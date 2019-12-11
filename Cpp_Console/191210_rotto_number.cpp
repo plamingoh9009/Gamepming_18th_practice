@@ -1,12 +1,33 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+
+@zxwnstn
+Learn Git and GitHub without any code!
+Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
+
+
+0
+01zxwnstn / Gamepming_18th_practice
+forked from plamingoh9009 / Gamepming_18th_practice
+Code Pull requests 0 Actions Projects 0 Wiki Security Insights Settings
+Gamepming_18th_practice / Cpp_Console / 191210_rotto_number.cpp
+plamingoh9009 Create 191210_rotto_number.cpp
+f3b6a61 6 hours ago
+62 lines(53 sloc)  1.21 KB
+
 #include <iostream>
 #include <time.h>
 
 using namespace std;
 /*
 	지금 해볼 것.
-	로또 번호 생성기를 만들어 보시오. 
+	로또 번호 생성기를 만들어 보시오.
 	단) 배열을 꼭 섞어서 구현할 것.
-
 	1. 로또 45개로 배열을 초기화
 	2. 배열을 믹스믹스
 	3. 결과는 배열의[0~5] 순서대로 6개만 뽑자.
@@ -57,6 +78,9 @@ int main()
 	}
 	cout << endl;
 
+	cout << "zxwnstn하하" << endl;
+
 	system("pause");
 	return 0;
 }
+
