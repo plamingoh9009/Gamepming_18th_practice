@@ -1,36 +1,14 @@
-Skip to content
-Search or jump to¡¦
-
-Pull requests
-Issues
-Marketplace
-Explore
-
-@zxwnstn
-Learn Git and GitHub without any code!
-Using the Hello World guide, you¡¯ll start a branch, write comments, and open a pull request.
-
-
-0
-01zxwnstn / Gamepming_18th_practice
-forked from plamingoh9009 / Gamepming_18th_practice
-Code Pull requests 0 Actions Projects 0 Wiki Security Insights Settings
-Gamepming_18th_practice / Cpp_Console / 191210_rotto_number.cpp
-plamingoh9009 Create 191210_rotto_number.cpp
-f3b6a61 6 hours ago
-62 lines(53 sloc)  1.21 KB
-
 #include <iostream>
 #include <time.h>
 
 using namespace std;
 /*
-	Áö±İ ÇØº¼ °Í.
-	·Î¶Ç ¹øÈ£ »ı¼º±â¸¦ ¸¸µé¾î º¸½Ã¿À.
-	´Ü) ¹è¿­À» ²À ¼¯¾î¼­ ±¸ÇöÇÒ °Í.
-	1. ·Î¶Ç 45°³·Î ¹è¿­À» ÃÊ±âÈ­
-	2. ¹è¿­À» ¹Í½º¹Í½º
-	3. °á°ú´Â ¹è¿­ÀÇ[0~5] ¼ø¼­´ë·Î 6°³¸¸ »ÌÀÚ.
+	ì§€ê¸ˆ í•´ë³¼ ê²ƒ.
+	ë¡œë˜ ë²ˆí˜¸ ìƒì„±ê¸°ë¥¼ ë§Œë“¤ì–´ ë³´ì‹œì˜¤.
+	ë‹¨) ë°°ì—´ì„ ê¼­ ì„ì–´ì„œ êµ¬í˜„í•  ê²ƒ.
+	1. ë¡œë˜ 45ê°œë¡œ ë°°ì—´ì„ ì´ˆê¸°í™”
+	2. ë°°ì—´ì„ ë¯¹ìŠ¤ë¯¹ìŠ¤
+	3. ê²°ê³¼ëŠ” ë°°ì—´ì˜[0~5] ìˆœì„œëŒ€ë¡œ 6ê°œë§Œ ë½‘ì.
 */
 
 int main()
@@ -38,29 +16,29 @@ int main()
 	int rotto_num_set[45] = { 0, };
 	srand(time(NULL));
 
-	// ¿©±â¼­ ·Î¶Ç¹øÈ£ ÃÊ±âÈ­ ÇÑ´Ù.
+	// ì—¬ê¸°ì„œ ë¡œë˜ë²ˆí˜¸ ì´ˆê¸°í™” í•œë‹¤.
 	for (int i = 0; i < 45; i++)
 	{
 		rotto_num_set[i] = i + 1;
 	}
 
-	// ¿©±â¼­ ·Î¶Ç¹øÈ£¸¦ ¼¯´Â´Ù.
+	// ì—¬ê¸°ì„œ ë¡œë˜ë²ˆí˜¸ë¥¼ ì„ëŠ”ë‹¤.
 	int dest, temp, sour;
 	int mix_cnt = 100;
 	for (int k = 0; k < mix_cnt; k++)
 	{
-		// ·£´ıÇÏ°Ô ¼¯À» µÎ ÁÂÇ¥¸¦ ±¸ÇÑ´Ù.
+		// ëœë¤í•˜ê²Œ ì„ì„ ë‘ ì¢Œí‘œë¥¼ êµ¬í•œë‹¤.
 		dest = rand() % 45;
 		sour = rand() % 45;
 
-		// ÁÂÇ¥¸¦ ¹ÙÅÁÀ¸·Î ½ÇÁ¦ ¹è¿­ °ªÀ» ¼¯´Â´Ù.
+		// ì¢Œí‘œë¥¼ ë°”íƒ•ìœ¼ë¡œ ì‹¤ì œ ë°°ì—´ ê°’ì„ ì„ëŠ”ë‹¤.
 		temp = rotto_num_set[dest];
 		rotto_num_set[dest] = rotto_num_set[sour];
 		rotto_num_set[sour] = temp;
 	}
 
-	// ·Î¶Ç¹øÈ£ ¼ÂÀÌ ¼¯¿´´ÂÁö È®ÀÎÇÏ´Â ÄÚµå
-	cout << "·Î¶Ç°¡ ¼¯¿´´ÂÁö È®ÀÎÇÏ´Â Test Code ÀÔ´Ï´Ù. " << endl;
+	// ë¡œë˜ë²ˆí˜¸ ì…‹ì´ ì„ì˜€ëŠ”ì§€ í™•ì¸í•˜ëŠ” ì½”ë“œ
+	cout << "ë¡œë˜ê°€ ì„ì˜€ëŠ”ì§€ í™•ì¸í•˜ëŠ” Test Code ì…ë‹ˆë‹¤. " << endl;
 	cout << "Last dest: " << dest << endl;
 	cout << "Last sour: " << sour << endl;
 	for (int i = 0; i < 45; i++)
@@ -69,16 +47,17 @@ int main()
 	}
 	cout << endl;
 
-	// ·Î¶Ç ¹øÈ£ 6°³¸¦ »ÌÀ» ¿¹Á¤.
+	// ë¡œë˜ ë²ˆí˜¸ 6ê°œë¥¼ ë½‘ì„ ì˜ˆì •.
 	cout << endl;
-	cout << "*** ³»°¡ »ÌÀº ·Î¶Ç¹øÈ£ ***" << endl;
+	cout << "*** ë‚´ê°€ ë½‘ì€ ë¡œë˜ë²ˆí˜¸ ***" << endl;
 	for (int i = 0; i < 6; i++)
 	{
 		cout << rotto_num_set[i] << " ";
 	}
 	cout << endl;
 
-	cout << "zxwnstnÇÏÇÏ" << endl;
+	// ì¤€ìˆ˜í˜• ì¶”ê°€ ì½”ë“œ
+	cout << "zxwnstní•˜í•˜" << endl;
 
 	system("pause");
 	return 0;
