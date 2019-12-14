@@ -56,10 +56,10 @@ void reverse_String(char *originalString, const int length)
 	//	cout << "true" << endl;
 
 	// 카피한 공간에 원본을 입력한다.
-	int i = 0;
+	
 	// 입력받은 값을 직접 비교하기 위한 변수
 	char nowCharactor = 0;
-
+	int i = 0;
 	for (int k = length - 1; k >= 0; k--)
 	{
 		//// originalString[k] 의 값을 확인해보기 위한부분
@@ -81,7 +81,6 @@ void reverse_String(char *originalString, const int length)
 			(unsigned char)originalString[k - 1] != (unsigned char)0xCC
 			)
 		{
-			// 1 Byte 공간에 164보다 큰 수가 넘어오면 한글로 간주한다.
 
 			// 2 Byte [앞], [뒤] 중에 
 			// myString [i], [i+1]
