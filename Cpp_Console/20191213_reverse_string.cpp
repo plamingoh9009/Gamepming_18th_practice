@@ -2,6 +2,8 @@
 	1. 문자열을 입력받아서 뒤집는 프로그램 짜기
 	2. 뒤집어서 짝수번째만 출력하는 프로그램 짜기
 */
+
+// 이건 워닝 메시지를 무시하는 함수다.
 //#pragma warning(disable : 4996)
 #include<iostream>
 #include<string>
@@ -10,6 +12,8 @@ using namespace std;
 
 // 문자열을 뒤집어주는 함수
 void reverse_String(char *orignalString, const int length);
+// 문자열을 짝수번째만 출력하는 함수
+void show_EvenString(char *originalString, const int length);
 
 int main()
 {
@@ -18,18 +22,21 @@ int main()
 	cout << "[문자열 입력]: ";
 	cin.getline(myString, 300);
 	// 입력받은 문자열의 길이를 구해놓는다.
-	int mylength = strlen(myString);
+	int myLength = strlen(myString);
 
-	cout << "[main] myString: \t" << myString << endl;
-	cout << "[main] &myString: \t" << &myString << endl;
-	cout << "[main] mylength: \t" << mylength << endl;
+	cout << "[Main] myString: \t" << myString << endl;
+	cout << "[Main] myLength: \t" << myLength << endl;
+	//cout << "[main] &myString: \t" << &myString << endl;
 
 	// 여기서 문자열을 뒤집는다.
-	reverse_String(myString, mylength);
+	reverse_String(myString, myLength);
 	// 성공적으로 뒤집었다면 myString을 출력했을 때
 	// 뒤집어서 나올 것이다.
-	cout << "[main] myString: \t" << myString << endl;
+	cout << "[Main] myString: \t" << myString << endl;
 	//cout << "In main testPointer: \t" << testPointer << endl;
+
+	// 여기서 뒤집은 문자열의 짝수번째 문자만을 출력한다.
+	show_EvenString(myString, myLength);
 
 	system("pause");
 	return 0;
@@ -114,4 +121,63 @@ void reverse_String(char *originalString, const int length)
 	//cout << originalString << endl;
 	//cout << "[reverse_String] originalString: \t" << originalString << endl;
 	//cout << "[reverse_String] originalString: \t" << &originalString << endl;
+}
+
+void show_EvenString(char *originalString, const int length)
+{
+	// 넘겨받은 문자열을 순서대로 짝수번째만 출력하는 프로그램
+	
+	// 원본 데이터의 훼손을 막기 위해서 카피해서 사용한다.
+	char myString[300] = { 0, };
+	strcpy_s(myString, 300, originalString);
+	// 출력할 결과물을 담는 배열을 만든다.
+	char evenString[300] = { 0, };
+
+	// 받은 length 만큼 반복문을 한바퀴 돌려서 짝수번째 글자를 출력한다.
+	// 한글이 짬뽕되어 있기 때문에 어쩔 수 없이 다른 변수에 글자를 넣어서 출력해야 한다.
+	// stringCounter: 몇번째 글자인지 세는 변수
+	int stringCounter = 0;
+	int indexOf_Even = 0;
+	for (int i=0; i < length; i++)
+	{
+		// length의 크기는 글자의 갯수와 다를 수있다.
+
+		// 뒤에서부터 확인할 때랑 다르게 앞에서 확인은 1개의 조건이면 충분하다.
+		if(	(unsigned char)myString[i] >= (unsigned char)0xA1 )
+		{
+			// 만약 한글이라면 nowCharactor에 2 Byte를 넣는다.
+			stringCounter++;
+			if (stringCounter % 2 == 0)
+			{
+				evenString[indexOf_Even] = myString[i];
+				evenString[indexOf_Even + 1] = myString[i + 1];
+
+				// 짝수 글자 갯수는 myString의 글자 갯수와 다르니
+				// 새로운 인덱스를 사용한다.
+				indexOf_Even += 2;
+			}
+			// stringCounter 가 홀수더라도 확인 했기때문에 i의 증가는 
+			// if문 여부와 상관이 없다.
+			// 2 Byte를 확인했으니 i도 추가로 전진한다.
+			i++;
+		}
+		else
+		{
+			// 한글 아니면 nowCharactor에 1 Byte를 넣는다.
+			stringCounter++;
+			if (stringCounter % 2 == 0)
+			{
+				evenString[indexOf_Even] = myString[i];
+
+				indexOf_Even++;
+			}
+		}// end 조건문: 한글이면 참, 아니면 거짓
+	}// end of for: 문자열의 끝까지 확인했음.
+	// 루프가 끝났으면 evenString의 끝을 알리기 위해서 null값을 넣어준다.
+	evenString[indexOf_Even] = '\0';
+
+	// 출력 부분이다.
+	cout << endl;
+	cout << "[EvenString]: \t";
+	cout << evenString << endl;
 }
