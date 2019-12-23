@@ -173,7 +173,8 @@ void Shop::run_pageBuy()
 		else
 		{
 			show_warnMessage(WARN_INVALID_INPUT);
-			continue;
+			Sleep(1000);
+			//continue;
 		}// end of else: 잘못 입력했다면
 	}// end of while: 아이템을 구매하는 루프
 }
@@ -231,7 +232,8 @@ void Shop::run_pageSell()
 		else
 		{
 			show_warnMessage(WARN_INVALID_INPUT);
-			continue;
+			Sleep(1000);
+			//continue;
 		}// end of else: 잘못 입력했다면
 	}// end of while: 아이템을 판매하는 루프
 }

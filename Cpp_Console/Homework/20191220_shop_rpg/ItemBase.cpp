@@ -88,6 +88,45 @@ void ItemBase::show_itemList(itemList_t mItemList, PAGE_CHOICE p)
 	}// end of for: myItemList의 목록을 전부 출력한 후 loop를 종료한다.
 }
 
+bool ItemBase::is_existKey_itemList(string key, itemList_t mItemList)
+{
+	bool result = false;
+	itemList_t::iterator mIter;
+	mIter = mItemList.find(key);
+
+	if (mIter != mItemList.end())
+	{
+		result = true;
+	}// end of if: mItem_inven에 key값이 존재한다면
+	else
+	{
+		result = false;
+	}// end of else: mItem_inven에 key값이 없다면
+
+	return result;
+}
+
+bool ItemBase::is_existType_itemList(string type, itemList_t mItemList)
+{
+	bool result = false;
+	itemList_t::iterator mIter;
+
+	mIter = mItemList.begin();
+
+	for (mIter; mIter != mItemList.end(); mIter++)
+	{
+		if(mIter->second.get_type() == type)
+		{
+			result = true;
+		}// end of if: mItemList에 type 값이 존재한다면
+		else
+		{
+			result = false;
+		}// end of else: mItemList에 type 값이 없다면
+	}
+	return result;
+}
+
 ItemBase::ItemBase()
 {
 }

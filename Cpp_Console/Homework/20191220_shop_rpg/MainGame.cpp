@@ -66,7 +66,7 @@ void MainGame::move_toInven()
 {
 	// 인벤을 보여줌
 	//cout << "인벤임" << endl;
-	_inven->update_(_money, _mItem_inven);
+	_inven->update_(_money, _mItem_inven, _mItem_shop);
 	_inven->run_();
 	// 인벤토리에서 아이템 사용, 장비 해제가 끝난 후 MainGame을 업데이트한다.
 	_mItem_inven = _inven->get_mItem_inven();
