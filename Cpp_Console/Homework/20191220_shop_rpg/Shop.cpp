@@ -1,7 +1,5 @@
 #include "Shop.h"
 
-
-
 void Shop::init_()
 {
 	// 여기서 상점에 필요한 것들 초기화

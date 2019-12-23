@@ -268,6 +268,11 @@ itemList_t Inventory::get_mItem_inven()
 	return _mItem_inven;
 }
 
+itemList_t Inventory::get_mItem_equip()
+{
+	return _mItem_equip;
+}
+
 void Inventory::set_money(int money)
 {
 	_money = money;

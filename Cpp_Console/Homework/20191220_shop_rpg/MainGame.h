@@ -1,7 +1,7 @@
 #pragma once
-#include "ItemBase.h"
 #include "Shop.h"
 #include "Inventory.h"
+#include "Status.h"
 
 class MainGame : public ItemBase
 {
@@ -9,6 +9,8 @@ private:
 	// 여기서 샵과 인벤정보를 가지고 있어야 두 정보간 교류가능
 	Shop * _shop;
 	Inventory * _inven;
+	Status * _status;
+
 	bool _isRunOver;
 
 	// 여기서 공유할 데이터를 선언한다.
