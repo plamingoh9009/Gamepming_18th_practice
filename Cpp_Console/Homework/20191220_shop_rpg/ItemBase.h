@@ -26,8 +26,9 @@ class ItemBase : public GameBase
 {
 protected:
 	virtual void show_itemList(itemList_t, PAGE_CHOICE);
+	virtual bool is_existKey_itemList(string, itemList_t);
+	virtual bool is_existType_itemList(string, itemList_t);
 public:
 	ItemBase();
 	~ItemBase();
 };
-
