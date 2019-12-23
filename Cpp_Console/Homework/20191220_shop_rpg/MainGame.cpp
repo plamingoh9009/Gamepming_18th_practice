@@ -6,6 +6,8 @@ void MainGame::init_()
 	_shop->init_();
 	_inven = new Inventory();
 	_inven->init_();
+	_status = new Status();
+	_status->init_();
 	_isRunOver = false;
 
 	// 공유데이터를 초기화 한다.
@@ -43,6 +45,12 @@ void MainGame::run_()
 void MainGame::show_mainPage()
 {
 	system("cls");
+
+	// 여기서 캐릭터 스탯창을 보여준다.
+	// 보여주기 전에 인벤토리에서 장비창을 받아온다.
+	_mItem_equip = _inven->get_mItem_equip();
+	_status->update_(_mItem_equip);
+	_status->run_();
 
 	// 상점창 갈건지, 인벤토리 볼건지 물어봄.
 	cout << "*** Main Page ***" << endl;
@@ -90,6 +98,7 @@ MainGame::~MainGame()
 {
 	delete _shop;
 	delete _inven;
+	delete _status;
 
 	exit_();
 }

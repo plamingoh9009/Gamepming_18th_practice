@@ -14,6 +14,7 @@ public:
 	void run_();
 	int get_money();
 	itemList_t get_mItem_inven();
+	itemList_t get_mItem_equip();
 	void set_money(int money);
 
 	void update_(int, itemList_t, itemList_t);
