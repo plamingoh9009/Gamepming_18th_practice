@@ -109,7 +109,7 @@ void mainGame::check_crush()
 	if (IntersectRect(&temp, &player, &target))
 	{
 		// esc 이벤트 발생
-		keybd_event(VK_ESCAPE, 0, 0, 0);
+		//keybd_event(VK_ESCAPE, 0, 0, 0);
 	}
 }
 
