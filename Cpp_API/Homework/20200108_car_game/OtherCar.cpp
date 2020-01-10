@@ -10,7 +10,7 @@
 #define LOAD_H	600
 
 // 자동차의 좌, 우 마젠타 영역 보정을 위한 값이다.
-#define MAGENTA_BAND	CAR_W * 0.2
+#define MAGENTA_BAND	CAR_W * 0.3
 
 void OtherCar::reinit_posCar()
 {
@@ -35,12 +35,10 @@ void OtherCar::reinit_posCar(int index)
 
 	if (_enemy[index].posCar.y < window_top - coriterion)
 	{
-		_test1 = 100;
 		init_posCar(index);
 	}//end of if: 윈도우의 top을 기준만큼 벗어나면
 	else if (_enemy[index].posCar.y > window_bottom + coriterion)
 	{
-		_test1 = 100;
 		init_posCar(index);
 	}//end of if: 윈도우의 bottom을 기준만큼 벗어나면
 }
@@ -126,11 +124,6 @@ void OtherCar::update_posCar(int speed_player, int maxSpeed, int index)
 
 	// 여기서 윈도우를 기준 거리만큼 벗어나면 위치를 다시 할당
 	reinit_posCar(index);
-
-	if (_test1 == 100)
-	{
-		_test1 = 0;
-	}
 }
 void OtherCar::update_posCarAll(int speed_player, int maxSpeed, int count)
 {
@@ -138,11 +131,6 @@ void OtherCar::update_posCarAll(int speed_player, int maxSpeed, int count)
 	{
 		update_posCar(speed_player, maxSpeed, i);
 	}
-
-	/*if (_test1 == 100)
-	{
-		_test1 = 0;
-	}*/
 }
 
 POINT OtherCar::get_posCar()
@@ -152,30 +140,40 @@ POINT OtherCar::get_posCar()
 
 void OtherCar::init_posCar()
 {
-	randomFunction rd;
-
 	// _posCar.x는 leftRoad + MAGENTA_BAND 보다 크고,
 	// rightRoad - MAGENTA_BAND 보다 작다.
 	LONG leftRoad = LOAD_X + MAGENTA_BAND;
 	LONG rightRoad = LOAD_X + LOAD_W - (MAGENTA_BAND * 2);
 
-	_posCar.x = rd.getFromIntTo(leftRoad, rightRoad);
+	_posCar.x = RND->getFromIntTo(leftRoad, rightRoad);
 	_posCar.y = LOAD_Y;
 	//_posCar.y = 300;	// for test
 }
 void OtherCar::init_posCar(int index)
 {
-	randomFunction rd;
-
 	// _posCar.x는 leftRoad + MAGENTA_BAND 보다 크고,
 	// rightRoad - MAGENTA_BAND 보다 작다.
 	LONG leftRoad = LOAD_X + MAGENTA_BAND;
-	LONG rightRoad = LOAD_X + LOAD_W - (MAGENTA_BAND * 2);
+	LONG rightRoad = LOAD_X + LOAD_W - CAR_W;
 
 	_enemy[index].posCar.x =
-		rd.getFromIntTo(leftRoad, rightRoad);
-	//_enemy[index].posCar.y = LOAD_Y;
-	_enemy[index].posCar.y = 500;	// for test
+		RND->getFromIntTo(leftRoad, rightRoad);
+
+	int coriterion = 5;
+	int randomY;
+	randomY = RND->getInt(2);
+
+	// posCar.y 값은 LOAD_Y ~ LOAD_Y + 기준값 사이 또는 
+	// LOAD_H ~ LOAD_H - 기준값
+	if (randomY == 0)
+	{
+		_enemy[index].posCar.y = RND->getFromIntTo(LOAD_Y, LOAD_Y+5);
+	}//end of if: 랜덤 인덱스가 0이면
+	else
+	{
+		_enemy[index].posCar.y = RND->getFromIntTo(LOAD_H, LOAD_H - 5);
+	}
+	//_enemy[index].posCar.y = 500;	// for test
 }
 void OtherCar::init_posCarAll(int count)
 {
@@ -234,7 +232,7 @@ HRESULT OtherCar::init()
 
 	// 여기서 어떤 차를 렌더할지 이미지를 정한다.
 	init_carImageAll(_enemyCnt);
-	_kind = randomFunction().getInt(2);
+	//_kind = randomFunction().getInt(2);
 
 	// 차의 초기 위치를 정한다.
 	init_posCarAll(_enemyCnt);
@@ -244,21 +242,13 @@ HRESULT OtherCar::init()
 
 void OtherCar::update(int speed_player, int maxSpeed)
 {
-	update_posCar(speed_player, maxSpeed);
 	update_posCarAll(speed_player, maxSpeed, _enemyCnt);
-
-	/*if (_test1 == 100)
-	{
-		_test1 = 0;
-	}*/
 }
 
 void OtherCar::render(HDC hdc)
 {
-	_carImage[_kind]->render(hdc, _posCar.x, _posCar.y);
-
 	renderAll(hdc, _enemyCnt);
-	renderTest(hdc);
+	//renderTest(hdc);
 }
 void OtherCar::renderAll(HDC hdc, int enemy_count)
 {
@@ -267,11 +257,6 @@ void OtherCar::renderAll(HDC hdc, int enemy_count)
 		_enemy[i].carImage->render(hdc,
 			_enemy[i].posCar.x, _enemy[i].posCar.y);
 	}
-
-	/*if (_test1 == 100)
-	{
-		_test1 = 0;
-	}*/
 }
 
 void OtherCar::release()
@@ -287,11 +272,6 @@ void OtherCar::release()
 void OtherCar::renderTest(HDC hdc)
 {
 	char strTest[128];
-
-	/*if (_test1 == 100)
-	{
-		_test1 = 0;
-	}*/
 
 	wsprintf(strTest, "다른 차 1 x, y: %d, %d",
 		_enemy[0].posCar.x, _enemy[0].posCar.y);
