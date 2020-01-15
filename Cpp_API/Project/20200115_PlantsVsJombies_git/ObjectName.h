@@ -1,0 +1,8 @@
+#pragma once
+enum PLANT_NAME
+{
+	NAME_EMPTY,
+	NAME_PEASHOOTER,
+	NAME_SUNFLOWER,
+	NAME_WALLNUT
+};
