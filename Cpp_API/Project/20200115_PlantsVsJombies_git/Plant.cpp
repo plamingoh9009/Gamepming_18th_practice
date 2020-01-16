@@ -30,7 +30,7 @@ void Plant::set_plant(string strKey, int x, int y)
 	}//if: WallnutÀº width 27, height 32
 	else if (_type.compare("PeaShooter") == 0)
 	{
-		_frameDelay = 8;
+		_frameDelay = 4;
 		_maxFrameX = 8;
 		_maxFrameY = 1;
 		_width = 432;
@@ -47,11 +47,14 @@ Plant::~Plant()
 }
 HRESULT Plant::init()
 {
-	IMAGEMANAGER->addFrameImage("SunFlower", "images/SunFlower_Idle.bmp",
+	IMAGEMANAGER->addFrameImage("SunFlower", 
+		"images/plants/SunFlower_Idle.bmp",
 		232, 32, 8, 1, true, COLOR_MAGENTA);
-	IMAGEMANAGER->addFrameImage("Wallnut", "images/Wallnut_Idle.bmp",
+	IMAGEMANAGER->addFrameImage("Wallnut", 
+		"images/plants/Wallnut_Idle.bmp",
 		135, 32, 5, 1, true, COLOR_MAGENTA);
-	IMAGEMANAGER->addFrameImage("PeaShooter", "images/PeaShooter_Idle.bmp",
+	IMAGEMANAGER->addFrameImage("PeaShooter", 
+		"images/plants/PeaShooter_Idle.bmp",
 		432, 36, 8, 1, true, COLOR_MAGENTA);
 	return S_OK;
 }

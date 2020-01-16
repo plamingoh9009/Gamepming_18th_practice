@@ -141,8 +141,8 @@
     <ClInclude Include="Plant.h">
       <Filter>mainGame\Object\ObjectControl</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectName.h">
-      <Filter>mainGame\Object</Filter>
+    <ClInclude Include="SeedCard.h">
+      <Filter>mainGame\Object\UI\SeedBank</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="Plant.cpp">
       <Filter>mainGame\Object\ObjectControl</Filter>
+    </ClCompile>
+    <ClCompile Include="SeedCard.cpp">
+      <Filter>mainGame\Object\UI\SeedBank</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

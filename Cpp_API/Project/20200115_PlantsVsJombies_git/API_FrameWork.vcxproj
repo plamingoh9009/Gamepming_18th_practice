@@ -160,12 +160,12 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectControl.h" />
-    <ClInclude Include="ObjectName.h" />
     <ClInclude Include="Plant.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="SeedBank.h" />
+    <ClInclude Include="SeedCard.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
@@ -192,6 +192,7 @@
     <ClCompile Include="Plant.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="SeedBank.cpp" />
+    <ClCompile Include="SeedCard.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
