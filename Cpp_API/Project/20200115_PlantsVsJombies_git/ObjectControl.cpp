@@ -12,7 +12,7 @@ HRESULT ObjectControl::init()
 {
 	_plant = new Plant;
 	_plant->init();
-	_plant->set_plant("PeaShooter", 200, 200);
+	_plant->set_plant("SunFlower", 200, 200);
 	return S_OK;
 }
 void ObjectControl::release()

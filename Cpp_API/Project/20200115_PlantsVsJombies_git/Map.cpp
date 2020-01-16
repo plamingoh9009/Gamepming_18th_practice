@@ -1,18 +1,25 @@
 #include "stdafx.h"
 #include "Map.h"
 
-void Map::show_space()
+vector<RECT> Map::get_spaces()
 {
-	for (int i = 0; i < 5; i++)
+	return vector<RECT>(_spaces);
+}
+vector<RECT>::iterator Map::get_itSpaces()
+{
+	return vector<RECT>::iterator(_itSpaces);
+}
+
+void Map::show_spaces()
+{
+	_itSpaces = _spaces.begin();
+	for (;_itSpaces != _spaces.end();_itSpaces++)
 	{
-		for (int k = 0; k < 9; k++)
-		{
-			Rectangle(getMemDC(), _space[i][k].left, _space[i][k].top,
-				_space[i][k].right, _space[i][k].bottom);
-		}
+		Rectangle(getMemDC(), _itSpaces->left, _itSpaces->top,
+			_itSpaces->right, _itSpaces->bottom);
 	}
 }
-void Map::init_space()
+void Map::init_spaces()
 {
 	int initX = 132;
 	int initY = 90;
@@ -21,19 +28,31 @@ void Map::init_space()
 	int blankWidth = (int)(plantWidth * 0.1429);
 	int blankHeight = (int)(plantHeight * 0.2);
 	int currentX, currentY;
-
+	RECT rect;
 	currentY = initY;
 	for (int i = 0; i < 5; i++)
 	{
 		currentX = initX;
 		for (int k = 0; k < 9; k++)
 		{
-			_space[i][k] = RectMake(currentX, currentY,
+			// 렉트를 만든다.
+			rect = RectMake(currentX, currentY,
 				plantWidth, plantHeight);
+			// 벡터에 넣는다.
+			_spaces.push_back(rect);
 			currentX = currentX + plantWidth + blankWidth;
 		}//for: 좌우 여백은 22픽셀
 		currentY = currentY + plantHeight + blankHeight;
 	}//for: 상하 여백은 38픽셀
+}
+void Map::delete_spaces()
+{
+	_itSpaces = _spaces.begin();
+	for (;_itSpaces != _spaces.end();)
+	{
+		_spaces.erase(_itSpaces++);
+	}
+	_spaces.clear();
 }
 void Map::show_mapAll()
 {
@@ -64,9 +83,9 @@ HRESULT Map::init()
 		_rect.right - _rect.left, _rect.bottom - _rect.top, false, COLOR_MAGENTA);
 	// 맵을 전부 보여줄지 말지 정하는 변수
 	_isShowMapAll = false;
-	_distance = 0;
+	_distance = 126;
 	// 사각형 타일을 초기화하는 함수
-	init_space();
+	init_spaces();
 	// 초반 딜레이를 위한 변수
 	_delay = 0;
 	return S_OK;
@@ -74,12 +93,13 @@ HRESULT Map::init()
 void Map::release()
 {
 	IMAGEMANAGER->deleteImage("Background_Yard");
+	delete_spaces();
 }
 void Map::update()
 {
 	if (_delay == 100)
 	{
-		_isShowMapAll = true;
+		_isShowMapAll = false;
 		// 처음에 맵을 쭉 보여주는 부분
 		if (_isShowMapAll == true) 
 		{ 
@@ -93,6 +113,4 @@ void Map::render()
 	// 마당을 렌더하는 부분
 	IMAGEMANAGER->loopRender("Background_Yard", getMemDC(),
 		&RectMake(0, 0, WINSIZEX, WINSIZEY), _distance, 0);
-	// 1번을 누르면 사각형 타일을 보여준다.
-	if (KEYMANAGER->isToggleKey(0X31)) { show_space(); }
 }

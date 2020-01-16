@@ -8,10 +8,10 @@ Stage::~Stage()
 }
 HRESULT Stage::init()
 {
-	_ui = new UI;
-	_ui->init();
 	_objControl = new ObjectControl;
 	_objControl->init();
+	_ui = new UI;
+	_ui->init();
 	return S_OK;
 }
 void Stage::release()
