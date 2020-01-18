@@ -5,7 +5,7 @@ class SeedBank: public gameNode
 {
 private:
 	typedef vector<string> vPlantName_t;
-	typedef vector<SeedCard *> vSeedCards_t;
+	typedef map<string, SeedCard *> mSeedCards_t;
 private:
 	image * _img;
 	RECT _rect;
@@ -14,12 +14,14 @@ private:
 	// 식물 이름 벡터
 	vPlantName_t _plantName;
 	vPlantName_t::iterator _itPlantName;
-	// 시드카드 벡터, 시드카드
-	vSeedCards_t _seedCards;
-	vSeedCards_t::iterator _itSeedCards;
+	// 시드카드 맵
+	mSeedCards_t _seedCards;
+	mSeedCards_t::iterator _itSeedCards;
+
 public:
-	vector<SeedCard*> get_seedCards();
-	vector<SeedCard*>::iterator get_itSeedCards();
+	map<string, SeedCard *> get_seedCards();
+	map<string, SeedCard *>::iterator get_itSeedCards();
+
 	void delete_plantImage();
 	void init_plantName();
 	void delete_plantName();
@@ -27,6 +29,7 @@ public:
 	void draw_seedCards();
 	void init_seedCards();
 	void delete_seedCards();
+
 	void show_space();
 	void init_space();
 public:

@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "SeedBank.h"
 
-vector<SeedCard*> SeedBank::get_seedCards()
+map<string, SeedCard*> SeedBank::get_seedCards()
 {
-	return vector<SeedCard*>(_seedCards);
+	return map<string, SeedCard*>(_seedCards);
 }
-vector<SeedCard*>::iterator SeedBank::get_itSeedCards()
+map<string, SeedCard*>::iterator SeedBank::get_itSeedCards()
 {
-	return vector<SeedCard*>::iterator(_itSeedCards);
+	return map<string, SeedCard*>::iterator(_itSeedCards);
 }
 
 void SeedBank::delete_plantImage()
@@ -38,32 +38,35 @@ void SeedBank::delete_plantName()
 void SeedBank::draw_seedCards()
 {
 	_itSeedCards = _seedCards.begin();
-	for (;_itSeedCards != _seedCards.end();_itSeedCards++)
+	for (;_itSeedCards != _seedCards.end(); _itSeedCards++)
 	{
-		(*_itSeedCards)->render();
+		_itSeedCards->second->render();
 	}
 }
 void SeedBank::init_seedCards()
 {
-	for (int i = 0; i < _plantName.size(); i++)
+	SeedCard * seedCard;
+	int size = _plantName.size();
+	for (int i = 0;i < size;i++)
 	{
-		_seedCards.push_back(new SeedCard);
-	}
-
-	for (int i = 0;i < _plantName.size(); i++)
-	{
-		_seedCards[i]->init();
-		_seedCards[i]->set_seedCard(_plantName[i],
+		seedCard = new SeedCard;
+		seedCard->init();
+		seedCard->set_seedCard(_plantName[i], 
 			_space[i].left, _space[i].top);
+		// ¿©±â¼­ ¸Ê¿¡ insert
+		_seedCards.insert(
+			make_pair(_plantName[i], seedCard)
+		);
+		seedCard = nullptr;
 	}
 }
 void SeedBank::delete_seedCards()
 {
 	_itSeedCards = _seedCards.begin();
-	for (; _itSeedCards != _seedCards.end();)
+	for (;_itSeedCards != _seedCards.end();)
 	{
-		(*_itSeedCards)->release();
-		_itSeedCards = _seedCards.erase(_itSeedCards);
+		_itSeedCards->second->release();
+		_seedCards.erase(_itSeedCards++);
 	}
 	_seedCards.clear();
 }

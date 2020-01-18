@@ -8,6 +8,8 @@ private:
 	UI * _ui;
 	ObjectControl * _objControl;
 public:
+	void update_uiToObjControl();
+public:
 	Stage();
 	~Stage();
 	HRESULT init();
