@@ -9,14 +9,40 @@ vector<RECT>::iterator Map::get_itSpaces()
 {
 	return vector<RECT>::iterator(_itSpaces);
 }
+vector<RECT> Map::get_lines()
+{
+	return vector<RECT>(_lines);
+}
+vector<RECT>::iterator Map::get_itLines()
+{
+	return vector<RECT>::iterator(_itLines);
+}
 
+void Map::show_lines()
+{
+	_itLines = _lines.begin();
+	for (;_itLines != _lines.end();_itLines++)
+	{
+		FrameRect(getMemDC(), &(*_itLines),
+			CreateSolidBrush(RGB(64, 0, 64)));
+	}
+}
+void Map::delete_lines()
+{
+	_itLines = _lines.begin();
+	for (;_itLines != _lines.end();)
+	{
+		_lines.erase(_itLines++);
+	}
+	_lines.clear();
+}
 void Map::show_spaces()
 {
 	_itSpaces = _spaces.begin();
 	for (;_itSpaces != _spaces.end();_itSpaces++)
 	{
-		Rectangle(getMemDC(), _itSpaces->left, _itSpaces->top,
-			_itSpaces->right, _itSpaces->bottom);
+		FrameRect(getMemDC(), &(*_itSpaces), 
+			CreateSolidBrush(RGB(0, 0, 0)));
 	}
 }
 void Map::init_spaces()
@@ -43,6 +69,10 @@ void Map::init_spaces()
 			currentX = currentX + plantWidth + blankWidth;
 		}//for: 좌우 여백은 22픽셀
 		currentY = currentY + plantHeight + blankHeight;
+		// ================================================
+		// **			_lines 벡터를 초기화				 **
+		// ================================================
+		_lines.push_back(rect);
 	}//for: 상하 여백은 38픽셀
 }
 void Map::delete_spaces()

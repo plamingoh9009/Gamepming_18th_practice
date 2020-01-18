@@ -3,7 +3,8 @@
 class Map: public gameNode
 {
 private:
-	typedef vector<RECT> vSpaces;
+	typedef vector<RECT> vLines_t;
+	typedef vector<RECT> vSpaces_t;
 private:
 	// 가져올 이미지 변수
 	image * _img;
@@ -12,14 +13,21 @@ private:
 	bool _isShowMapAll;
 	int _distance;
 	const int _SPEED = 3;
+	// 맵의 5개 라인 정보를 담는 벡터
+	vLines_t _lines;
+	vLines_t::iterator _itLines;
 	// 맵에 식물을 설치할 수 있는 사각형 9x5개 벡터
-	vSpaces _spaces;
-	vSpaces::iterator _itSpaces;
+	vSpaces_t _spaces;
+	vSpaces_t::iterator _itSpaces;
 	// 초반에 딜레이를 주기 위한 변수
 	int _delay;
 public:
 	vector<RECT> get_spaces();
 	vector<RECT>::iterator get_itSpaces();
+	vector<RECT> get_lines();
+	vector<RECT>::iterator get_itLines();
+	void show_lines();
+	void delete_lines();
 	void show_spaces();
 	void init_spaces();
 	void delete_spaces();

@@ -6,8 +6,6 @@
 gameNode::gameNode()
 {
 }
-
-
 gameNode::~gameNode()
 {
 }
@@ -63,7 +61,6 @@ void gameNode::release()
 	//SAFE_DELETE(_backBuffer);
 
 }
-
 void gameNode::update()
 {
 	//더블버퍼 이후 사용하지 않는다 true->false

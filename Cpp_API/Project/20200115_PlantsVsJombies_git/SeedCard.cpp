@@ -5,7 +5,6 @@ RECT SeedCard::get_oneFrameRect()
 {
 	return _oneFrameRect;
 }
-
 RECT SeedCard::make_oneFrameRect()
 {
 	int x = _rect.left;

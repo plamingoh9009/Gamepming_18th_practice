@@ -129,9 +129,6 @@
     <ClInclude Include="FlagMeter.h">
       <Filter>mainGame\Object\UI\FlagMeter</Filter>
     </ClInclude>
-    <ClInclude Include="Zombies.h">
-      <Filter>mainGame\Object\ObjectControl</Filter>
-    </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>mainGame\Object\UI</Filter>
     </ClInclude>
@@ -143,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="SeedCard.h">
       <Filter>mainGame\Object\UI\SeedBank</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>mainGame\Object\ObjectControl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,9 +203,6 @@
     <ClCompile Include="FlagMeter.cpp">
       <Filter>mainGame\Object\UI\FlagMeter</Filter>
     </ClCompile>
-    <ClCompile Include="Zombies.cpp">
-      <Filter>mainGame\Object\ObjectControl</Filter>
-    </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>mainGame\Object\UI</Filter>
     </ClCompile>
@@ -217,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="SeedCard.cpp">
       <Filter>mainGame\Object\UI\SeedBank</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>mainGame\Object\ObjectControl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
