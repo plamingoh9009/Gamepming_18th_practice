@@ -17,12 +17,15 @@ private:
 	RECT _oneFrameRect;
 	int _currentFrameX;
 	int _currentFrameY;
+	// 카드를 on, off 할 때 쓰는 정보
+	bool _fCardEnable;
 public:
 	RECT get_oneFrameRect();
 	RECT make_oneFrameRect();
 	void show_oneFrameRect();
 	void init_plantImage();
 	void set_seedCard(string strKey, int x, int y);
+	void set_plantImage(bool isEnable);
 public:
 	SeedCard();
 	~SeedCard();

@@ -53,7 +53,7 @@ void SeedBank::init_seedCards()
 		seedCard->init();
 		seedCard->set_seedCard(_plantName[i], 
 			_space[i].left, _space[i].top);
-		// 여기서 맵에 insert
+		// 여기서 시드카드 맵에 insert
 		_seedCards.insert(
 			make_pair(_plantName[i], seedCard)
 		);
@@ -131,6 +131,11 @@ void SeedBank::release()
 }
 void SeedBank::update()
 {
+	// 클릭하면 카드 이미지를 뒤로 돌린다.
+	if (_fClickCard == true)
+	{
+		
+	}//if:
 }
 void SeedBank::render()
 {

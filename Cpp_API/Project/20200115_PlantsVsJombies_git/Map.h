@@ -9,6 +9,7 @@ private:
 	// 가져올 이미지 변수
 	image * _img;
 	RECT _rect;
+	string _type;
 	// 맵을 쭉 보여줄 때 쓰는 변수
 	bool _isShowMapAll;
 	int _distance;
@@ -21,6 +22,8 @@ private:
 	vSpaces_t::iterator _itSpaces;
 	// 초반에 딜레이를 주기 위한 변수
 	int _delay;
+protected:
+	void change_mapImg();
 public:
 	vector<RECT> get_spaces();
 	vector<RECT>::iterator get_itSpaces();

@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="API_FrameWork.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="Ending.h" />
     <ClInclude Include="FlagMeter.h" />
@@ -169,6 +170,8 @@
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SunPoint.h" />
+    <ClInclude Include="SunPointControl.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Ending.cpp" />
     <ClCompile Include="FlagMeter.cpp" />
     <ClCompile Include="gameNode.cpp" />
@@ -194,6 +198,8 @@
     <ClCompile Include="SeedBank.cpp" />
     <ClCompile Include="SeedCard.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="SunPoint.cpp" />
+    <ClCompile Include="SunPointControl.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="Title.cpp" />

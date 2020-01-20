@@ -1,6 +1,25 @@
 #include "stdafx.h"
 #include "Map.h"
 
+void Map::change_mapImg()
+{
+	if (_type.compare("Background_Yard") == 0)
+	{
+		_img = IMAGEMANAGER->findImage("Background_Night");
+		_type = "Background_Night";
+	}
+	else if (_type.compare("Background_Night") == 0)
+	{
+		_img = IMAGEMANAGER->findImage("Background_Snow");
+		_type = "Background_Snow";
+	}
+	else if (_type.compare("Background_Snow") == 0)
+	{
+		_img = IMAGEMANAGER->findImage("Background_Yard");
+		_type = "Background_Yard";
+	}
+}
+
 vector<RECT> Map::get_spaces()
 {
 	return vector<RECT>(_spaces);
@@ -109,8 +128,19 @@ Map::~Map()
 HRESULT Map::init()
 {
 	_rect = RectMake(0, 0, 1400, 600);
-	_img = IMAGEMANAGER->addImage("Background_Yard", "images/Background_Yard.bmp",
-		_rect.right - _rect.left, _rect.bottom - _rect.top, false, COLOR_MAGENTA);
+	_img = IMAGEMANAGER->addImage("Background_Yard", 
+		"images/Background_Yard.bmp",
+		_rect.right - _rect.left, _rect.bottom - _rect.top, 
+		false, COLOR_MAGENTA);
+	IMAGEMANAGER->addImage("Background_Snow",
+		"images/Background_Snow.bmp",
+		_rect.right - _rect.left, _rect.bottom - _rect.top,
+		false, COLOR_MAGENTA);
+	IMAGEMANAGER->addImage("Background_Night",
+		"images/Background_Night.bmp",
+		_rect.right - _rect.left, _rect.bottom - _rect.top,
+		false, COLOR_MAGENTA);
+	_type = "Background_Yard";
 	// 맵을 전부 보여줄지 말지 정하는 변수
 	_isShowMapAll = false;
 	_distance = 126;
@@ -123,6 +153,9 @@ HRESULT Map::init()
 void Map::release()
 {
 	IMAGEMANAGER->deleteImage("Background_Yard");
+	IMAGEMANAGER->deleteImage("Background_Snow");
+	IMAGEMANAGER->deleteImage("Background_Night");
+	_img = nullptr;
 	delete_spaces();
 }
 void Map::update()
@@ -137,10 +170,16 @@ void Map::update()
 		}
 	}//if: 일정시간이 지난 후
 	else { _delay++; }
+
+	if (KEYMANAGER->isOnceKeyDown(0x39))
+	{
+		change_mapImg();
+		
+	}
 }
 void Map::render()
 {
 	// 마당을 렌더하는 부분
-	IMAGEMANAGER->loopRender("Background_Yard", getMemDC(),
+	_img->loopRender(getMemDC(),
 		&RectMake(0, 0, WINSIZEX, WINSIZEY), _distance, 0);
 }

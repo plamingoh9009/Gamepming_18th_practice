@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "SeedBank.h"
 #include "FlagMeter.h"
+#include "SunPointControl.h"
 class UI: public gameNode
 {
 private:
@@ -13,6 +14,8 @@ private:
 	Map * _map;
 	SeedBank * _bank;
 	FlagMeter * _flagMeter;
+	// 햇빛 컨트롤
+	SunPointControl * _sunControl;
 	// 시드뱅크가 가지고 있는 시드카드의 렉트맵
 	mCardRects_t _cardRects;
 	mCardRects_t::iterator _itCardRects;
@@ -24,6 +27,9 @@ private:
 	vMapLines_t _mapLines;
 	vMapLines_t::iterator _itMapLines;
 public:
+	// 시드뱅크에 클릭여부, 카드 타입을 넘긴다.
+	void set_fClickCardToBank(bool fResult);
+	void set_cardTypeToBank(string cardType);
 	// 맵의 공간정보 렉트벡터를 넘긴다.
 	vector<RECT> get_mapSpaces();
 	vector<RECT>::iterator get_itMapSpaces();

@@ -55,6 +55,9 @@
     <Filter Include="mainGame\Object\UI\FlagMeter">
       <UniqueIdentifier>{f3fbf8ae-05fe-4686-83ae-8d09fee96a14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mainGame\Object\UI\SunPoint">
+      <UniqueIdentifier>{3b0dec1c-865c-4dff-ae83-f65e585c6a6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -144,6 +147,15 @@
     <ClInclude Include="Zombie.h">
       <Filter>mainGame\Object\ObjectControl</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>mainGame\Object\ObjectControl</Filter>
+    </ClInclude>
+    <ClInclude Include="SunPoint.h">
+      <Filter>mainGame\Object\UI\SunPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="SunPointControl.h">
+      <Filter>mainGame\Object\UI\SunPoint</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -217,6 +229,15 @@
     </ClCompile>
     <ClCompile Include="Zombie.cpp">
       <Filter>mainGame\Object\ObjectControl</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>mainGame\Object\ObjectControl</Filter>
+    </ClCompile>
+    <ClCompile Include="SunPoint.cpp">
+      <Filter>mainGame\Object\UI\SunPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="SunPointControl.cpp">
+      <Filter>mainGame\Object\UI\SunPoint</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
