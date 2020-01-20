@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "UI.h"
 
+void UI::set_fClickCardToBank(bool fResult)
+{
+	_bank->set_fClickCard(fResult);
+}
+void UI::set_cardTypeToBank(string cardType)
+{
+	_bank->set_cardType(cardType);
+}
+
 vector<RECT> UI::get_mapSpaces()
 {
 	return vector<RECT>(_mapSpaces);
@@ -146,6 +155,9 @@ HRESULT UI::init()
 	_bank->init();
 	_flagMeter = new FlagMeter;
 	_flagMeter->init();
+	// 햇빛을 초기화한다.
+	_sunControl = new SunPointControl;
+	_sunControl->init();
 	// 시드카드 rect 벡터를 초기화한다.
 	init_cardRects();
 	// 맵의 공간 벡터를 초기화한다.
@@ -157,8 +169,13 @@ HRESULT UI::init()
 void UI::release()
 {
 	_map->release();
+	_map = nullptr;
 	_bank->release();
+	_bank = nullptr;
 	_flagMeter->release();
+	_flagMeter = nullptr;
+	_sunControl->release();
+	_sunControl = nullptr;
 	// 카드와 맵 Rect 벡터를 지운다.
 	delete_cardRects();
 	delete_mapSpaces();
@@ -169,14 +186,20 @@ void UI::update()
 	_map->update();
 	_bank->update();
 	_flagMeter->update();
+	_sunControl->update();
 }
 void UI::render()
 {
 	_map->render();
 	_bank->render();
 	_flagMeter->render();
+	_sunControl->render();
 
-	if (KEYMANAGER->isToggleKey(0x32)) { show_cardRects(); }
+	if (KEYMANAGER->isToggleKey(0x32)) 
+	{ 
+		show_cardRects(); 
+		_sunControl->show_sunPointRects();
+	}
 	//if: 2번을 누르면
 	if (KEYMANAGER->isToggleKey(0X31))
 	{

@@ -1,106 +1,37 @@
 #pragma once
-#include"gameNode.h"
-
-struct tagBullet
-{
-	image* bulletImage;
-	RECT rc;
-	float x, y;
-	float fireX, fireY;
-	float radius;
-	float angle;
-	float speed;
-	bool fire;
-	int count;
-
-};
-
-class bullet  :public gameNode
+#include "gameNode.h"
+class Bullet: public gameNode
 {
 private:
-
-	vector<tagBullet> _vBullet;
-	vector<tagBullet>::iterator _viBullet;
-
-
-	const char* _imageName;
-	float _range;
-	int _bulletMax;
-
+	image * _img;
+	RECT _rect;
+	int _width;
+	int _height;
+	int _speed;
+	int _damage;
+	// 총알의 유효 영역
+	RECT _hitPoint;
+	// 총알 없앨때 쓰는 정보
+	bool _fDeleteBullet;
+protected:
+	void init_hitPoint();
+	void check_deleteBullet();
+	void move_toRight();
 public:
-	bullet();
-	~bullet();
-
-	HRESULT init(char* imageName,int bulletMax, float range);
+	// 총알 타격점 보여주는 함수
+	void draw_hitPoint();
+	void init_bullet(LONG x, LONG y);
+	void set_fDeleteBullet(bool fResult) { _fDeleteBullet = fResult; }
+	bool get_fDeleteBullet() { return _fDeleteBullet; }
+	int get_damege() { return _damage; }
+	RECT get_rect() { return _rect; }
+	RECT get_hitPoint() { return _hitPoint; }
+public:
+	Bullet();
+	~Bullet();
+	HRESULT init();
 	void release();
 	void update();
 	void render();
-
-	void fire(float x, float y, float angle, float speed);
-	void move();
-
-	//총알삭제
-	void removeMissile(int arrNum);
-
-	vector<tagBullet> getVBullet() { return _vBullet; }
-	vector<tagBullet>::iterator getVIBullet() { return _viBullet; }
-
-
-
 };
-class missile : public gameNode
-{
-private:
-	vector<tagBullet> _vBullet;
-	vector<tagBullet>::iterator _viBullet;
 
-private:
-
-	float _range;
-
-public:
-
-
-	missile();
-	~missile();
-
-	HRESULT init(int bulletMax, float range);
-	void release();
-	void update();
-	void render();
-
-	//발사
-	void fire(float x, float y);
-	//움직여라
-	void move();
-
-};
-class nuclear : public gameNode
-{
-
-private:
-
-	vector<tagBullet> _vBullet;
-	vector<tagBullet>::iterator _viBullet;
-
-	int _missileMax;
-	float _range;
-
-public:
-
-	nuclear();
-	~nuclear();
-
-	HRESULT init(int bulletMax, float range);
-	void release();
-	void update();
-	void render();
-
-	void fire(float x, float y);
-	void move();
-
-	void removeNuclear(int arrNum);
-	vector<tagBullet> getVBullet() { return _vBullet; }
-	vector<tagBullet>::iterator getVIBullet() { return _viBullet; }
-
-};

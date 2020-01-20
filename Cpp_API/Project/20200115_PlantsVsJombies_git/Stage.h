@@ -9,6 +9,7 @@ private:
 	ObjectControl * _objControl;
 public:
 	void update_uiToObjControl();
+	void update_objControlToUi();
 public:
 	Stage();
 	~Stage();

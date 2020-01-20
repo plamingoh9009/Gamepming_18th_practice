@@ -31,7 +31,7 @@ void SeedCard::init_plantImage()
 	IMAGEMANAGER->addImage("Wallnut_Disable",
 		"images/ui/Wallnut_Disable.bmp", 26, 25, false, COLOR_MAGENTA);
 	IMAGEMANAGER->addImage("Wallnut_Enable",
-		"images/ui/Wallnut_Enable.bmp", 26, 25, false, COLOR_MAGENTA);
+		"images/ui/Wallnut_Enable.bmp", 36, 35, true, COLOR_MAGENTA);
 	//PeaShooter
 	IMAGEMANAGER->addImage("PeaShooter_Disable",
 		"images/ui/PeaShooter_Disable.bmp", 26, 27, false, COLOR_MAGENTA);
@@ -90,6 +90,19 @@ void SeedCard::set_seedCard(string strKey, int x, int y)
 	// 카드 한 장의 사각형을 초기화
 	_oneFrameRect = make_oneFrameRect();
 }
+void SeedCard::set_plantImage(bool isEnable)
+{
+	string result;
+	if (isEnable = true)
+	{
+		result = _type.append("_Enable");
+	}
+	else
+	{
+		result = _type.append("_Disable");
+	}
+	_plantImage = IMAGEMANAGER->findImage(result);
+}
 
 SeedCard::SeedCard()
 {
@@ -108,6 +121,8 @@ HRESULT SeedCard::init()
 		_width, _height, _maxFrameX, _maxFrameY, false, COLOR_MAGENTA);
 	// 카드안의 식물 이미지를 로드한다.
 	init_plantImage();
+	// 카드 on, off 하는 정보
+	_fCardEnable = true;
 	return S_OK;
 }
 void SeedCard::release()
