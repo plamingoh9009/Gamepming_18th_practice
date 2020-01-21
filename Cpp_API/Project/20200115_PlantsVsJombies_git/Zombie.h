@@ -36,6 +36,8 @@ protected:
 	void check_deadZombie();
 	// 좀비가 때릴 때 쓰는 함수
 	void attack_plant();
+	void change_zombieImgForAttack();
+	void change_zombieImgForWalk();
 	// 좀비가 평소에 쓰는 함수
 	void walk_toLeft();
 	void run_frame();

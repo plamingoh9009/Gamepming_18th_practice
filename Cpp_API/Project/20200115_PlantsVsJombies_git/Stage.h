@@ -8,6 +8,7 @@ private:
 	UI * _ui;
 	ObjectControl * _objControl;
 public:
+	void update_clickedUi();
 	void update_uiToObjControl();
 	void update_objControlToUi();
 public:

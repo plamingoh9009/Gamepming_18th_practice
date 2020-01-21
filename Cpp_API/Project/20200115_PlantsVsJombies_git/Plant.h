@@ -21,7 +21,7 @@ private:
 	int _hp=3;
 	// 마우스를 따라가는지 정하는 변수
 	bool _fMouseFollow;
-	// 식물이 심어진 공간 정보
+	// 식물을 심을 때 쓰는 정보
 	RECT _plantPoint;
 	// 총알컨트롤에 쓰는 정보
 	vBullets_t _bullets;
@@ -40,7 +40,6 @@ private:
 protected:
 	void follow_mouseMove();
 	void run_frameImg();
-	
 	// 식물이 죽었는지 확인하는 함수
 	void check_deadPlant();
 	// 좀비 때릴때 쓰는 함수
@@ -53,6 +52,7 @@ protected:
 	void delete_bulletsAll();
 	void draw_bullets();
 public:
+	// 식물 초기화
 	void init_plant(string strKey, int x, int y);
 	void move_plant(LONG, LONG);
 	// 좀비 때릴 때 쓰는 함수

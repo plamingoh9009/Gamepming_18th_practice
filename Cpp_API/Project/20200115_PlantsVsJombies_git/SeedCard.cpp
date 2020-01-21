@@ -1,6 +1,20 @@
 #include "stdafx.h"
 #include "SeedCard.h"
 
+// ================================================
+// **				디버그용 함수 					 **
+// ================================================
+void SeedCard::show_costRect()
+{
+	FrameRect(getMemDC(), &_costRect,
+		CreateSolidBrush(RGB(0, 0, 0)));
+}
+void SeedCard::show_rect()
+{
+	FrameRect(getMemDC(), &_rect,
+		CreateSolidBrush(RGB(255, 255, 255)));
+}
+
 RECT SeedCard::get_oneFrameRect()
 {
 	return _oneFrameRect;
@@ -16,8 +30,8 @@ RECT SeedCard::make_oneFrameRect()
 }
 void SeedCard::show_oneFrameRect()
 {
-	Rectangle(getMemDC(), _oneFrameRect.left, _oneFrameRect.top,
-		_oneFrameRect.right, _oneFrameRect.bottom);
+	FrameRect(getMemDC(), &_oneFrameRect, 
+		CreateSolidBrush(RGB(255, 255, 255)));
 }
 
 void SeedCard::init_plantImage()
@@ -47,6 +61,7 @@ void SeedCard::set_seedCard(string strKey, int x, int y)
 	// 카드 이미지 셋팅
 	if (strKey.compare("SunFlower") == 0)
 	{
+		_cost = 50;
 		_kindOfPlant = strKey.append("_Enable");
 		initPlantImgX = 8;
 		initPlantImgY = 12;
@@ -55,6 +70,7 @@ void SeedCard::set_seedCard(string strKey, int x, int y)
 	}
 	else if (strKey.compare("Wallnut") == 0)
 	{
+		_cost = 50;
 		_kindOfPlant = strKey.append("_Enable");
 		initPlantImgX = 8;
 		initPlantImgY = 12;
@@ -63,6 +79,7 @@ void SeedCard::set_seedCard(string strKey, int x, int y)
 	}
 	else if (strKey.compare("PeaShooter") == 0)
 	{
+		_cost = 100;
 		_kindOfPlant = strKey.append("_Enable");
 		initPlantImgX = 8;
 		initPlantImgY = 12;
@@ -103,6 +120,21 @@ void SeedCard::set_plantImage(bool isEnable)
 	}
 	_plantImage = IMAGEMANAGER->findImage(result);
 }
+// ================================================
+// **			카드 가격을 셋팅					 **
+// ================================================
+void SeedCard::set_costRect()
+{
+	int initX = 5;
+	int initY = 53;
+	int width = 25;
+	int height = 10;
+	_costRect.left = _oneFrameRect.left + initX;
+	_costRect.top = _oneFrameRect.top + initY;
+	_costRect.right = _costRect.left + width;
+	_costRect.bottom = _costRect.top + height;
+	wsprintf(_strCost, "%d", _cost);
+}
 
 SeedCard::SeedCard()
 {
@@ -110,7 +142,6 @@ SeedCard::SeedCard()
 SeedCard::~SeedCard()
 {
 }
-
 HRESULT SeedCard::init()
 {
 	_width = 450;
@@ -123,6 +154,8 @@ HRESULT SeedCard::init()
 	init_plantImage();
 	// 카드 on, off 하는 정보
 	_fCardEnable = true;
+	// 카드의 가격을 초기화
+	_cost = 0;
 	return S_OK;
 }
 void SeedCard::release()
@@ -142,4 +175,8 @@ void SeedCard::render()
 	// 카드의 식물그림을 렌더
 	_plantImage->render(getMemDC(),
 		(int)(_plantImage->getX()), (int)(_plantImage->getY()));
+	// 카드의 코스트를 렌더
+	SetBkMode(getMemDC(), TRANSPARENT);
+	TextOut(getMemDC(), _costRect.left, _costRect.top, 
+		_strCost, strlen(_strCost));
 }
