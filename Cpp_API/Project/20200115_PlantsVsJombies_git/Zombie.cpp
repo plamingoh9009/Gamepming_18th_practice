@@ -16,7 +16,9 @@ void Zombie::check_deadZombie()
 		_fDeadZombie = true;
 	}
 }
-
+// ================================================
+// **				좀비가 식물 때릴때				 **
+// ================================================
 void Zombie::attack_plant()
 {
 	_attackCount++;
@@ -25,7 +27,41 @@ void Zombie::attack_plant()
 		_fZombieAttack = true;
 		_lostPlantHp += _damage;
 		_attackCount = 0;
+		// 때린 후에는 원래 이미지로 돌린다.
+		change_zombieImgForWalk();
 	}
+}
+void Zombie::change_zombieImgForAttack()
+{
+	_img = IMAGEMANAGER->findImage("Zombie_Attack");
+	// 프레임을 돌리기 위한 변수
+	_currentFrameX = 0;
+	_currentFrameY = 0;
+	_frameDelay = 8;
+	_frameCount = 0;
+	// _rect를 만들기 위한 변수
+	_maxFrameX = 7;
+	_maxFrameY = 1;
+	_width = 630;
+	_height = 130;
+	_rect = RectMake(_rect.left, _rect.top,
+		_width / _maxFrameX, _height / _maxFrameY);
+}
+void Zombie::change_zombieImgForWalk()
+{
+	_img = IMAGEMANAGER->findImage("Zombie");
+	// 프레임을 돌리기 위한 변수
+	_currentFrameX = 0;
+	_currentFrameY = 0;
+	_frameDelay = 8;
+	_frameCount = 0;
+	// _rect를 만들기 위한 변수
+	_maxFrameX = 10;
+	_maxFrameY = 1;
+	_width = 990;
+	_height = 130;
+	_rect = RectMake(_rect.left, _rect.top,
+		_width / _maxFrameX, _height / _maxFrameY);
 }
 
 void Zombie::init_lostPlantHp()
@@ -119,12 +155,15 @@ Zombie::~Zombie()
 }
 HRESULT Zombie::init()
 {
+	_width = 990;
+	_height = 130;
 	_img = IMAGEMANAGER->addFrameImage("Zombie",
-		"images/zombies/Zombie_Walk.bmp", 1080, 110,
-		12, 1, true, COLOR_MAGENTA);
-	_width = 1080;
-	_height = 110;
-	_maxFrameX = 12;
+		"images/zombies/Zombie_Walk.bmp", _width, _height,
+		10, 1, true, COLOR_MAGENTA);
+	IMAGEMANAGER->addFrameImage("Zombie_Attack",
+		"images/zombies/Zombie_Attack.bmp", 630, 130,
+		7, 1, true, COLOR_MAGENTA);
+	_maxFrameX = 10;
 	_maxFrameY = 1;
 	// 프레임 돌릴 정보
 	_currentFrameX = 0;
@@ -152,11 +191,16 @@ void Zombie::release()
 }
 void Zombie::update()
 {
-	if (_fPlantInRange == true) 
+	if (_fPlantInRange == true)
 	{
+		// 때리기 전에 이미지를 바꾼다.
+		if (_attackCount >= _attackDelay - (_frameDelay * (_maxFrameX)))
+		{
+			change_zombieImgForAttack();
+		}
 		attack_plant();
 	}//if: 식물이 근처에 있다면
-	else 
+	else
 	{
 		walk_toLeft();
 	}//else: 식물이 근처에 없다면 그저 걷는다.
@@ -165,6 +209,6 @@ void Zombie::update()
 }
 void Zombie::render()
 {
-	IMAGEMANAGER->frameRender("Zombie", getMemDC(),
+	_img->frameRender(getMemDC(),
 		_rect.left, _rect.top, _currentFrameX, _currentFrameY);
 }

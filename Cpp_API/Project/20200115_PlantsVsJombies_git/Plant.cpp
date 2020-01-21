@@ -33,12 +33,12 @@ void Plant::change_plantImgForAttack()
 	_currentFrameX = 0;
 	_currentFrameY = 0;
 	_frameCount = 0;
+	_frameDelay = 12;
 	// _rect를 만들기 위한 변수
-	_frameDelay = 8;
-	_maxFrameX = 3;
+	_maxFrameX = 5;
 	_maxFrameY = 1;
-	_width = 105;
-	_height = 36;
+	_width = 375;
+	_height = 75;
 	_rect = RectMake(_rect.left, _rect.top,
 		_width / _maxFrameX, _height / _maxFrameY);
 }
@@ -50,11 +50,11 @@ void Plant::change_plantImgForIdle()
 	_currentFrameY = 0;
 	_frameCount = 0;
 	// _rect를 만들기 위한 변수
-	_frameDelay = 4;
-	_maxFrameX = 8;
+	_frameDelay = 8;
+	_maxFrameX = 7;
 	_maxFrameY = 1;
-	_width = 432;
-	_height = 36;
+	_width = 525;
+	_height = 75;
 	_rect = RectMake(_rect.left, _rect.top,
 		_width / _maxFrameX, _height / _maxFrameY);
 }
@@ -214,6 +214,17 @@ void Plant::set_plantPoint(RECT plantPoint)
 {
 	_plantPoint = plantPoint;
 }
+
+
+Plant::Plant()
+{
+}
+Plant::~Plant()
+{
+}
+// ================================================
+// **				식물 초기화					 **
+// ================================================
 void Plant::init_plant(string strKey, int x, int y)
 {
 	_img = IMAGEMANAGER->findImage(strKey);
@@ -242,20 +253,13 @@ void Plant::init_plant(string strKey, int x, int y)
 	}//if: Wallnut은 width 27, height 32
 	else if (_type.compare("PeaShooter") == 0)
 	{
-		_frameDelay = 4;
-		_maxFrameX = 8;
+		_frameDelay = 8;
+		_maxFrameX = 7;
 		_maxFrameY = 1;
-		_width = 432;
-		_height = 36;
+		_width = 525;
+		_height = 75;
 		_rect = RectMake(x, y, _width / _maxFrameX, _height / _maxFrameY);
 	}//if: PeaShooter는 width 54, height 36
-}
-
-Plant::Plant()
-{
-}
-Plant::~Plant()
-{
 }
 HRESULT Plant::init()
 {
@@ -267,10 +271,10 @@ HRESULT Plant::init()
 		350, 80, 5, 1, true, COLOR_MAGENTA);
 	IMAGEMANAGER->addFrameImage("PeaShooter",
 		"images/plants/PeaShooter_Idle.bmp",
-		432, 36, 8, 1, true, COLOR_MAGENTA);
+		525, 75, 7, 1, true, COLOR_MAGENTA);
 	IMAGEMANAGER->addFrameImage("PeaShooter_Attack",
 		"images/plants/PeaShooter_Attack.bmp",
-		105, 36, 3, 1, true, COLOR_MAGENTA);
+		375, 75, 5, 1, true, COLOR_MAGENTA);
 	// 마우스를 따라갈지 정하는 변수
 	_fMouseFollow = false;
 	// 총알 컨트롤 변수

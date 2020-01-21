@@ -22,13 +22,20 @@ private:
 	vSpaces_t::iterator _itSpaces;
 	// 초반에 딜레이를 주기 위한 변수
 	int _delay;
+	// 스테이지 범위를 담는 변수
+	RECT _stage;
+
 protected:
+	void init_stage();
 	void change_mapImg();
 public:
+	RECT get_stage() { return _stage; }
 	vector<RECT> get_spaces();
 	vector<RECT>::iterator get_itSpaces();
 	vector<RECT> get_lines();
 	vector<RECT>::iterator get_itLines();
+	// 디버그용 함수
+	void show_stage();
 	void show_lines();
 	void delete_lines();
 	void show_spaces();

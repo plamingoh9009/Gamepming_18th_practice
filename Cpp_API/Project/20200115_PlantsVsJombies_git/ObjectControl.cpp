@@ -4,6 +4,29 @@
 // ================================================
 // **				좀비 컨트롤					 **
 // ================================================
+void ObjectControl::init_forStageLevel()
+{
+	_stageLevel = 1;
+	_maxZombies = 30 * _stageLevel;
+	_currentGauge = 0;
+	_currentZombies = 0;
+	_makeZombieCount = 0;
+	_makeZombieDelay = 200;
+}
+void ObjectControl::make_zombieAtStage()
+{
+	_makeZombieCount++;
+	if (_makeZombieCount >= _makeZombieDelay)
+	{
+		if (_currentZombies < _maxZombies &&
+			0 < _currentGauge)
+		{
+			make_zombie();
+			_makeZombieDelay = RND->getFromIntTo(150, 300);
+		}
+		_makeZombieCount = 0;
+	}
+}
 void ObjectControl::make_zombie()
 {
 	Zombie * zombie = new Zombie;
@@ -44,14 +67,14 @@ void ObjectControl::update_zombies()
 	for (;_itZombies != _zombies.end();_itZombies++)
 	{
 		(*_itZombies)->update();
-// ================================================
-// **				식물과 충돌체크				 **
-// ================================================
+		// ================================================
+		// **				식물과 충돌체크				 **
+		// ================================================
 		fPlantInAttackRange = is_plantInAttackRange(
 			(*_itZombies)->get_zombieAttackRange());
-// ================================================
-// **				좀비가 식물 공격				 **
-// ================================================
+		// ================================================
+		// **				좀비가 식물 공격				 **
+		// ================================================
 		if (fPlantInAttackRange == true)
 		{
 			(*_itZombies)->set_fPlantInRange(true);
@@ -232,6 +255,26 @@ void ObjectControl::make_plant()
 	// 이러면 객체는 남아 있음.
 	plant = nullptr;
 }
+void ObjectControl::init_forSunflower()
+{
+	_sunflowerCount = 0;
+	_newSunflowerCount = 0;
+}
+// ================================================
+// **			해바라기 세는 부분					 **
+// ================================================
+void ObjectControl::count_sunflower()
+{
+	_sunflowerCount = 0;
+	_itPlants = _plants.begin();
+	for (;_itPlants != _plants.end();_itPlants++)
+	{
+		if ((*_itPlants)->get_type().compare("SunFlower") == 0)
+		{
+			_sunflowerCount++;
+		}
+	}
+}
 // ================================================
 // **				식물이 좀비 때릴때				 **
 // ================================================
@@ -307,20 +350,9 @@ void ObjectControl::attack_zombieToPlant(RECT zombiRange, int lostHp)
 		}//if: 좀비 공격거리 안에 있는 식물이라면
 	}//for: 식물 서치
 }
-void ObjectControl::check_clickCard()
-{
-	RECT temp;
-	make_mouseRect();
-	_itCardRects = _cardRects.begin();
-	for (;_itCardRects != _cardRects.end();_itCardRects++)
-	{
-		if (IntersectRect(&temp, &_mouseRect, &_itCardRects->second))
-		{
-			_fClickCard = true;
-			_cardType = _itCardRects->first;
-		}//if: 내 마우스가 카드를 누르면
-	}//for: 식물 맵을 돌린다.
-}
+// ================================================
+// **				식물 심을때					 **
+// ================================================
 void ObjectControl::check_mapSpace()
 {
 	make_mouseRect();
@@ -361,6 +393,14 @@ void ObjectControl::plant_plantToMap()
 			// 위치를 잡아준다.
 			(*_itPlants)->move_plant(_plantPoint.left, _plantPoint.top);
 			(*_itPlants)->set_plantPoint(_plantPoint);
+// ================================================
+// **		새로 만든 해바라기 세는 부분				 **
+// ================================================
+			if (_cardType.compare("SunFlower") == 0)
+			{
+				// 심은 식물이 해바라기라면 newSunflowerCount를 올린다.
+				_newSunflowerCount++;
+			}
 		}
 	}
 }
@@ -373,11 +413,17 @@ ObjectControl::~ObjectControl()
 }
 HRESULT ObjectControl::init()
 {
+	// 식물 심을 때 쓰는 변수
 	_fClickCard = false;
 	_fMakingPlant = false;
 	_fMapSpace = false;
 	_fPlantInSpace = false;
 	_cardType = "";
+	_fClickStage = false;
+	// 스테이지에서 좀비 나오는거 초기화
+	init_forStageLevel();
+	// 해바라기 갯수 세는거 초기화
+	init_forSunflower();
 	return S_OK;
 }
 void ObjectControl::release()
@@ -399,49 +445,63 @@ void ObjectControl::update()
 	// 좀비 벡터를 업데이트 한다.
 	update_zombies();
 
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	// ================================================
+	// **			식물을 생성하는 부분				 **
+	// ================================================
+	if (_fClickCard == true && _fClickStage == false)
 	{
-// ================================================
-// **			식물을 생성하는 부분				 **
-// ================================================
-		check_clickCard();
-		if (_fClickCard == true && _fMakingPlant == false)
+		if (_fMakingPlant == false)
 		{
 			make_plant();
 			_fClickCard = false;
 			// 객체를 생성했다면 다른 객체를 또 생성하지는 못한다.
 			_fMakingPlant = true;
-		}//if: 카드를 눌렀고, 식물을 만드는 중이 아니라면 객체를 생성한다.
+		}//if: 식물을 만드는 중이 아니라면 객체를 생성한다.
+	}//if: 스테이지 말고 카드를 클릭했을 때
+	else
+	{
+		_fClickCard = false;
+	}
 
-// ================================================
-// **				식물을 심는 부분				 **
-// ================================================
-		if (_fMakingPlant == true)
-		{
-			check_mapSpace();
-			check_spaceEmpty();
-		}//if: 식물을 만드는 중이라면
+	// ================================================
+	// **				식물을 심는 부분				 **
+	// ================================================
+	if (_fClickStage == true && _fMakingPlant == true)
+	{
+		check_mapSpace();
+		check_spaceEmpty();
+	}//if: 식물을 만드는 중이고, 심을 자리를 클릭했다면
 
-		if (_fMapSpace == true && _fMakingPlant == true)
+	if (_fMakingPlant == true && _fMapSpace == true &&
+		_fClickStage == true)
+	{
+		if (_fPlantInSpace == false && _fClickStage == true)
 		{
-			if (_fPlantInSpace == false)
-			{
-				// 식물을 땅에 심는다.
-				plant_plantToMap();
-				// 심고나면 식물을 만드는 중이 아니다.
-				_fMakingPlant = false;
-				// 심고나면 식물이 공간에 존재한다.
-				_fPlantInSpace = true;
-			}//if: 공간에 식물이 없다면
-		}//if: 심을 땅이 있고, 식물을 심는 중이라면
-	}//if: 클릭하는 순간.
+			// 식물을 땅에 심는다.
+			plant_plantToMap();
+			// 심고나면 식물을 만드는 중이 아니다.
+			_fClickStage = false;
+			_fMakingPlant = false;
+			// 심고나면 식물이 공간에 존재한다.
+			_fPlantInSpace = true;
+		}//if: 공간에 식물이 없다면
+	}//if: 심을 땅이 있고, 식물을 심는 중이라면
+	else
+	{
+		_fClickStage = false;
+	}
+
 	if (KEYMANAGER->isOnceKeyDown(0x30))
 	{
-// ================================================
-// **			좀비를 생성하는 부분				 **
-// ================================================
+		// ================================================
+		// **			좀비를 생성하는 부분				 **
+		// ================================================
 		make_zombie();
 	}//if: 0번을 누르면 새 좀비를 만든다.
+	// 해바라기를 센다.
+	count_sunflower();
+	// 좀비를 스테이지 레벨에 따라서 만든다.
+	make_zombieAtStage();
 	// 죽은 식물을 지운다.
 	delete_deadPlants();
 	// 죽은 좀비를 지운다.

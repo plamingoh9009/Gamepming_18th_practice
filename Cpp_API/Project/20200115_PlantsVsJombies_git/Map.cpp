@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "Map.h"
 
+void Map::init_stage()
+{
+	int size = _spaces.size();
+	_stage.left = _spaces[0].left;
+	_stage.top = _spaces[0].top;
+	_stage.right = _spaces[size - 1].right;
+	_stage.bottom = _spaces[size - 1].bottom;
+}
+
 void Map::change_mapImg()
 {
 	if (_type.compare("Background_Yard") == 0)
@@ -37,6 +46,11 @@ vector<RECT>::iterator Map::get_itLines()
 	return vector<RECT>::iterator(_itLines);
 }
 
+void Map::show_stage()
+{
+	FrameRect(getMemDC(), &_stage,
+		CreateSolidBrush(RGB(0, 0, 0)));
+}
 void Map::show_lines()
 {
 	_itLines = _lines.begin();
@@ -148,6 +162,8 @@ HRESULT Map::init()
 	init_spaces();
 	// 초반 딜레이를 위한 변수
 	_delay = 0;
+	// 스테이지 범위를 갖는 변수
+	init_stage();
 	return S_OK;
 }
 void Map::release()
