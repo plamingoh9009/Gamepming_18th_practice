@@ -1,7 +1,10 @@
 #pragma once
-#include "GameScene.h"
-class Ending: GameScene
+#include "gameNode.h"
+class Ending: public gameNode
 {
+private:
+	image * _img;
+	RECT _rect;
 public:
 	Ending();
 	~Ending();

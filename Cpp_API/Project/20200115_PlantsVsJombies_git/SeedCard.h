@@ -24,6 +24,7 @@ private:
 	RECT _costRect;
 	char _strCost[30];
 protected:
+	void delete_seedCardImg();
 public:
 	// 디버그용 함수
 	void show_costRect();

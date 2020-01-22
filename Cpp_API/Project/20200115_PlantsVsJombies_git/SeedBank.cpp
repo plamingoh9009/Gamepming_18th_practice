@@ -116,7 +116,7 @@ void SeedBank::init_cardCosts()
 void SeedBank::delete_cardCosts()
 {
 	_itCardCosts = _cardCosts.begin();
-	for (;_itCardCosts != _cardCosts.end();_itCardCosts++)
+	for (;_itCardCosts != _cardCosts.end();)
 	{
 		_itCardCosts = _cardCosts.erase(_itCardCosts);
 	}

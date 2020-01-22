@@ -1,5 +1,19 @@
 #include "stdafx.h"
 #include "Zombie.h"
+// ================================================
+// **			게임을 끝내기 위한 함수				 **
+// ================================================
+bool Zombie::is_zombiePassByLine()
+{
+	if (IsRectEmpty(&_stageRect) == false)
+	{
+		if (_zombieHitPoint.right < _stageRect.left)
+		{
+			return true;
+		}//if: 좀비가 라인을 넘어가는 순간
+	}//if: 스테이지 렉트가 존재한다면
+	return false;
+}
 
 void Zombie::init_zombieAttackRange(RECT hitPoint)
 {
@@ -131,13 +145,16 @@ void Zombie::init_zombiePosition(vector<RECT> lines)
 	// 좀비의 오른쪽 끝이 -> 각 라인의 오른쪽 끝 중에 하나여야 한다.
 	int range = (int)(lines.size());
 	int idx = RND->getInt(range);
+	int blank = WINSIZEX - lines[idx].right;
 	// 렉트 셋팅
-	_rect.right = lines[idx].right;
+	_rect.right = lines[idx].right + (blank*2);
 	_rect.bottom = lines[idx].bottom;
 	_rect.left = _rect.right - _img->getFrameWidth();
 	_rect.top = _rect.bottom - _img->getFrameHeight();
 	// 좀비 피격지점 셋팅
 	_zombieHitPoint = lines[idx];
+	_zombieHitPoint.left += (blank * 2);
+	_zombieHitPoint.right += (blank * 2);
 	// 좀비 타격지점 셋팅
 	init_zombieAttackRange(_zombieHitPoint);
 }

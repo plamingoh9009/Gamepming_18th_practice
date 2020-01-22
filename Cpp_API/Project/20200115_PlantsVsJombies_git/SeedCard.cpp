@@ -161,8 +161,8 @@ HRESULT SeedCard::init()
 void SeedCard::release()
 {
 	//delete_plantImage는 SeedBank 클래스가 하고 있다.
-	_img->release();
-	_plantImage->release();
+	_img = nullptr;
+	_plantImage = nullptr;
 }
 void SeedCard::update()
 {

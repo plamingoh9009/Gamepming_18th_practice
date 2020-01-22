@@ -9,7 +9,6 @@ void Map::init_stage()
 	_stage.right = _spaces[size - 1].right;
 	_stage.bottom = _spaces[size - 1].bottom;
 }
-
 void Map::change_mapImg()
 {
 	if (_type.compare("Background_Yard") == 0)
@@ -27,6 +26,15 @@ void Map::change_mapImg()
 		_img = IMAGEMANAGER->findImage("Background_Yard");
 		_type = "Background_Yard";
 	}
+}
+// ================================================
+// **				인트로 초기화					 **
+// ================================================
+void Map::init_forIntro()
+{
+	_isShowMapAll = true;
+	_distance = 0;
+	_fReadySetPlant = false;
 }
 
 vector<RECT> Map::get_spaces()
@@ -74,7 +82,7 @@ void Map::show_spaces()
 	_itSpaces = _spaces.begin();
 	for (;_itSpaces != _spaces.end();_itSpaces++)
 	{
-		FrameRect(getMemDC(), &(*_itSpaces), 
+		FrameRect(getMemDC(), &(*_itSpaces),
 			CreateSolidBrush(RGB(0, 0, 0)));
 	}
 }
@@ -113,24 +121,29 @@ void Map::delete_spaces()
 	_itSpaces = _spaces.begin();
 	for (;_itSpaces != _spaces.end();)
 	{
-		_spaces.erase(_itSpaces++);
+		_itSpaces = _spaces.erase(_itSpaces);
 	}
-	_spaces.clear();
+	swap(vSpaces_t(), _spaces);
 }
 void Map::show_mapAll()
 {
-	// 맵이 어디까지인지 보여주는 함수
-	if (_distance + WINSIZEX >= _rect.right - 1)
+	if (_delay >= (60 * 2))
 	{
-		_distance = 126;
-		_isShowMapAll = false;
-		_delay++;
-		Sleep(2500);
-	}//if: 윈도우의 끝에 도달하면 멈춘다.
-	else
-	{
-		_distance += _SPEED;
-	}//else: 윈도우의 끝이 아니면 움직여서 보여준다.
+		// 맵이 어디까지인지 보여주는 함수
+		if (_distance + WINSIZEX >= _rect.right - 1)
+		{
+			_distance = 126;
+			_isShowMapAll = false;
+			_delay = 0;
+			Sleep(2500);
+			_fReadySetPlant = true;
+		}//if: 윈도우의 끝에 도달하면 멈춘다.
+		else
+		{
+			_distance += _SPEED;
+		}//else: 윈도우의 끝이 아니면 움직여서 보여준다.
+	}//if: 일정시간이 지난 후
+	else { _delay++; }
 }
 
 Map::Map()
@@ -142,9 +155,9 @@ Map::~Map()
 HRESULT Map::init()
 {
 	_rect = RectMake(0, 0, 1400, 600);
-	_img = IMAGEMANAGER->addImage("Background_Yard", 
+	_img = IMAGEMANAGER->addImage("Background_Yard",
 		"images/Background_Yard.bmp",
-		_rect.right - _rect.left, _rect.bottom - _rect.top, 
+		_rect.right - _rect.left, _rect.bottom - _rect.top,
 		false, COLOR_MAGENTA);
 	IMAGEMANAGER->addImage("Background_Snow",
 		"images/Background_Snow.bmp",
@@ -176,21 +189,15 @@ void Map::release()
 }
 void Map::update()
 {
-	if (_delay == 100)
+	if (_isShowMapAll == true)
 	{
-		_isShowMapAll = false;
-		// 처음에 맵을 쭉 보여주는 부분
-		if (_isShowMapAll == true) 
-		{ 
-			show_mapAll();
-		}
-	}//if: 일정시간이 지난 후
-	else { _delay++; }
+		show_mapAll();
+	}
 
 	if (KEYMANAGER->isOnceKeyDown(0x39))
 	{
 		change_mapImg();
-		
+
 	}
 }
 void Map::render()

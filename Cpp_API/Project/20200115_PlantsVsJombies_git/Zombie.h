@@ -15,6 +15,8 @@ private:
 	int _currentFrameY;
 	int _frameDelay;
 	int _frameCount;
+	// 게임이 끝나기 위한 정보
+	RECT _stageRect;
 	// 좀비가 걷기 위한 정보
 	int _walkDelay;
 	int _walkCount;
@@ -42,6 +44,10 @@ protected:
 	void walk_toLeft();
 	void run_frame();
 public:
+	// 게임을 끝내기 위한 함수
+	bool is_zombiePassByLine();
+	void set_stageRect(RECT stage) { _stageRect = stage; }
+
 	RECT get_rect() { return _rect; }
 	RECT get_zombieDamagePoint() { return _zombieHitPoint; }
 	RECT get_zombieAttackRange() { return _zombieAttackRange; }

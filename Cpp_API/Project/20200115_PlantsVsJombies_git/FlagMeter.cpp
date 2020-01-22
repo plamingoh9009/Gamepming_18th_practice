@@ -16,6 +16,10 @@ void FlagMeter::run_flagmeter()
 			_flagmeterCount = 0;
 		}
 	}//if: 게이지가 존재하는 동안
+	else
+	{
+		_fGameWin = true;
+	}//else: 게이지가 없다면
 }
 void FlagMeter::move_flagmeter()
 {
@@ -24,11 +28,19 @@ void FlagMeter::move_flagmeter()
 	_headRect.left = (LONG)(_rect.left + _currentWidth - (_headWidth / 2));
 	_headRect.right = _headRect.left + _headWidth;
 }
+void FlagMeter::move_flagmeter(float percent)
+{
+	percent = _currentGauge / _maxGauge;
+	_currentWidth = _width * percent;
+	_headRect.left = (LONG)(_rect.left + _currentWidth - (_headWidth / 2));
+	_headRect.right = _headRect.left + _headWidth;
+}
 void FlagMeter::init_flagmeter()
 {
 	_flagmeterCount = 0;
 	_flagmeterDelay = 8;
-	_maxGauge = 1000;
+	_maxGauge = 60 * 20;
+	//_maxGauge = 10;
 	_currentGauge = _maxGauge;
 	_currentWidth = (float)(_width);
 	_headWidth = 25;
@@ -37,8 +49,8 @@ void FlagMeter::init_flagmeter()
 	_headRect.top = _rect.top;
 	_headRect.right = _headRect.left + _headWidth;
 	_headRect.bottom = _headRect.right + 25;
+	_fGameWin = false;
 }
-
 void FlagMeter::show_rect()
 {
 	FrameRect(getMemDC(), &_rect,

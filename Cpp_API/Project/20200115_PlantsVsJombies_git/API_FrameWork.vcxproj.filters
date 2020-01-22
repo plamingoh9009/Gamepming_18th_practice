@@ -156,6 +156,9 @@
     <ClInclude Include="SunPointControl.h">
       <Filter>mainGame\Object\UI\SunPoint</Filter>
     </ClInclude>
+    <ClInclude Include="IntroStage.h">
+      <Filter>mainGame\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="SunPointControl.cpp">
       <Filter>mainGame\Object\UI\SunPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroStage.cpp">
+      <Filter>mainGame\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
