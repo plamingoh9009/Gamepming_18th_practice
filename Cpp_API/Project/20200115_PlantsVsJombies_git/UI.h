@@ -53,8 +53,11 @@ protected:
 	void check_clickCard();
 	void check_clickStage();
 public:
+	bool is_gameWin() { return (_flagmeter->is_gameWin()); }
 	// 해바라기 정보를 받는다.
 	void update_sunflowerInfo(int count, int newCount);
+	// 변하는 플래그 미터 정보를 처리한다.
+	void change_flagmeterUseDeadZombies(float percent);
 	// 플래그 미터의 정보를 넘긴다.
 	bool is_passOverGauge() { return _fPassOverGauge; }
 	void set_fPassOverGauge(bool fResult) { _fPassOverGauge = fResult; }
@@ -70,6 +73,8 @@ public:
 	void set_fClickStage(bool fResult) { _fClickStage = fResult; }
 	bool get_fClickStage() { return _fClickStage; }
 	string get_cardType() { return _cardType; }
+	// 맵의 스테이지 렉트를 넘긴다.
+	RECT get_mapStage();
 	// 맵의 공간정보 렉트벡터를 넘긴다.
 	vector<RECT> get_mapSpaces();
 	vector<RECT>::iterator get_itMapSpaces();

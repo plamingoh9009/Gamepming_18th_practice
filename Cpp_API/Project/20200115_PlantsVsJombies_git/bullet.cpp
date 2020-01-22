@@ -29,7 +29,7 @@ void Bullet::draw_hitPoint()
 }
 void Bullet::init_bullet(LONG x, LONG y)
 {
-	_rect = RectMake(x, y, _width, _height);
+	_rect = RectMake(x, y + _height, _width, _height);
 	init_hitPoint();
 }
 
@@ -42,10 +42,10 @@ Bullet::~Bullet()
 
 HRESULT Bullet::init()
 {
-	_width = 13;
-	_height = 17;
+	_width = 24;
+	_height = 24;
 	_img = IMAGEMANAGER->addImage("PeaBullet",
-		"images/plants/PeaBullet.bmp", _width, _height, 
+		"images/plants/Pea_Bullet.bmp", _width, _height, 
 		true, COLOR_MAGENTA);
 	_speed = 2;
 	_damage = 1;

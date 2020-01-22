@@ -17,6 +17,8 @@ private:
 	int _headWidth;
 	int _flagmeterCount;
 	int _flagmeterDelay;
+	// 게임 끝을 알리는 변수
+	bool _fGameWin;
 protected:
 	// 플래그미터 컨트롤
 	void run_flagmeter();
@@ -24,6 +26,10 @@ protected:
 	// 플래그미터 초기화
 	void init_flagmeter();
 public:
+	// 게임의 종료여부를 알린다.
+	bool is_gameWin() { return _fGameWin; }
+	// 플래그미터를 움직인다.
+	void move_flagmeter(float percent);
 	// 현재 게이지 정보를 넘긴다.
 	float get_currentGauge() { return _currentGauge; }
 	//디버그를 위한 함수

@@ -177,7 +177,7 @@ void SunPointControl::update()
 {
 	update_sunPoints();
 
-	if (KEYMANAGER->isOnceKeyDown(0x38))
+	if (KEYMANAGER->isOnceKeyDown(0x30))
 	{
 		make_sunPoint();
 	}

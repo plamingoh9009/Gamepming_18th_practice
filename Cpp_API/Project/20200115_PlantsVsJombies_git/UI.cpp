@@ -15,7 +15,7 @@ void UI::check_buyCard()
 	}
 }
 // ================================================
-// **			플래그미터를 업데이트				 **
+// **		플래그미터를 넘겨주기 위한 함수			 **
 // ================================================
 void UI::check_currentGauge()
 {
@@ -61,7 +61,13 @@ void UI::set_cardTypeToBank(string cardType)
 {
 	_bank->set_cardType(cardType);
 }
-
+// ================================================
+// **		맵의 정보를 넘겨주기 위한 함수			 **
+// ================================================
+RECT UI::get_mapStage()
+{
+	return (_map->get_stage());
+}
 vector<RECT> UI::get_mapSpaces()
 {
 	return vector<RECT>(_mapSpaces);
@@ -85,6 +91,18 @@ map<string, RECT> UI::get_cardRects()
 map<string, RECT>::iterator UI::get_itCardRects()
 {
 	return map<string, RECT>::iterator(_itCardRects);
+}
+
+void UI::update_sunflowerInfo(int count, int newCount)
+{
+	_sunControl->update_sunflowerInfo(count, newCount);
+}
+// ================================================
+// **	좀비 죽으면 플래그미터를 지나게 하는 부분		 **
+// ================================================
+void UI::change_flagmeterUseDeadZombies(float percent)
+{
+	_flagmeter->move_flagmeter(percent);
 }
 
 RECT UI::make_mouseRect()
@@ -116,10 +134,6 @@ void UI::check_clickStage()
 		_fClickStage = true;
 	}
 }
-void UI::update_sunflowerInfo(int count, int newCount)
-{
-	_sunControl->update_sunflowerInfo(count, newCount);
-}
 // ================================================
 // **			맵의 공간 정보 처리함수				 **
 // ================================================
@@ -142,9 +156,9 @@ void UI::delete_mapSpaces()
 	_itMapSpaces = _mapSpaces.begin();
 	for (;_itMapSpaces != _mapSpaces.end();)
 	{
-		_mapSpaces.erase(_itMapSpaces++);
+		_itMapSpaces = _mapSpaces.erase(_itMapSpaces);
 	}
-	_mapSpaces.clear();
+	swap(vMapSpaces_t(), _mapSpaces);
 }
 // ================================================
 // **			맵의 라인 정보 처리함수				 **
@@ -170,9 +184,9 @@ void UI::delete_mapLines()
 	_itMapLines = _mapLines.begin();
 	for (;_itMapLines != _mapLines.end();)
 	{
-		_mapLines.erase(_itMapLines++);
+		_itMapLines = _mapLines.erase(_itMapLines);
 	}
-	_mapLines.clear();
+	swap(vMapLines_t(), _mapLines);
 }
 // ================================================
 // **			카드 공간 정보 처리함수				 **

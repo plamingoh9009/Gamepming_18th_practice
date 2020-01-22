@@ -12,9 +12,15 @@ private:
 	// 좀비 객체 벡터
 	vZombies_t _zombies;
 	vZombies_t::iterator _itZombies;
-	// 좀비를 자동으로 만들 때 쓰는 변수
+	// 게임을 끝내기 위한 변수
+	RECT _stageRect;
+	bool _fZombiePassByLine;
+	// 스테이지 난이도와 플래그미터 변화를 위한 변수
 	int _stageLevel;
 	int _maxZombies;
+	int _deadZombieCount;
+	float _pastGaugePercentAmount;
+	// 좀비를 자동으로 만들 때 쓰는 변수
 	int _currentZombies;
 	int _makeZombieCount;
 	int _makeZombieDelay;
@@ -60,6 +66,8 @@ protected:
 	void delete_plantsAll();
 	void delete_deadPlants();
 	void make_plant();
+	// 플래그미터 게이지 컨트롤
+	void change_flagmeterGauge();
 	// 해바라기 컨트롤
 	void init_forSunflower();
 	void count_sunflower();
@@ -82,6 +90,9 @@ protected:
 	void show_zombieRects();
 	void show_zombieRectsForFight();
 public:
+	// 게임을 끝내기 위한 함수
+	bool is_ZombiePassByLine() { return _fZombiePassByLine; }
+	void set_stageRect(RECT stage) { _stageRect = stage; }
 	// 클릭했을 때 가져오는 정보
 	void set_fClickStage(bool fResult) { _fClickStage = fResult; }
 	void set_fClickCard(bool fResult) { _fClickCard = fResult; }
@@ -97,6 +108,11 @@ public:
 	void set_itMapLines(vector<RECT>::iterator);
 	void set_cardRects(map<string, RECT>);
 	void set_itCardRects(map<string, RECT>::iterator);
+	// 변하는 플래그미터 게이지 정보
+	float get_pastGaugePercentAmount() 
+	{ return _pastGaugePercentAmount; }
+	void set_pastGaugePercentAmount(float gauge) 
+	{ _pastGaugePercentAmount = gauge; }
 	// 플래그미터 현재 게이지
 	void set_currentGauge(float gauge) { _currentGauge = gauge; }
 public:

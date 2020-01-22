@@ -237,18 +237,18 @@ void Plant::init_plant(string strKey, int x, int y)
 		_frameDelay = 8;
 		_maxFrameX = 8;
 		_maxFrameY = 1;
-		_width = 232;
-		_height = 32;
+		_width = 600;
+		_height = 75;
 		_rect = RectMake(x, y, _width / _maxFrameX, _height / _maxFrameY);
 	}//if: SunFlower´Â width 29, height 32
 	else if (_type.compare("Wallnut") == 0)
 	{
 		_hp = _hp * 3;
 		_frameDelay = 8;
-		_maxFrameX = 5;
+		_maxFrameX = 6;
 		_maxFrameY = 1;
-		_width = 135;
-		_height = 32;
+		_width = 450;
+		_height = 75;
 		_rect = RectMake(x, y, _width / _maxFrameX, _height / _maxFrameY);
 	}//if: WallnutÀº width 27, height 32
 	else if (_type.compare("PeaShooter") == 0)
@@ -264,11 +264,11 @@ void Plant::init_plant(string strKey, int x, int y)
 HRESULT Plant::init()
 {
 	IMAGEMANAGER->addFrameImage("SunFlower",
-		"images/plants/SunFlower_Idle.bmp",
-		232, 32, 8, 1, true, COLOR_MAGENTA);
+		"images/plants/Sunflower_Idle.bmp",
+		600, 75, 8, 1, true, COLOR_MAGENTA);
 	IMAGEMANAGER->addFrameImage("Wallnut",
 		"images/plants/Wallnut_Idle.bmp",
-		350, 80, 5, 1, true, COLOR_MAGENTA);
+		450, 75, 6, 1, true, COLOR_MAGENTA);
 	IMAGEMANAGER->addFrameImage("PeaShooter",
 		"images/plants/PeaShooter_Idle.bmp",
 		525, 75, 7, 1, true, COLOR_MAGENTA);

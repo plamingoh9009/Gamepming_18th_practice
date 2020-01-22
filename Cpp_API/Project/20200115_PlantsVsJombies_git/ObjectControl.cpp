@@ -8,21 +8,26 @@ void ObjectControl::init_forStageLevel()
 {
 	_stageLevel = 1;
 	_maxZombies = 30 * _stageLevel;
+	_deadZombieCount = 0;
+	_pastGaugePercentAmount = 0;
+
 	_currentGauge = 0;
 	_currentZombies = 0;
 	_makeZombieCount = 0;
-	_makeZombieDelay = 200;
+	_makeZombieDelay = 60 * 4;
 }
+// ================================================
+// **			좀비 만드는 부분					 **
+// ================================================
 void ObjectControl::make_zombieAtStage()
 {
 	_makeZombieCount++;
 	if (_makeZombieCount >= _makeZombieDelay)
 	{
-		if (_currentZombies < _maxZombies &&
-			0 < _currentGauge)
+		if (0 < _currentGauge)
 		{
 			make_zombie();
-			_makeZombieDelay = RND->getFromIntTo(150, 300);
+			_makeZombieDelay = RND->getFromIntTo(60 * 5, 60 * 10);
 		}
 		_makeZombieCount = 0;
 	}
@@ -32,6 +37,7 @@ void ObjectControl::make_zombie()
 	Zombie * zombie = new Zombie;
 	zombie->init();
 	zombie->init_zombiePosition(_mapLines);
+	zombie->set_stageRect(_stageRect);
 	_zombies.push_back(zombie);
 }
 void ObjectControl::delete_zombiesAll()
@@ -40,10 +46,13 @@ void ObjectControl::delete_zombiesAll()
 	for (;_itZombies != _zombies.end();)
 	{
 		(*_itZombies)->release();
-		_zombies.erase(_itZombies++);
+		_itZombies = _zombies.erase(_itZombies);
 	}
-	_zombies.clear();
+	swap(vZombies_t(), _zombies);
 }
+// ================================================
+// **				좀비 죽었을 때					 **
+// ================================================
 void ObjectControl::delete_deadZombies()
 {
 	_itZombies = _zombies.begin();
@@ -53,6 +62,7 @@ void ObjectControl::delete_deadZombies()
 		{
 			(*_itZombies)->release();
 			_itZombies = _zombies.erase(_itZombies);
+			_deadZombieCount++;
 		}
 		else
 		{
@@ -92,7 +102,12 @@ void ObjectControl::update_zombies()
 			// 좀비가 쌓은 데미지를 초기화한다.
 			(*_itZombies)->init_lostPlantHp();
 		}//if: 좀비가 공격을 했다면
-	}
+
+		if ((*_itZombies)->is_zombiePassByLine() == true)
+		{
+			_fZombiePassByLine = (*_itZombies)->is_zombiePassByLine();
+		}
+	}//for: 모든 좀비를 서치
 }
 void ObjectControl::draw_zombies()
 {
@@ -186,10 +201,12 @@ void ObjectControl::update_plants()
 	{
 		(*_itPlants)->update();
 		// 라인에 좀비가 있는지 확인.
-		fResult = is_zombiesAtSameLine((*_itPlants)->get_plantPoint());
-		(*_itPlants)->set_fZombieAtSameLine(fResult);
-
-		// 총알과 좀비 충돌검사는 Plant 객체가 한다.
+		if (IsRectEmpty(&_plantPoint) == false)
+		{
+			fResult = is_zombiesAtSameLine((*_itPlants)->get_plantPoint());
+			(*_itPlants)->set_fZombieAtSameLine(fResult);
+		}
+		// 총알과 좀비 충돌검사 하는 부분
 		if ((*_itPlants)->get_fZombieAtSameLine() == true)
 		{
 			temp = find_zombieDamagePoint(
@@ -222,9 +239,9 @@ void ObjectControl::delete_plantsAll()
 	for (;_itPlants != _plants.end();)
 	{
 		(*_itPlants)->release();
-		_plants.erase(_itPlants++);
+		_itPlants = _plants.erase(_itPlants);
 	}
-	_plants.clear();
+	swap(vPlants_t(), _plants);
 }
 void ObjectControl::delete_deadPlants()
 {
@@ -255,6 +272,20 @@ void ObjectControl::make_plant()
 	// 이러면 객체는 남아 있음.
 	plant = nullptr;
 }
+// ================================================
+// **			플래그미터 변하는 부분				 **
+// ================================================
+void ObjectControl::change_flagmeterGauge()
+{
+	float pastGaugePercent;
+	if (0 < _deadZombieCount)
+	{
+		pastGaugePercent =
+			(float)(_deadZombieCount) / (float)(_maxZombies);
+		_deadZombieCount = 0;
+		_pastGaugePercentAmount += pastGaugePercent;
+	}//if: 죽은 좀비가 있다면
+}
 void ObjectControl::init_forSunflower()
 {
 	_sunflowerCount = 0;
@@ -283,7 +314,8 @@ bool ObjectControl::is_zombiesAtSameLine(RECT plantPoint)
 	_itZombies = _zombies.begin();
 	for (;_itZombies != _zombies.end();_itZombies++)
 	{
-		if (plantPoint.top == (*_itZombies)->get_zombieDamagePoint().top)
+		if (plantPoint.top == (*_itZombies)->get_zombieDamagePoint().top
+			&& (*_itZombies)->get_zombieDamagePoint().left < WINSIZEX)
 		{
 			return true;
 		}
@@ -393,9 +425,9 @@ void ObjectControl::plant_plantToMap()
 			// 위치를 잡아준다.
 			(*_itPlants)->move_plant(_plantPoint.left, _plantPoint.top);
 			(*_itPlants)->set_plantPoint(_plantPoint);
-// ================================================
-// **		새로 만든 해바라기 세는 부분				 **
-// ================================================
+			// ================================================
+			// **		새로 만든 해바라기 세는 부분				 **
+			// ================================================
 			if (_cardType.compare("SunFlower") == 0)
 			{
 				// 심은 식물이 해바라기라면 newSunflowerCount를 올린다.
@@ -490,14 +522,8 @@ void ObjectControl::update()
 	{
 		_fClickStage = false;
 	}
-
-	if (KEYMANAGER->isOnceKeyDown(0x30))
-	{
-		// ================================================
-		// **			좀비를 생성하는 부분				 **
-		// ================================================
-		make_zombie();
-	}//if: 0번을 누르면 새 좀비를 만든다.
+	// 플래그미터가 변한다.
+	change_flagmeterGauge();
 	// 해바라기를 센다.
 	count_sunflower();
 	// 좀비를 스테이지 레벨에 따라서 만든다.

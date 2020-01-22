@@ -11,8 +11,11 @@ GameScene::~GameScene()
 
 HRESULT GameScene::init()
 {
+	SCENEMANAGER->addScene("Title", new Title);
+	SCENEMANAGER->addScene("IntroStage", new IntroStage);
 	SCENEMANAGER->addScene("Stage", new Stage);
-	SCENEMANAGER->changeScene("Stage");
+	SCENEMANAGER->addScene("Ending", new Ending);
+	SCENEMANAGER->changeScene("Title");
 	return S_OK;
 }
 

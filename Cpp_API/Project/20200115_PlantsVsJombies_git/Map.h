@@ -24,11 +24,18 @@ private:
 	int _delay;
 	// 스테이지 범위를 담는 변수
 	RECT _stage;
-
+	// 인트로를 위한 변수
+	bool _fReadySetPlant;
 protected:
 	void init_stage();
 	void change_mapImg();
+	void show_mapAll();
 public:
+	// 인트로를 위한 함수
+	void init_forIntro();
+	bool is_ReadySetPlantOK() { return _fReadySetPlant; }
+	void set_isShowMapAll(bool fResult) { _isShowMapAll = fResult; }
+
 	RECT get_stage() { return _stage; }
 	vector<RECT> get_spaces();
 	vector<RECT>::iterator get_itSpaces();
@@ -41,7 +48,6 @@ public:
 	void show_spaces();
 	void init_spaces();
 	void delete_spaces();
-	void show_mapAll();
 public:
 	Map();
 	~Map();
