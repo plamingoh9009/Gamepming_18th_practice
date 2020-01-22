@@ -40,7 +40,7 @@ void SeedCard::init_plantImage()
 	IMAGEMANAGER->addImage("SunFlower_Disable",
 		"images/ui/SunFlower_Disable.bmp", 27, 27, false, COLOR_MAGENTA);
 	IMAGEMANAGER->addImage("SunFlower_Enable",
-		"images/ui/SunFlower_Enable.bmp", 27, 27, false, COLOR_MAGENTA);
+		"images/ui/SunFlower_Enable.bmp", 35, 35, true, COLOR_MAGENTA);
 	//Wallnut
 	IMAGEMANAGER->addImage("Wallnut_Disable",
 		"images/ui/Wallnut_Disable.bmp", 26, 25, false, COLOR_MAGENTA);
@@ -50,7 +50,7 @@ void SeedCard::init_plantImage()
 	IMAGEMANAGER->addImage("PeaShooter_Disable",
 		"images/ui/PeaShooter_Disable.bmp", 26, 27, false, COLOR_MAGENTA);
 	IMAGEMANAGER->addImage("PeaShooter_Enable",
-		"images/ui/PeaShooter_Enable.bmp", 26, 27, false, COLOR_MAGENTA);
+		"images/ui/PeaShooter_Enable.bmp", 34, 35, true, COLOR_MAGENTA);
 }
 void SeedCard::set_seedCard(string strKey, int x, int y)
 {
