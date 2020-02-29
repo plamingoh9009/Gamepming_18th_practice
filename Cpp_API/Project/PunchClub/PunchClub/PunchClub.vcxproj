@@ -156,9 +156,21 @@
     <ClInclude Include="Base\Util.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="MainGame\MainGame.h" />
+    <ClInclude Include="Manager\KeyManager.h" />
+    <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
     <ClInclude Include="PunchClub.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Scene\GameOverScene.h" />
+    <ClInclude Include="Scene\GymScene.h" />
+    <ClInclude Include="Scene\HomeScene.h" />
+    <ClInclude Include="Scene\HUD_Scene.h" />
+    <ClInclude Include="Scene\LeagueFightingScene.h" />
+    <ClInclude Include="Scene\LeagueWaitingScene.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\ShopScene.h" />
+    <ClInclude Include="Scene\SkillTreeScene.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -168,8 +180,20 @@
     <ClCompile Include="Base\Timer.cpp" />
     <ClCompile Include="Base\Util.cpp" />
     <ClCompile Include="MainGame\MainGame.cpp" />
+    <ClCompile Include="Manager\KeyManager.cpp" />
+    <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
     <ClCompile Include="PunchClub.cpp" />
+    <ClCompile Include="Scene\GameOverScene.cpp" />
+    <ClCompile Include="Scene\GymScene.cpp" />
+    <ClCompile Include="Scene\HomeScene.cpp" />
+    <ClCompile Include="Scene\HUD_Scene.cpp" />
+    <ClCompile Include="Scene\LeagueFightingScene.cpp" />
+    <ClCompile Include="Scene\LeagueWaitingScene.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\ShopScene.cpp" />
+    <ClCompile Include="Scene\SkillTreeScene.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

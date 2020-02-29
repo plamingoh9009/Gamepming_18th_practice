@@ -26,6 +26,8 @@ HRESULT GameNode::init(bool managerInit)
 		//SetTimer(m_hWnd, 1, 10, NULL);
 		// 여기서 매니저 초기화
 		TIMEMANAGER->init();
+		SCENEMANAGER->init();
+		KEYMANAGER->init();
 	}
 
 	return S_OK;
@@ -38,7 +40,12 @@ void GameNode::release()
 		//KillTimer(m_hWnd, 1);
 		// 여기서 매니저 해제. 1) release_singleton(), 2) 클래스 release()
 		TIMEMANAGER->release_singleton();
+		SCENEMANAGER->release_singleton();
+		KEYMANAGER->release_singleton();
+
 		TIMEMANAGER->release();
+		SCENEMANAGER->release();
+		KEYMANAGER->release();
 	}
 	ReleaseDC(m_hWnd, _hdc);
 }

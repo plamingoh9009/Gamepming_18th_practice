@@ -28,6 +28,11 @@ inline RECT RectMakeCenter(int x, int y, int width, int height)
 
 	return rc;
 }
+inline RECT RectMakeRightBottom(int x, int y, int width, int height)
+{
+	RECT rc = { x - width, y - height, x, y };
+	return rc;
+}
 //사각형 그리기
 inline void RectangleMake(HDC hdc, int x, int y, int width, int height)
 {
@@ -43,7 +48,7 @@ inline void RectangleMakeCenter(HDC hdc, int x, int y, int width, int height)
 	Rectangle(hdc, x - (width / 2), y - (height / 2), x + (width / 2), y + (height / 2));
 }
 //사각형 그리기(Color)
-inline void ColorRect(HDC hdc, RECT rc, COLORREF color)
+inline void ColorRect(HDC hdc, RECT rc, COLORREF color = RGB(254,254,254))
 {
 	// 브러시 생성하는 부분
 	HBRUSH rectBrush = (HBRUSH)CreateSolidBrush(color);
@@ -55,7 +60,7 @@ inline void ColorRect(HDC hdc, RECT rc, COLORREF color)
 	DeleteObject(rectBrush);
 }
 // 빈 사각형 그리기 (Color)
-inline void ColorFrameRect(HDC hdc, RECT rc, COLORREF color = RGB(0, 0, 0))
+inline void ColorFrameRect(HDC hdc, RECT rc, COLORREF color = RGB(254, 254, 254))
 {
 	// 브러시 생성하는 부분
 	HBRUSH rectBrush = (HBRUSH)CreateSolidBrush(color);
