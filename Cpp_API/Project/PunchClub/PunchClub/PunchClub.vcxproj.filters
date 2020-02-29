@@ -28,7 +28,13 @@
     <Filter Include="I_Scene">
       <UniqueIdentifier>{dbe7674e-e909-48a5-b6bc-61f23fb2609e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="I_Scene\kind">
+    <Filter Include="I_UI">
+      <UniqueIdentifier>{440f4b28-e5f5-48d8-afd7-82f4930fc1b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I_UI\type">
+      <UniqueIdentifier>{3a66a269-9f39-42e5-8316-e73373845f47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I_Scene\type">
       <UniqueIdentifier>{229aaeda-8530-4ea2-96ca-670575cbf30f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -79,34 +85,43 @@
       <Filter>I_Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\GameOverScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\GymScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\HomeScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\HUD_Scene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\LeagueFightingScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\LeagueWaitingScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\ShopScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SkillTreeScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Scene\TitleScene.h">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClInclude>
     <ClInclude Include="Manager\KeyManager.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI.h">
+      <Filter>I_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Icon.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\InGameUI.h">
+      <Filter>I_UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -141,34 +156,43 @@
       <Filter>I_Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\GameOverScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\GymScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\HomeScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\HUD_Scene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\LeagueFightingScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\LeagueWaitingScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\ShopScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SkillTreeScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Scene\TitleScene.cpp">
-      <Filter>I_Scene\kind</Filter>
+      <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="Manager\KeyManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI.cpp">
+      <Filter>I_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Icon.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\InGameUI.cpp">
+      <Filter>I_UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

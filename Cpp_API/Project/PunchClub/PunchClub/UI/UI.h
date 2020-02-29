@@ -1,6 +1,6 @@
 #pragma once
 #include "Base/GameNode.h"
-class Scene : public GameNode
+class UI: public GameNode
 {
 public:
 	virtual HRESULT init();
@@ -8,7 +8,7 @@ public:
 	virtual void update();
 	virtual void render();
 public:
-	Scene();
-	~Scene();
+	UI();
+	~UI();
 };
 

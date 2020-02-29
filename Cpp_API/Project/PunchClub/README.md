@@ -1,7 +1,7 @@
 # PunchClub Copy Project
-# Ver. 1.1.0
+# Ver. 1.2.0
 - 수정내용: 
-    - 타이틀 씬 대충 완성.
+    - UI 클래스 추가..
     - 
     - 
 - 개발환경

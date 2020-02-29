@@ -1,12 +1,21 @@
 #pragma once
 #include "Base/Image.h"
+
 class GameNode
 {
 private:
 	static Image * _backBuffer;		//백버퍼
-
 	HDC _hdc;
 	bool _fManagerInit;
+protected:
+	// 게임에서 사용할 이미지 경로
+	string _imgPath = "Images/";
+	// 디버그 모드를 위한 변수
+	static bool _fDebug;
+protected:
+	void update_checkDebugMode();
+	// append: "Images/[append]"
+	void set_imgPath(string append = "");
 public:
 	virtual HRESULT init();
 	virtual HRESULT init(bool managerInit);

@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "UI/InGameUI.h"
 class HomeScene: public Scene
 {
 private:

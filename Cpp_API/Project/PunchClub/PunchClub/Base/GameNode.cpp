@@ -2,12 +2,15 @@
 #include "Base/GameNode.h"
 
 Image* GameNode::_backBuffer = NULL;
-Image * GameNode::set_backBuffer()
+bool GameNode::_fDebug = false;
+void GameNode::update_checkDebugMode()
 {
-	_backBuffer = new Image;
-	_backBuffer->init(WINSIZEX, WINSIZEY);
-
-	return _backBuffer;
+	if (KEYMANAGER->is_toggleKey(VK_TAB) == true) { _fDebug = true; }
+	else if (KEYMANAGER->is_toggleKey(VK_TAB) == false) { _fDebug = false; }
+}
+void GameNode::set_imgPath(string append)
+{
+	_imgPath = "Images/" + append;
 }
 HRESULT GameNode::init()
 {
@@ -77,3 +80,10 @@ LRESULT GameNode::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 }
 GameNode::GameNode() {}
 GameNode::~GameNode() {}
+Image * GameNode::set_backBuffer()
+{
+	_backBuffer = new Image;
+	_backBuffer->init(WINSIZEX, WINSIZEY);
+
+	return _backBuffer;
+}
