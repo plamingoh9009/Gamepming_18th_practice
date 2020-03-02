@@ -7,37 +7,38 @@ void TitleScene::control_light_onButtons()
 	if (PtInRect(&_play_rc, m_ptMouse))
 	{
 		_play->set_frameX(1);
-		_buttonKind = BUTTON_PLAY;
+		_buttonType = BUTTON_PLAY;
 		enabledCounter++;
 	}
 	else { _play->set_frameX(0); }
 	if (PtInRect(&_exit_rc, m_ptMouse))
 	{
 		_exit->set_frameX(1);
-		_buttonKind = BUTTON_EXIT;
+		_buttonType = BUTTON_EXIT;
 		enabledCounter++;
 	}
 	else { _exit->set_frameX(0); }
 	// 아무 버튼도 활성화 되지 않은 경우
 	if (enabledCounter < 1)
 	{
-		_buttonKind = BUTTON_DISABLED;
+		_buttonType = BUTTON_DISABLED;
 	}
 }
 void TitleScene::run_buttons()
 {
-	if (_buttonKind == BUTTON_PLAY) { _fPlayGame = true; }
-	else if (_buttonKind == BUTTON_EXIT) { PostQuitMessage(0); }
+	if (_buttonType == BUTTON_PLAY) { _fPlayGame = true; }
+	else if (_buttonType == BUTTON_EXIT) { PostQuitMessage(0); }
 }
 //==========================================
 //##			이미지 초기화				  ##
 //==========================================
 void TitleScene::init_background()
 {
+	double bg_multiple = 1.7042;
 	_bg = new Image;
 	string path = _imgPath + "Sky_map.bmp";
-	_bg->init(path.c_str(), (int)(256 * 2.2598),
-		(int)(255 * 2.2598));
+	_bg->init(path.c_str(), (int)(256 * GAME_MULTIPLE * bg_multiple),
+		(int)(255 * GAME_MULTIPLE * bg_multiple));
 }
 void TitleScene::draw_background()
 {
@@ -132,6 +133,7 @@ void TitleScene::delete_texts()
 
 HRESULT TitleScene::init()
 {
+	add_currentScene_toList(SCENE_TITLE);
 	set_imgPath("Title/");
 	init_background();
 	// 로고 이미지

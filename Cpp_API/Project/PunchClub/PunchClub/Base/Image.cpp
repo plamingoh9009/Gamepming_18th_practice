@@ -5,13 +5,42 @@
 //============================================================
 //==				프레임 돌릴때 쓰는 함수						==
 //============================================================
+void Image::reselect_frameSection(int section)
+{
+	switch (section)
+	{
+	case 1:
+		_imageInfo->currentFrameX = _imageInfo->firstSection[0];
+		_imageInfo->firstCounter = 0;
+		_imageInfo->bEnable[0] = true;
+		_imageInfo->bEnable[1] = false;
+		_imageInfo->bEnable[2] = false;
+		break;
+	case 2:
+		_imageInfo->currentFrameX = _imageInfo->secondSection[0];
+		_imageInfo->secondCounter = 0;
+		_imageInfo->bEnable[0] = false;
+		_imageInfo->bEnable[1] = true;
+		_imageInfo->bEnable[2] = false;
+		break;
+	case 3:
+		_imageInfo->currentFrameX = _imageInfo->thirdSection[0];
+		_imageInfo->thirdCounter = 0;
+		_imageInfo->bEnable[0] = false;
+		_imageInfo->bEnable[1] = false;
+		_imageInfo->bEnable[2] = true;
+		break;
+	default:
+		break;
+	}
+}
 void Image::run_frameDefault()
 {
 	float speed, delay;
 	// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-	speed = _imageInfo->firstOption[1];
-	delay = _imageInfo->firstOption[0];
-	_imageInfo->firstCounter += (int)(speed);
+	speed = TIMEMANAGER->getElapsedTime();
+	delay = _imageInfo->firstDelay;
+	_imageInfo->firstCounter += speed;
 
 	if (_imageInfo->firstCounter >= delay)
 	{
@@ -22,20 +51,23 @@ void Image::run_frameDefault()
 			_imageInfo->firstCounter = 0;
 		}//if: 프레임이 최대 프레임보다 작다면
 		// 프레임이 끝가지 돌았다면 0으로 초기화한다.
-		else { _imageInfo->currentFrameX = 0; }
+		else 
+		{ 
+			reselect_frameSection(1);
+		}
 	}//if: 딜레이를 준다.
 }
 void Image::run_frameSection(int section)
 {
 	float speed, delay;
+	speed = TIMEMANAGER->getElapsedTime();
 	// section: 어느 섹션을 프레임 돌릴지 받아서 돌린다.
 	switch (section)
 	{
 	case 1:
 		// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-		delay = _imageInfo->firstOption[0];
-		speed = _imageInfo->firstOption[1];
-		_imageInfo->firstCounter += (int)speed;
+		delay = _imageInfo->firstDelay;
+		_imageInfo->firstCounter += speed;
 
 		if (_imageInfo->firstCounter >= delay)
 		{
@@ -44,31 +76,24 @@ void Image::run_frameSection(int section)
 				// 프레임을 하나 돌리면서 카운터를 초기화한다.
 				_imageInfo->currentFrameX++;
 				_imageInfo->firstCounter = 0;
-			}//if: 프레임이 최대 프레임보다 작거나 같다면
+			}//if: 프레임이 최대 프레임보다 작다면
 			else
 			{
 				if (_imageInfo->bSection[1] == true)
 				{
-					_imageInfo->currentFrameX = _imageInfo->secondSection[0];
-					_imageInfo->bEnable[0] = false;
-					_imageInfo->bEnable[1] = true;
-					_imageInfo->bEnable[2] = false;
+					reselect_frameSection(2);
 				}//if: 2번째 섹션이 존재한다면
 				else
 				{
-					_imageInfo->currentFrameX = _imageInfo->firstSection[0];
-					_imageInfo->bEnable[0] = true;
-					_imageInfo->bEnable[1] = false;
-					_imageInfo->bEnable[2] = false;
+					reselect_frameSection(1);
 				}//else: 2번째 섹션이 없다면
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
 	case 2:
 		// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-		delay = _imageInfo->secondOption[0];
-		speed = _imageInfo->secondOption[1];
-		_imageInfo->secondCounter += (int)speed;
+		delay = _imageInfo->secondDelay;
+		_imageInfo->secondCounter += speed;
 
 		if (_imageInfo->secondCounter >= delay)
 		{
@@ -82,26 +107,19 @@ void Image::run_frameSection(int section)
 			{
 				if (_imageInfo->bSection[2] == true)
 				{
-					_imageInfo->currentFrameX = _imageInfo->thirdSection[0];
-					_imageInfo->bEnable[0] = false;
-					_imageInfo->bEnable[1] = false;
-					_imageInfo->bEnable[2] = true;
+					reselect_frameSection(3);
 				}//if: 3번째 섹션이 존재한다면
 				else
 				{
-					_imageInfo->currentFrameX = _imageInfo->firstSection[0];
-					_imageInfo->bEnable[0] = true;
-					_imageInfo->bEnable[1] = false;
-					_imageInfo->bEnable[2] = false;
+					reselect_frameSection(1);
 				}
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
 	case 3:
 		// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-		delay = _imageInfo->thirdOption[0];
-		speed = _imageInfo->thirdOption[1];
-		_imageInfo->thirdCounter += (int)speed;
+		delay = _imageInfo->thirdDelay;
+		_imageInfo->thirdCounter += speed;
 
 		if (_imageInfo->thirdCounter >= delay)
 		{
@@ -113,10 +131,7 @@ void Image::run_frameSection(int section)
 			}//if: 프레임이 최대 프레임보다 작다면
 			else
 			{
-				_imageInfo->currentFrameX = _imageInfo->firstSection[0];
-				_imageInfo->bEnable[0] = true;
-				_imageInfo->bEnable[1] = false;
-				_imageInfo->bEnable[2] = false;
+				reselect_frameSection(1);
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
@@ -125,14 +140,14 @@ void Image::run_frameSection(int section)
 void Image::run_frameSection_reverse(int section)
 {
 	float speed, delay;
+	speed = TIMEMANAGER->getElapsedTime();
 	// section: 어느 섹션을 프레임 돌릴지 받아서 돌린다.
 	switch (section)
 	{
 	case 1:
 		// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-		delay = _imageInfo->firstOption[0];
-		speed = _imageInfo->firstOption[1];
-		_imageInfo->firstCounter += (int)speed;
+		delay = _imageInfo->firstDelay;
+		_imageInfo->firstCounter += speed;
 
 		if (_imageInfo->firstCounter >= delay)
 		{
@@ -146,26 +161,19 @@ void Image::run_frameSection_reverse(int section)
 			{
 				if (_imageInfo->bSection[1] == true)
 				{
-					_imageInfo->currentFrameX = _imageInfo->secondSection[0];
-					_imageInfo->bEnable[0] = false;
-					_imageInfo->bEnable[1] = true;
-					_imageInfo->bEnable[2] = false;
+					reselect_frameSection(2);
 				}//if: 2번째 섹션이 존재한다면
 				else
 				{
-					_imageInfo->currentFrameX = _imageInfo->firstSection[0];
-					_imageInfo->bEnable[0] = true;
-					_imageInfo->bEnable[1] = false;
-					_imageInfo->bEnable[2] = false;
+					reselect_frameSection(1);
 				}//else: 2번째 섹션이 없다면
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
 	case 2:
 		// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-		delay = _imageInfo->secondOption[0];
-		speed = _imageInfo->secondOption[1];
-		_imageInfo->secondCounter += (int)speed;
+		delay = _imageInfo->secondDelay;
+		_imageInfo->secondCounter += speed;
 
 		if (_imageInfo->secondCounter >= delay)
 		{
@@ -179,26 +187,19 @@ void Image::run_frameSection_reverse(int section)
 			{
 				if (_imageInfo->bSection[2] == true)
 				{
-					_imageInfo->currentFrameX = _imageInfo->thirdSection[0];
-					_imageInfo->bEnable[0] = false;
-					_imageInfo->bEnable[1] = false;
-					_imageInfo->bEnable[2] = true;
+					reselect_frameSection(3);
 				}//if: 3번째 섹션이 존재한다면
 				else
 				{
-					_imageInfo->currentFrameX = _imageInfo->firstSection[0];
-					_imageInfo->bEnable[0] = true;
-					_imageInfo->bEnable[1] = false;
-					_imageInfo->bEnable[2] = false;
+					reselect_frameSection(1);
 				}
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
 	case 3:
 		// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-		delay = _imageInfo->thirdOption[0];
-		speed = _imageInfo->thirdOption[1];
-		_imageInfo->thirdCounter += (int)speed;
+		delay = _imageInfo->thirdDelay;
+		_imageInfo->thirdCounter += speed;
 
 		if (_imageInfo->thirdCounter >= delay)
 		{
@@ -210,11 +211,8 @@ void Image::run_frameSection_reverse(int section)
 			}//if: 프레임이 최대 프레임보다 작다면
 			else
 			{
-				_imageInfo->currentFrameX = _imageInfo->firstSection[0];
-				_imageInfo->bEnable[0] = true;
-				_imageInfo->bEnable[1] = false;
-				_imageInfo->bEnable[2] = false;
-			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
+				reselect_frameSection(1);
+			}//else: 프레임이 끝가지 돌았다면 1번 섹션으로 되돌아간다.
 		}//if: 딜레이를 준다.
 		break;
 	}
@@ -637,9 +635,9 @@ void Image::update_parallelogram(RECT imageRect, double radian)
 //==				프레임 섹션 초기화							==
 //============================================================
 void Image::set_frameSection(int enableSectionCount,
-	int firstStart, int firstEnd, float firstDelay, float firstSpeed,
-	int secondStart, int secondEnd, float secondDelay, float secondSpeed,
-	int thirdStart, int thirdEnd, float thirdDelay, float thirdSpeed)
+	int firstStart, int firstEnd, float firstDelay, 
+	int secondStart, int secondEnd, float secondDelay, 
+	int thirdStart, int thirdEnd, float thirdDelay)
 {
 	// 내가 입력한 섹션 수에 따라서 초기화를 다르게 받는다.
 	switch (enableSectionCount)
@@ -647,22 +645,19 @@ void Image::set_frameSection(int enableSectionCount,
 	case 3:
 		_imageInfo->thirdSection[0] = thirdStart;
 		_imageInfo->thirdSection[1] = thirdEnd;
-		_imageInfo->thirdOption[0] = thirdDelay;
-		_imageInfo->thirdOption[1] = thirdSpeed;
+		_imageInfo->thirdDelay = thirdDelay;
 		_imageInfo->bSection[2] = true;
 		_imageInfo->bEnable[2] = true;
 	case 2:
 		_imageInfo->secondSection[0] = secondStart;
 		_imageInfo->secondSection[1] = secondEnd;
-		_imageInfo->secondOption[0] = secondDelay;
-		_imageInfo->secondOption[1] = secondSpeed;
+		_imageInfo->secondDelay = secondDelay;
 		_imageInfo->bSection[1] = true;
 		_imageInfo->bEnable[1] = true;
 	case 1:
 		_imageInfo->firstSection[0] = firstStart;
 		_imageInfo->firstSection[1] = firstEnd;
-		_imageInfo->firstOption[0] = firstDelay;
-		_imageInfo->firstOption[1] = firstSpeed;
+		_imageInfo->firstDelay = firstDelay;
 		_imageInfo->bSection[0] = true;
 		_imageInfo->bEnable[0] = true;
 		break;

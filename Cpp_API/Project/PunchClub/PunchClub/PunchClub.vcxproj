@@ -164,7 +164,7 @@
     <ClInclude Include="Scene\GameOverScene.h" />
     <ClInclude Include="Scene\GymScene.h" />
     <ClInclude Include="Scene\HomeScene.h" />
-    <ClInclude Include="Scene\HUD_Scene.h" />
+    <ClInclude Include="Scene\HudMapScene.h" />
     <ClInclude Include="Scene\LeagueFightingScene.h" />
     <ClInclude Include="Scene\LeagueWaitingScene.h" />
     <ClInclude Include="Scene\Scene.h" />
@@ -173,8 +173,10 @@
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UI\HudBack.h" />
     <ClInclude Include="UI\Icon.h" />
     <ClInclude Include="UI\InGameUI.h" />
+    <ClInclude Include="UI\RedButton.h" />
     <ClInclude Include="UI\UI.h" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +192,7 @@
     <ClCompile Include="Scene\GameOverScene.cpp" />
     <ClCompile Include="Scene\GymScene.cpp" />
     <ClCompile Include="Scene\HomeScene.cpp" />
-    <ClCompile Include="Scene\HUD_Scene.cpp" />
+    <ClCompile Include="Scene\HudMapScene.cpp" />
     <ClCompile Include="Scene\LeagueFightingScene.cpp" />
     <ClCompile Include="Scene\LeagueWaitingScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
@@ -203,8 +205,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UI\HudBack.cpp" />
     <ClCompile Include="UI\Icon.cpp" />
     <ClCompile Include="UI\InGameUI.cpp" />
+    <ClCompile Include="UI\RedButton.cpp" />
     <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-enum BUTTON_KIND
+enum BUTTON_TYPE
 {
 	BUTTON_DISABLED,
 	BUTTON_PLAY,
@@ -20,7 +20,7 @@ private:
 	RECT _play_rc;
 	Image * _exit;
 	RECT _exit_rc;
-	BUTTON_KIND _buttonKind = BUTTON_DISABLED;
+	BUTTON_TYPE _buttonType = BUTTON_DISABLED;
 	// æ¿ √º¿Œ¡ˆ
 	bool _fPlayGame = false;
 protected:

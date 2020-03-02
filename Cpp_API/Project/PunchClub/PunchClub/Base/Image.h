@@ -30,14 +30,14 @@ typedef struct tagImage
 	// bSection:	어느 섹션을 활성화 할건지
 	// bEnable:		어느 섹션이 활성화 된건지
 	int		firstSection[2];
-	float	firstOption[2];
-	int		firstCounter;
+	float	firstDelay;
+	float	firstCounter;
 	int		secondSection[2];
-	float	secondOption[2];
-	int		secondCounter;
+	float	secondDelay;
+	float	secondCounter;
 	int		thirdSection[2];
-	float	thirdOption[2];
-	int		thirdCounter;
+	float	thirdDelay;
+	float	thirdCounter;
 	bool	bSection[3];
 	bool	bEnable[3];
 	int		breakFrame;
@@ -68,16 +68,13 @@ typedef struct tagImage
 		// bSection:	어느 섹션을 활성화 할건지
 		// bEnable:		어느 섹션이 활성화 된건지
 		firstSection[2] = { 0, };
-		firstOption[0] = 60;
-		firstOption[1] = 1;
+		firstDelay = 1;
 		firstCounter = 0;
 		secondSection[2] = { 0, };
-		secondOption[0] = 60;
-		secondOption[1] = 1;
+		secondDelay = 1;
 		secondCounter = 0;
 		thirdSection[2] = { 0, };
-		thirdOption[0] = 60;
-		thirdOption[1] = 1;
+		thirdDelay = 1;
 		thirdCounter = 0;
 		bSection[3] = { 0, };
 		bEnable[3] = { 0, };
@@ -99,6 +96,7 @@ private:
 	LPIMAGE_INFO	_blendImage;	//알파 블렌드를 사용하기 위한 이미지 정보
 protected:
 	// 이미지 프레임 돌릴 때 쓰는 함수
+	void reselect_frameSection(int section);
 	void run_frameDefault();
 	void run_frameSection(int section);
 	void run_frameSection_reverse(int section);
@@ -129,13 +127,13 @@ public:
 	//============================================================
 	//==			프레임 애니메이션을 위한 함수					==
 	//============================================================
+	// enableSectionCount: How many you want use section (MAX:3)
+	// Start-End: Frame image's Index (0 is start)
+	// Delay: How fast you want running frame image (1: 1 fps)
 	void set_frameSection(int enableSectionCount,
-		int firstStart, int firstEnd,
-		float firstDelay = 60, float firstSpeed = 1,
-		int secondStart = 0, int secondEnd = 0,
-		float secondDelay = 60, float secondSpeed = 1,
-		int thirdStart = 0, int thirdEnd = 0,
-		float thirdDelay = 60, float thirdSpeed = 1);
+		int firstStart, int firstEnd, float firstDelay = 1,
+		int secondStart = 0, int secondEnd = 0, float secondDelay = 1,
+		int thirdStart = 0, int thirdEnd = 0, float thirdDelay = 1);
 	// 프레임 이미지 업데이트
 	void frameUpdate(bool bDefault = true, bool bReverse = false);
 	void set_breakFrame(int breakFrame = -1);

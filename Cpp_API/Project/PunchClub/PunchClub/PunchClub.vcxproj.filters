@@ -93,9 +93,6 @@
     <ClInclude Include="Scene\HomeScene.h">
       <Filter>I_Scene\type</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\HUD_Scene.h">
-      <Filter>I_Scene\type</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\LeagueFightingScene.h">
       <Filter>I_Scene\type</Filter>
     </ClInclude>
@@ -122,6 +119,15 @@
     </ClInclude>
     <ClInclude Include="UI\InGameUI.h">
       <Filter>I_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\HudBack.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\HudMapScene.h">
+      <Filter>I_Scene\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\RedButton.h">
+      <Filter>I_UI\type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -164,9 +170,6 @@
     <ClCompile Include="Scene\HomeScene.cpp">
       <Filter>I_Scene\type</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\HUD_Scene.cpp">
-      <Filter>I_Scene\type</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\LeagueFightingScene.cpp">
       <Filter>I_Scene\type</Filter>
     </ClCompile>
@@ -193,6 +196,15 @@
     </ClCompile>
     <ClCompile Include="UI\InGameUI.cpp">
       <Filter>I_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\HudBack.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\HudMapScene.cpp">
+      <Filter>I_Scene\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\RedButton.cpp">
+      <Filter>I_UI\type</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

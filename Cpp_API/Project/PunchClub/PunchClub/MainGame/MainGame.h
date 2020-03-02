@@ -3,9 +3,10 @@
 // 여기에 게임씬 추가
 #include "Scene/TitleScene.h"
 #include "Scene/HomeScene.h"
-#include "Scene/HUD_Scene.h"
+#include "Scene/HudMapScene.h"
 #include "Scene/GymScene.h"
 #include "Scene/ShopScene.h"
+#include "Scene/SkillTreeScene.h"
 class MainGame: public GameNode
 {
 protected:

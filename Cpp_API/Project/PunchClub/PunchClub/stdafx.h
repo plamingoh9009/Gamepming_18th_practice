@@ -48,14 +48,14 @@ using namespace std;
 #define WINNAME		(LPTSTR)(TEXT("경일 프로그래밍 18기"))
 #define WINSTARTX   100
 #define WINSTARTY   30
-#define WINSIZEX	1157
-#define	WINSIZEY	650
+#define WINSIZEX	1366
+#define	WINSIZEY	768
 #define WIN_HALF_W	WINSIZEX * 0.5
 #define WIN_HALF_H	WINSIZEY * 0.5
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 #define SAFE_DELETE(p) {if(p) {delete(p); (p) = nullptr;}}
 // 펀치클럽 배율
-#define GAME_MULTIPLE	1.6971
+#define GAME_MULTIPLE	2.0029
 //========================================
 //##				전역변수				##
 //========================================

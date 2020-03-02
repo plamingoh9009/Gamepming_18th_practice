@@ -1,6 +1,16 @@
 #pragma once
 #include "Base/Image.h"
-
+enum SCENE_TYPE
+{
+	SCENE_EMPTY,
+	SCENE_TITLE,
+	SCENE_HOME,
+	SCENE_HUD_MAP,
+	SCENE_GYM,
+	SCENE_SHOP,
+	SCENE_LEAGUE,
+	SCENE_SKILLTREE
+};
 class GameNode
 {
 private:
@@ -8,12 +18,16 @@ private:
 	HDC _hdc;
 	bool _fManagerInit;
 protected:
-	// 게임에서 사용할 이미지 경로
-	string _imgPath = "Images/";
-	// 디버그 모드를 위한 변수
-	static bool _fDebug;
+	string _imgPath = "Images/";	// 게임에서 사용할 이미지 경로
+	static SCENE_TYPE _scene_forChange;
+	
+	static bool _fClick;	// 클릭 처리를 위한 변수
+	static bool _fDebug;	// 디버그 모드를 위한 변수
 protected:
 	void update_checkDebugMode();
+	void update_checkClicked();
+	// type: SCENE_TYPE to change you want
+	void change_currentScene();
 	// append: "Images/[append]"
 	void set_imgPath(string append = "");
 public:

@@ -2,11 +2,43 @@
 #include "Base/GameNode.h"
 
 Image* GameNode::_backBuffer = NULL;
+// 인게임 공통 데이터
+SCENE_TYPE GameNode::_scene_forChange = SCENE_EMPTY;
+bool GameNode::_fClick = false;
 bool GameNode::_fDebug = false;
 void GameNode::update_checkDebugMode()
 {
 	if (KEYMANAGER->is_toggleKey(VK_TAB) == true) { _fDebug = true; }
 	else if (KEYMANAGER->is_toggleKey(VK_TAB) == false) { _fDebug = false; }
+}
+void GameNode::update_checkClicked()
+{
+	if (KEYMANAGER->is_onceKeyDown(VK_LBUTTON)) { _fClick = true; }
+	else if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON)) { _fClick = false; }
+}
+void GameNode::change_currentScene()
+{
+	switch (_scene_forChange)
+	{
+	case SCENE_HOME:
+		SCENEMANAGER->changeScene("Home");
+		break;
+	case SCENE_HUD_MAP:
+		SCENEMANAGER->changeScene("HudMap");
+		break;
+	case SCENE_GYM:
+		SCENEMANAGER->changeScene("Gym");
+		break;
+	case SCENE_SHOP:
+		SCENEMANAGER->changeScene("Shop");
+		break;
+	case SCENE_LEAGUE:
+		//SCENEMANAGER->changeScene("League");
+		break;
+	case SCENE_SKILLTREE:
+		SCENEMANAGER->changeScene("SkillTree");
+		break;
+	}
 }
 void GameNode::set_imgPath(string append)
 {
