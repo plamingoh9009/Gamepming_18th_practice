@@ -21,6 +21,26 @@ void RedButton::init_red_button()
 	_del_icon_rc = RectMakeCenter(center.x, center.y,
 		_del_icon->get_width(), _del_icon->get_height());
 }
+void RedButton::init_red_button(int x, int y)
+{
+	string path;
+	POINT center;
+	path = _imgPath + "Btn_red_back.bmp";
+	_red_button = new Image;
+	_red_button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	center.x = (LONG)(x - _red_button->get_width() * 0.7);
+	center.y = (LONG)(y + _red_button->get_height() * 0.7);
+	_red_button_rc = RectMakeCenter(center.x, center.y,
+		_red_button->get_width(), _red_button->get_height());
+	_red_button_center = center;
+	path = _imgPath + "Btn_del.bmp";
+	_del_icon = new Image;
+	_del_icon->init(path.c_str(), (int)(18 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
+	center.x -= (LONG)(_del_icon->get_width() * 0.06);
+	center.y -= (LONG)(_del_icon->get_height() * 0.06);
+	_del_icon_rc = RectMakeCenter(center.x, center.y,
+		_del_icon->get_width(), _del_icon->get_height());
+}
 void RedButton::draw_red_button()
 {
 	_red_button->render(get_memDC(), _red_button_rc.left, _red_button_rc.top);
@@ -43,6 +63,12 @@ HRESULT RedButton::init()
 {
 	set_imgPath("UI/");
 	init_red_button();
+	return S_OK;
+}
+HRESULT RedButton::init(int right, int top)
+{
+	set_imgPath("UI/");
+	init_red_button(right, top);
 	return S_OK;
 }
 void RedButton::release()

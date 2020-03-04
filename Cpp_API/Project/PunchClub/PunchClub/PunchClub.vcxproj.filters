@@ -37,6 +37,15 @@
     <Filter Include="I_Scene\type">
       <UniqueIdentifier>{229aaeda-8530-4ea2-96ca-670575cbf30f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="I_Object">
+      <UniqueIdentifier>{78687ee3-51ba-4653-802f-84ef789bdb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I_Object\Unit">
+      <UniqueIdentifier>{af39ac19-f599-4952-a0f2-ddc2e113e36e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I_Object\Unit\Player">
+      <UniqueIdentifier>{c6669f34-843a-41c6-bbd8-a97228c64102}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -129,6 +138,18 @@
     <ClInclude Include="UI\RedButton.h">
       <Filter>I_UI\type</Filter>
     </ClInclude>
+    <ClInclude Include="Object\Player.h">
+      <Filter>I_Object\Unit\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Object.h">
+      <Filter>I_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Unit.h">
+      <Filter>I_Object\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Inventory.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PunchClub.cpp">
@@ -204,6 +225,18 @@
       <Filter>I_Scene\type</Filter>
     </ClCompile>
     <ClCompile Include="UI\RedButton.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Player.cpp">
+      <Filter>I_Object\Unit\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Object.cpp">
+      <Filter>I_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Unit.cpp">
+      <Filter>I_Object\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Inventory.cpp">
       <Filter>I_UI\type</Filter>
     </ClCompile>
   </ItemGroup>

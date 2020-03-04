@@ -9,7 +9,8 @@ enum SCENE_TYPE
 	SCENE_GYM,
 	SCENE_SHOP,
 	SCENE_LEAGUE,
-	SCENE_SKILLTREE
+	SCENE_SKILLTREE,
+	SCENE_BACK
 };
 class GameNode
 {
@@ -27,7 +28,7 @@ protected:
 	void update_checkDebugMode();
 	void update_checkClicked();
 	// type: SCENE_TYPE to change you want
-	void change_currentScene();
+	void change_currentScene(SCENE_TYPE type);
 	// append: "Images/[append]"
 	void set_imgPath(string append = "");
 public:

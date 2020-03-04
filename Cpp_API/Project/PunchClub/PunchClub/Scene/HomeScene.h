@@ -1,6 +1,5 @@
 #pragma once
 #include "Scene.h"
-#include "UI/InGameUI.h"
 class HomeScene: public Scene
 {
 private:
@@ -11,9 +10,10 @@ private:
 	RECT _kitchenTable_rc;
 	POINT _kitchenTable_center;
 	// ³ÃÀå°í
-	Image * _refrigerator;
-	RECT _refrigerator_rc;
-	POINT _refrigerator_center;
+	Image * _friger;
+	RECT _friger_rc;
+	POINT _friger_center;
+	Image * _friger_select;
 	// ½ºÅÄµå
 	Image * _stand;
 	RECT _stand_rc;
@@ -22,18 +22,20 @@ private:
 	Image * _sofa;
 	RECT _sofa_rc;
 	POINT _sofa_pos;
+	Image * _sofa_select;
 	// ¼öÁ¶
-	Image * _fishTank;
-	RECT _fishTank_rc;
-	POINT _fishTank_pos;
-	POINT _fishTank_center;
-	Image * _fishTank_head;
-	RECT _fishTank_head_rc;
+	Image * _aquarium;
+	RECT _aquarium_rc;
+	POINT _aquarium_pos;
+	POINT _aquarium_center;
+	Image * _aquarium_fg;
+	RECT _aquarium_fg_rc;
 	// TV
 	Image * _tv;
 	RECT _tv_rc;
 	POINT _tv_pos;
 	POINT _tv_center;
+	Image * _tv_select;
 	// ÃµÀå ¼±Ç³±â
 	Image * _fan;
 	RECT _fan_rc;
@@ -56,11 +58,17 @@ private:
 	Image * _phone;
 	RECT _phone_rc;
 	POINT _phone_center;
-
+	// bool º¯¼ö
+	bool _fFriger = false;
+	bool _fSofa = false;
+	bool _fTv = false;
+protected:
+	void update_objectSelected();
 protected:
 	void init_furniture();
 	void draw_furniture();
 	void delete_furniture();
+	void draw_rects();
 public:
 	virtual HRESULT init();
 	virtual void release();

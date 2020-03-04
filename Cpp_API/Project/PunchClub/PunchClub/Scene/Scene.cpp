@@ -2,32 +2,38 @@
 #include "Scene.h"
 
 vSceneList Scene::_sceneList;
+void Scene::update_scene()
+{
+	// 노드에서 업데이트 받아온다.
+	update_checkDebugMode();
+	update_checkClicked();
+}
+void Scene::change_scene()
+{
+	SCENE_TYPE type;
+	if (_scene_forChange == SCENE_BACK)
+	{
+		type = back_currentScene_toList();
+		change_currentScene(type);
+	}
+	else if (_scene_forChange != SCENE_EMPTY)
+	{
+		type = _scene_forChange;
+		change_currentScene(type);
+	}
+}
 void Scene::add_currentScene_toList(SCENE_TYPE sceneType)
 {
 	_scene_forChange = SCENE_EMPTY;
-	switch (sceneType)
-	{
-	case SCENE_TITLE:
-		_sceneList.push_back("Title");
-		break;
-	case SCENE_HOME:
-		_sceneList.push_back("Home");
-		break;
-	case SCENE_HUD_MAP:
-		_sceneList.push_back("HudMap");
-		break;
-	case SCENE_GYM:
-		_sceneList.push_back("Gym");
-		break;
-	case SCENE_SHOP:
-		_sceneList.push_back("Shop");
-		break;
-	case SCENE_SKILLTREE:
-		_sceneList.push_back("SkillTree");
-		break;
-	default:
-		break;
-	}
+	_sceneList.push_back(sceneType);
+}
+SCENE_TYPE Scene::back_currentScene_toList()
+{
+	SCENE_TYPE type;
+	_sceneList.pop_back();
+	type = _sceneList.back();
+	_sceneList.pop_back();
+	return type;
 }
 HRESULT Scene::init()
 {

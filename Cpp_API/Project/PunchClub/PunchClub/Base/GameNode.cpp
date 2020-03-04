@@ -16,9 +16,9 @@ void GameNode::update_checkClicked()
 	if (KEYMANAGER->is_onceKeyDown(VK_LBUTTON)) { _fClick = true; }
 	else if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON)) { _fClick = false; }
 }
-void GameNode::change_currentScene()
+void GameNode::change_currentScene(SCENE_TYPE type)
 {
-	switch (_scene_forChange)
+	switch (type)
 	{
 	case SCENE_HOME:
 		SCENEMANAGER->changeScene("Home");

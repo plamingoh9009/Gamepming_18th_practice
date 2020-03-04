@@ -159,6 +159,9 @@
     <ClInclude Include="Manager\KeyManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
+    <ClInclude Include="Object\Object.h" />
+    <ClInclude Include="Object\Player.h" />
+    <ClInclude Include="Object\Unit.h" />
     <ClInclude Include="PunchClub.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\GameOverScene.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="UI\HudBack.h" />
     <ClInclude Include="UI\Icon.h" />
     <ClInclude Include="UI\InGameUI.h" />
+    <ClInclude Include="UI\Inventory.h" />
     <ClInclude Include="UI\RedButton.h" />
     <ClInclude Include="UI\UI.h" />
   </ItemGroup>
@@ -188,6 +192,9 @@
     <ClCompile Include="Manager\KeyManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
+    <ClCompile Include="Object\Object.cpp" />
+    <ClCompile Include="Object\Player.cpp" />
+    <ClCompile Include="Object\Unit.cpp" />
     <ClCompile Include="PunchClub.cpp" />
     <ClCompile Include="Scene\GameOverScene.cpp" />
     <ClCompile Include="Scene\GymScene.cpp" />
@@ -208,6 +215,7 @@
     <ClCompile Include="UI\HudBack.cpp" />
     <ClCompile Include="UI\Icon.cpp" />
     <ClCompile Include="UI\InGameUI.cpp" />
+    <ClCompile Include="UI\Inventory.cpp" />
     <ClCompile Include="UI\RedButton.cpp" />
     <ClCompile Include="UI\UI.cpp" />
   </ItemGroup>
