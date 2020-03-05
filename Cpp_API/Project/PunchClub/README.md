@@ -1,7 +1,7 @@
 # PunchClub Copy Project
-# Ver. 1.3.1
+# Ver. 1.4.0
 - 수정내용: 
-    - HomeScene 오브젝트 이미지 추가, 냉장고 Open
+    - Player 클래스 추가
     - 
     - 원작 해상도: 1366 x 768(16:9)
 - 개발환경

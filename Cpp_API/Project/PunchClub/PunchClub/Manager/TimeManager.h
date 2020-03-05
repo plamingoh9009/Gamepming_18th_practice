@@ -14,7 +14,7 @@ public:
 	TimeManager();
 	~TimeManager();
 public:
-	float getElapsedTime()const { return _timer->get_elapsedTime(); }
-	float getWorldTime()const { return _timer->get_worldTime(); }
+	float get_elapsedTime()const { return _timer->get_elapsedTime(); }
+	float get_worldTime()const { return _timer->get_worldTime(); }
 };
 

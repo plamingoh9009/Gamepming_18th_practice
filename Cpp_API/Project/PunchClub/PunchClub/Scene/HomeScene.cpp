@@ -2,6 +2,7 @@
 #include "HomeScene.h"
 void HomeScene::update_objectSelected()
 {
+	done_action();
 	// 냉장고
 	if (PtInRect(&_friger_rc, m_ptMouse)) 
 	{ 
@@ -13,14 +14,43 @@ void HomeScene::update_objectSelected()
 	if (PtInRect(&_sofa_rc, m_ptMouse))
 	{
 		_fSofa = true;
+		if (_fClick == true && _fSleep == false) { _fSleep = true; }
 	}
 	else { _fSofa = false; }
+	
 	// TV
 	if (PtInRect(&_tv_rc, m_ptMouse))
 	{
 		_fTv = true;
+		if (_fClick == true && _fWatch == false) { _fWatch = true; }
 	}
 	else { _fTv = false; }
+
+	// 플레이어 행동
+	if (_fSleep == true)
+	{
+		_sofa_sleep->frameUpdate(false);
+		PLAYER->sleep_toSofa();
+	}
+	else if (_fWatch == true)
+	{
+		_tv_watch->frameUpdate(false);
+		PLAYER->watch_tv();
+	}
+}
+void HomeScene::done_action()
+{
+	// 행동 끝내기
+	if (_fClick == true && _fSleep == true)
+	{
+		_fSleep = false;
+		_sofa_sleep->set_frameX(0);
+	}
+	else if (_fClick == true && _fWatch == true)
+	{
+		_fWatch = false;
+		_tv_watch->set_frameX(0);
+	}
 }
 void HomeScene::init_furniture()
 {
@@ -80,9 +110,20 @@ void HomeScene::init_furniture()
 	_sofa_pos.y = (LONG)(_stand_center.y - _stand->get_width() * 0.1);
 	_sofa_rc = RectMake(_sofa_pos.x, _sofa_pos.y,
 		_sofa->get_width(), _sofa->get_height());
+	_sofa_center.x = (LONG)((_sofa_rc.left + _sofa_rc.right) * 0.5);
+	_sofa_center.y = (LONG)((_sofa_rc.top + _sofa_rc.bottom) * 0.5);
 	path = _imgPath + "Sofa_select.bmp";
 	_sofa_select = new Image;
 	_sofa_select->init(path.c_str(), (int)(111 * GAME_MULTIPLE), (int)(53 * GAME_MULTIPLE));
+	// 잠자는 이미지
+	path = _imgPath + "Sofa_sleep.bmp";
+	_sofa_sleep = new Image;
+	_sofa_sleep->init(path.c_str(), (int)(156 * GAME_MULTIPLE), (int)(57 * GAME_MULTIPLE), 2, 1);
+	_sofa_sleep->set_frameSection(1, 0, 1, 1.0f);
+	center.x = (LONG)(_sofa_center.x - _sofa_sleep->get_frameWidth() * 0.1);
+	center.y = (LONG)(_sofa_center.y + _sofa_sleep->get_frameHeight() * 0.2);
+	_sofa_sleep_rc = RectMakeCenter(center.x, center.y,
+		_sofa_sleep->get_frameWidth(), _sofa_sleep->get_frameHeight());
 	// ============================
 	// ***		수조			***
 	// ============================
@@ -120,6 +161,15 @@ void HomeScene::init_furniture()
 	path = _imgPath + "TV_select.bmp";
 	_tv_select = new Image;
 	_tv_select->init(path.c_str(), (int)(147 * GAME_MULTIPLE), (int)(68 * GAME_MULTIPLE));
+	// TV 보는 이미지
+	path = _imgPath + "TV_watch.bmp";
+	_tv_watch = new Image;
+	_tv_watch->init(path.c_str(), (int)(462 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 3, 1);
+	_tv_watch->set_frameSection(1, 0, 2, 0.3f);
+	center.x = (LONG)(_tv_center.x + _tv_watch->get_frameWidth() * 0.009);
+	center.y = (LONG)(_tv_center.y - _tv_watch->get_frameHeight() * 0.045);
+	_tv_watch_rc = RectMakeCenter(center.x, center.y,
+		_tv_watch->get_frameWidth(), _tv_watch->get_frameHeight());
 	// ============================
 	// ***			선풍기		***
 	// ============================
@@ -189,10 +239,40 @@ void HomeScene::draw_furniture()
 		_kitchenTable_rc.top);
 	_aquarium->frameRender(get_memDC(), _aquarium_rc.left, _aquarium_rc.top);
 	_aquarium_fg->render(get_memDC(), _aquarium_fg_rc.left, _aquarium_fg_rc.top);
-	if (_fSofa == true) { _sofa_select->render(get_memDC(), _sofa_rc.left, _sofa_rc.top); }
-	else { _sofa->render(get_memDC(), _sofa_rc.left, _sofa_rc.top); }
-	if (_fTv == true) { _tv_select->render(get_memDC(), _tv_rc.left, _tv_rc.top); }
-	else { _tv->render(get_memDC(), _tv_rc.left, _tv_rc.top); }
+	// 소파 렌더
+	if (_fSofa == true) 
+	{ 
+		_sofa_select->render(get_memDC(), _sofa_rc.left, _sofa_rc.top); 
+		if(_fSleep == true)
+		{ 
+			_sofa_sleep->frameRender(get_memDC(), _sofa_sleep_rc.left, _sofa_sleep_rc.top); 
+		}
+	}
+	else 
+	{ 
+		_sofa->render(get_memDC(), _sofa_rc.left, _sofa_rc.top);
+		if (_fSleep == true)
+		{
+			_sofa_sleep->frameRender(get_memDC(), _sofa_sleep_rc.left, _sofa_sleep_rc.top);
+		}
+	}
+	// TV 렌더
+	if (_fTv == true) 
+	{ 
+		_tv_select->render(get_memDC(), _tv_rc.left, _tv_rc.top);
+		if (_fWatch == true)
+		{
+			_tv_watch->frameRender(get_memDC(), _tv_watch_rc.left, _tv_watch_rc.top);
+		}
+	}
+	else 
+	{ 
+		_tv->render(get_memDC(), _tv_rc.left, _tv_rc.top);
+		if (_fWatch == true)
+		{
+			_tv_watch->frameRender(get_memDC(), _tv_watch_rc.left, _tv_watch_rc.top);
+		}
+	}
 	_fan->frameRender(get_memDC(), _fan_rc.left, _fan_rc.top);
 	_table->render(get_memDC(), _table_rc.left, _table_rc.top);
 	_bookshelf->render(get_memDC(), _bookshelf_rc.left, _bookshelf_rc.top);
@@ -251,6 +331,8 @@ HRESULT HomeScene::init()
 		(int)(383 * GAME_MULTIPLE));
 	// 배치할 가구 초기화
 	init_furniture();
+	// Player
+	PLAYER->init();
 	// UI
 	INGAME_UI->init();
 	return S_OK;
@@ -271,14 +353,22 @@ void HomeScene::update()
 	_aquarium->frameUpdate();
 	_fan->frameUpdate(false, true);
 	_clock->frameUpdate();
-
+	// 
+	if(_fSleep == true) {}
+	else if(_fWatch == true) {}
+	else { PLAYER->update(); }
+	
 	INGAME_UI->update();
-	change_scene();		// 항상 마지막에 씬을 바꾼다.
+	change_scene();	// 항상 마지막에 씬을 바꾼다.
 }
 void HomeScene::render()
 {
 	_bg->render(get_memDC());
 	draw_furniture();
+	if(_fSleep == true) {}
+	else if(_fWatch == true) {}
+	else { PLAYER->render(); }
+	
 	INGAME_UI->render();
 }
 HomeScene::HomeScene()

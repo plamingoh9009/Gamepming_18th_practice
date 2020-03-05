@@ -22,7 +22,10 @@ private:
 	Image * _sofa;
 	RECT _sofa_rc;
 	POINT _sofa_pos;
+	POINT _sofa_center;
 	Image * _sofa_select;
+	Image * _sofa_sleep;	// 잠자는 이미지
+	RECT _sofa_sleep_rc;
 	// 수조
 	Image * _aquarium;
 	RECT _aquarium_rc;
@@ -36,6 +39,8 @@ private:
 	POINT _tv_pos;
 	POINT _tv_center;
 	Image * _tv_select;
+	Image * _tv_watch;
+	RECT _tv_watch_rc;
 	// 천장 선풍기
 	Image * _fan;
 	RECT _fan_rc;
@@ -61,9 +66,12 @@ private:
 	// bool 변수
 	bool _fFriger = false;
 	bool _fSofa = false;
+	bool _fSleep = false;
 	bool _fTv = false;
+	bool _fWatch = false;
 protected:
 	void update_objectSelected();
+	void done_action();
 protected:
 	void init_furniture();
 	void draw_furniture();

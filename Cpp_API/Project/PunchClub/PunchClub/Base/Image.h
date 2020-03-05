@@ -32,12 +32,15 @@ typedef struct tagImage
 	int		firstSection[2];
 	float	firstDelay;
 	float	firstCounter;
+	bool	fFirstEnd;
 	int		secondSection[2];
 	float	secondDelay;
 	float	secondCounter;
+	bool	fSecondEnd;
 	int		thirdSection[2];
 	float	thirdDelay;
 	float	thirdCounter;
+	bool	fThirdEnd;
 	bool	bSection[3];
 	bool	bEnable[3];
 	int		breakFrame;
@@ -70,12 +73,15 @@ typedef struct tagImage
 		firstSection[2] = { 0, };
 		firstDelay = 1;
 		firstCounter = 0;
+		fFirstEnd = false;
 		secondSection[2] = { 0, };
 		secondDelay = 1;
 		secondCounter = 0;
+		fSecondEnd = false;
 		thirdSection[2] = { 0, };
 		thirdDelay = 1;
 		thirdCounter = 0;
+		fThirdEnd = false;
 		bSection[3] = { 0, };
 		bEnable[3] = { 0, };
 		breakFrame = -1;
@@ -101,6 +107,7 @@ protected:
 	void run_frameSection(int section);
 	void run_frameSection_reverse(int section);
 	void run_frameUpdate(bool bDefualt, bool bReverse);
+	void set_fSectionEnd_false();
 public:
 	//빈 비트맵 이미지 초기화
 	HRESULT init(int width, int height);
@@ -164,6 +171,10 @@ public:
 	//========================================================
 	//==				Getter, Setter						==
 	//========================================================
+	// 프레임이 끝났는지
+	inline bool is_end_firstSection() { return _imageInfo->fFirstEnd; }
+	inline bool is_end_secondSection() { return _imageInfo->fSecondEnd; }
+	inline bool is_end_thirdSection() { return _imageInfo->fThirdEnd; }
 	// 회전할 이미지의 평행사변형 가져오기
 	inline POINT * get_rotateParallelogram() { return _rotateImage->parallelogram; }
 	inline POINT * get_parallelogram() { return _imageInfo->parallelogram; }

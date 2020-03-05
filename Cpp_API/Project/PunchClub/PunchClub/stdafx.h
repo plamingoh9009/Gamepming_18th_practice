@@ -44,6 +44,7 @@ using namespace std;
 #define TIMEMANAGER	TimeManager::get_singleton()
 #define SCENEMANAGER SceneManager::get_singleton()
 #define KEYMANAGER	KeyManager::get_singleton()
+#define RAND		Random::get_singleton()
 //======================================
 //##			디파인문				  ##
 //======================================

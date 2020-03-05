@@ -38,7 +38,7 @@ void Image::run_frameDefault()
 {
 	float speed, delay;
 	// 속도, 딜레이 값을 받아서 프레임을 돌린다.
-	speed = TIMEMANAGER->getElapsedTime();
+	speed = TIMEMANAGER->get_elapsedTime();
 	delay = _imageInfo->firstDelay;
 	_imageInfo->firstCounter += speed;
 
@@ -51,8 +51,8 @@ void Image::run_frameDefault()
 			_imageInfo->firstCounter = 0;
 		}//if: 프레임이 최대 프레임보다 작다면
 		// 프레임이 끝가지 돌았다면 0으로 초기화한다.
-		else 
-		{ 
+		else
+		{
 			reselect_frameSection(1);
 		}
 	}//if: 딜레이를 준다.
@@ -60,7 +60,7 @@ void Image::run_frameDefault()
 void Image::run_frameSection(int section)
 {
 	float speed, delay;
-	speed = TIMEMANAGER->getElapsedTime();
+	speed = TIMEMANAGER->get_elapsedTime();
 	// section: 어느 섹션을 프레임 돌릴지 받아서 돌린다.
 	switch (section)
 	{
@@ -69,6 +69,7 @@ void Image::run_frameSection(int section)
 		delay = _imageInfo->firstDelay;
 		_imageInfo->firstCounter += speed;
 
+		set_fSectionEnd_false();
 		if (_imageInfo->firstCounter >= delay)
 		{
 			if (_imageInfo->currentFrameX < _imageInfo->firstSection[1])
@@ -87,6 +88,7 @@ void Image::run_frameSection(int section)
 				{
 					reselect_frameSection(1);
 				}//else: 2번째 섹션이 없다면
+				_imageInfo->fFirstEnd = true;
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
@@ -95,6 +97,7 @@ void Image::run_frameSection(int section)
 		delay = _imageInfo->secondDelay;
 		_imageInfo->secondCounter += speed;
 
+		set_fSectionEnd_false();
 		if (_imageInfo->secondCounter >= delay)
 		{
 			if (_imageInfo->currentFrameX < _imageInfo->secondSection[1])
@@ -113,6 +116,7 @@ void Image::run_frameSection(int section)
 				{
 					reselect_frameSection(1);
 				}
+				_imageInfo->fSecondEnd = true;
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
@@ -121,6 +125,7 @@ void Image::run_frameSection(int section)
 		delay = _imageInfo->thirdDelay;
 		_imageInfo->thirdCounter += speed;
 
+		set_fSectionEnd_false();
 		if (_imageInfo->thirdCounter >= delay)
 		{
 			if (_imageInfo->currentFrameX < _imageInfo->thirdSection[1])
@@ -132,6 +137,7 @@ void Image::run_frameSection(int section)
 			else
 			{
 				reselect_frameSection(1);
+				_imageInfo->fThirdEnd = true;
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
@@ -140,7 +146,7 @@ void Image::run_frameSection(int section)
 void Image::run_frameSection_reverse(int section)
 {
 	float speed, delay;
-	speed = TIMEMANAGER->getElapsedTime();
+	speed = TIMEMANAGER->get_elapsedTime();
 	// section: 어느 섹션을 프레임 돌릴지 받아서 돌린다.
 	switch (section)
 	{
@@ -149,6 +155,7 @@ void Image::run_frameSection_reverse(int section)
 		delay = _imageInfo->firstDelay;
 		_imageInfo->firstCounter += speed;
 
+		set_fSectionEnd_false();
 		if (_imageInfo->firstCounter >= delay)
 		{
 			if (_imageInfo->currentFrameX > _imageInfo->firstSection[1])
@@ -167,6 +174,7 @@ void Image::run_frameSection_reverse(int section)
 				{
 					reselect_frameSection(1);
 				}//else: 2번째 섹션이 없다면
+				_imageInfo->fFirstEnd = true;
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
@@ -175,6 +183,7 @@ void Image::run_frameSection_reverse(int section)
 		delay = _imageInfo->secondDelay;
 		_imageInfo->secondCounter += speed;
 
+		set_fSectionEnd_false();
 		if (_imageInfo->secondCounter >= delay)
 		{
 			if (_imageInfo->currentFrameX > _imageInfo->secondSection[1])
@@ -193,6 +202,7 @@ void Image::run_frameSection_reverse(int section)
 				{
 					reselect_frameSection(1);
 				}
+				_imageInfo->fSecondEnd = true;
 			}//else: 프레임이 끝가지 돌았다면 start 값으로 초기화한다.
 		}//if: 딜레이를 준다.
 		break;
@@ -201,6 +211,7 @@ void Image::run_frameSection_reverse(int section)
 		delay = _imageInfo->thirdDelay;
 		_imageInfo->thirdCounter += speed;
 
+		set_fSectionEnd_false();
 		if (_imageInfo->thirdCounter >= delay)
 		{
 			if (_imageInfo->currentFrameX > _imageInfo->thirdSection[1])
@@ -212,6 +223,7 @@ void Image::run_frameSection_reverse(int section)
 			else
 			{
 				reselect_frameSection(1);
+				_imageInfo->fThirdEnd = true;
 			}//else: 프레임이 끝가지 돌았다면 1번 섹션으로 되돌아간다.
 		}//if: 딜레이를 준다.
 		break;
@@ -262,6 +274,12 @@ void Image::run_frameUpdate(bool bDefault, bool bReverse)
 			}
 		}//if: third 섹션의 프레임 돌리는 경우
 	}//else: 섹션을 설정한 경우다.
+}
+void Image::set_fSectionEnd_false()
+{
+	_imageInfo->fFirstEnd = false;
+	_imageInfo->fSecondEnd = false;
+	_imageInfo->fThirdEnd = false;
 }
 HRESULT Image::init(int width, int height)
 {
@@ -635,8 +653,8 @@ void Image::update_parallelogram(RECT imageRect, double radian)
 //==				프레임 섹션 초기화							==
 //============================================================
 void Image::set_frameSection(int enableSectionCount,
-	int firstStart, int firstEnd, float firstDelay, 
-	int secondStart, int secondEnd, float secondDelay, 
+	int firstStart, int firstEnd, float firstDelay,
+	int secondStart, int secondEnd, float secondDelay,
 	int thirdStart, int thirdEnd, float thirdDelay)
 {
 	// 내가 입력한 섹션 수에 따라서 초기화를 다르게 받는다.

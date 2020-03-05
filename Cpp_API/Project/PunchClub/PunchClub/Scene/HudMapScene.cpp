@@ -40,7 +40,7 @@ void HudMapScene::init_map_icons()
 {
 	string path;
 	POINT center;
-	// 지형지물
+	// 집
 	path = _imgPath + "Hud_home.bmp";
 	_home = new Image;
 	_home->init(path.c_str(), (int)(46 * GAME_MULTIPLE), (int)(33 * GAME_MULTIPLE));
@@ -48,6 +48,10 @@ void HudMapScene::init_map_icons()
 	center.y = (LONG)(WIN_HALF_H + WIN_HALF_H * 0.42);
 	_home_rc = RectMakeCenter(center.x, center.y, _home->get_width(), _home->get_height());
 	_home_center = center;
+	path = _imgPath + "Hud_home_select.bmp";
+	_home_select = new Image;
+	_home_select->init(path.c_str(), (int)(46 * GAME_MULTIPLE), (int)(33 * GAME_MULTIPLE));
+	// 수퍼마켓
 	path = _imgPath + "Hud_shop.bmp";
 	_shop = new Image;
 	_shop->init(path.c_str(), (int)(46 * GAME_MULTIPLE), (int)(32 * GAME_MULTIPLE));
@@ -55,6 +59,10 @@ void HudMapScene::init_map_icons()
 	center.y = (LONG)(WIN_HALF_H + _shop->get_height() * 0.25);
 	_shop_rc = RectMakeCenter(center.x, center.y, _shop->get_width(), _shop->get_height());
 	_shop_center = center;
+	path = _imgPath + "Hud_shop_select.bmp";
+	_shop_select = new Image;
+	_shop_select->init(path.c_str(), (int)(46 * GAME_MULTIPLE), (int)(32 * GAME_MULTIPLE));
+	// 체육관
 	path = _imgPath + "Hud_gym.bmp";
 	_gym = new Image;
 	_gym->init(path.c_str(), (int)(48 * GAME_MULTIPLE), (int)(31 * GAME_MULTIPLE));
@@ -62,6 +70,9 @@ void HudMapScene::init_map_icons()
 	center.y = (LONG)(WIN_HALF_H - _gym->get_height() * 0.3);
 	_gym_rc = RectMakeCenter(center.x, center.y, _gym->get_width(), _gym->get_height());
 	_gym_center = center;
+	path = _imgPath + "Hud_gym_select.bmp";
+	_gym_select = new Image;
+	_gym_select->init(path.c_str(), (int)(48 * GAME_MULTIPLE), (int)(31 * GAME_MULTIPLE));
 	// 캐릭터 이미지 로드
 	path = _imgPath + "Map_player.bmp";
 	_player = new Image;
@@ -73,9 +84,21 @@ void HudMapScene::init_map_icons()
 }
 void HudMapScene::draw_map_icons()
 {
-	_home->render(get_memDC(), _home_rc.left, _home_rc.top);
-	_shop->render(get_memDC(), _shop_rc.left, _shop_rc.top);
-	_gym->render(get_memDC(), _gym_rc.left, _gym_rc.top);
+	if(_fHome == true) 
+	{
+		_home_select->render(get_memDC(), _home_rc.left, _home_rc.top);
+	}
+	else { _home->render(get_memDC(), _home_rc.left, _home_rc.top); }
+	if (_fShop == true)
+	{
+		_shop_select->render(get_memDC(), _shop_rc.left, _shop_rc.top);
+	}
+	else{ _shop->render(get_memDC(), _shop_rc.left, _shop_rc.top); }
+	if (_fGym)
+	{
+		_gym_select->render(get_memDC(), _gym_rc.left, _gym_rc.top);
+	}
+	else { _gym->render(get_memDC(), _gym_rc.left, _gym_rc.top); }
 	_player->render(get_memDC(), _player_rc.left, _player_rc.top);
 	if (_fDebug)
 	{
@@ -84,6 +107,27 @@ void HudMapScene::draw_map_icons()
 		ColorRect(get_memDC(), _gym_rc, RGB(244, 180, 41));
 		ColorRect(get_memDC(), _player_rc, RGB(144, 233, 0));
 	}
+}
+void HudMapScene::update_map_icons()
+{
+	if (PtInRect(&_home_rc, m_ptMouse))
+	{
+		_fHome = true;
+		if (_fClick) { _scene_forChange = SCENE_HOME; }
+	}
+	else { _fHome = false; }
+	if (PtInRect(&_shop_rc, m_ptMouse))
+	{
+		_fShop = true;
+		if (_fClick) { _scene_forChange = SCENE_SHOP; }
+	}
+	else { _fShop = false; }
+	if (PtInRect(&_gym_rc, m_ptMouse))
+	{
+		_fGym = true;
+		if (_fClick) { _scene_forChange = SCENE_GYM; }
+	}
+	else { _fGym = false; }
 }
 void HudMapScene::delete_map_icons()
 {
@@ -117,6 +161,7 @@ void HudMapScene::release()
 void HudMapScene::update()
 {
 	update_scene();
+	update_map_icons();
 	INGAME_UI->update();
 	change_scene();
 }

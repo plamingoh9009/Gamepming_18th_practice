@@ -20,6 +20,10 @@ private:
 	RECT _shop_rc;
 	POINT _shop_center;
 	Image * _shop_select;
+	//
+	bool _fHome = false;
+	bool _fShop = false;
+	bool _fGym = false;
 protected:
 	void init_player_pos();
 	void init_background();
@@ -27,6 +31,7 @@ protected:
 	void delete_background();
 	void init_map_icons();
 	void draw_map_icons();
+	void update_map_icons();
 	void delete_map_icons();
 public:
 	virtual HRESULT init();

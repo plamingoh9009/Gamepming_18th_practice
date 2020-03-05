@@ -1,6 +1,6 @@
 #pragma once
 #include "Object.h"
-class Unit: Object
+class Unit: public Object
 {
 public:
 	virtual HRESULT init();

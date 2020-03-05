@@ -18,6 +18,8 @@ private:
 	// 냉장고 인벤토리
 	Inventory * _inven_friger;
 	bool _fInven_friger;
+	// 다른 업데이트를 정지할지 말지
+	bool _fUI_on = false;
 protected:
 	void run_red_button();
 	void update_friger();

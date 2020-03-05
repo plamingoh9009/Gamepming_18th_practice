@@ -1,6 +1,7 @@
 #pragma once
 #include "Base/GameNode.h"
 #include "UI/InGameUI.h"
+#include "Object/Player.h"
 typedef vector<SCENE_TYPE> vSceneList;
 class Scene : public GameNode
 {

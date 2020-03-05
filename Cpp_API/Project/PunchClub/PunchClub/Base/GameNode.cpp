@@ -13,8 +13,8 @@ void GameNode::update_checkDebugMode()
 }
 void GameNode::update_checkClicked()
 {
-	if (KEYMANAGER->is_onceKeyDown(VK_LBUTTON)) { _fClick = true; }
-	else if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON)) { _fClick = false; }
+	if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON)) { _fClick = true; }
+	else { _fClick = false; }
 }
 void GameNode::change_currentScene(SCENE_TYPE type)
 {

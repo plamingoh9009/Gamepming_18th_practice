@@ -1,6 +1,6 @@
 #pragma once
 #include "Base/GameNode.h"
-class Object: GameNode
+class Object: public GameNode
 {
 public:
 	virtual HRESULT init();
