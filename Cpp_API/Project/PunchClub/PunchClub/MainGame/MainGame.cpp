@@ -9,6 +9,8 @@ void MainGame::add_scenes_toManager()
 	SCENEMANAGER->addScene("Gym", new GymScene());
 	SCENEMANAGER->addScene("Shop", new ShopScene());
 	SCENEMANAGER->addScene("SkillTree", new SkillTreeScene());
+	SCENEMANAGER->addScene("LeagueWait", new LeagueWaitingScene());
+	SCENEMANAGER->addScene("LeagueFight", new LeagueFightingScene());
 }
 
 HRESULT MainGame::init()

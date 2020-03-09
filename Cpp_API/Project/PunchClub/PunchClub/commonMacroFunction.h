@@ -113,3 +113,11 @@ inline void FontTextOut(HDC hdc, int drawX, int drawY, const char * str,
 	SelectObject(hdc, oldFont);
 	DeleteObject(font);
 }
+// 그림자를 추가해주는 함수
+inline void FontTextShadow(HDC hdc, int drawX, int drawY, const char * str,
+	char * fontName, int fontSize = 20, COLORREF color = RGB(0, 0, 0))
+{
+	int shadow_move = (int)(fontSize * 0.1);
+	FontTextOut(hdc, drawX + shadow_move, drawY + shadow_move, str, fontName, fontSize, RGB(1, 1, 1));
+	FontTextOut(hdc, drawX, drawY, str, fontName, fontSize, color);
+}

@@ -16,7 +16,10 @@ void UI::render()
 }
 UI::UI()
 {
+	_obj = new Object;
 }
 UI::~UI()
 {
+	_obj->release();
+	_obj = nullptr;
 }

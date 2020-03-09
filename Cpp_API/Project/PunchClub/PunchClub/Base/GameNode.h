@@ -8,8 +8,9 @@ enum SCENE_TYPE
 	SCENE_HUD_MAP,
 	SCENE_GYM,
 	SCENE_SHOP,
-	SCENE_LEAGUE,
 	SCENE_SKILLTREE,
+	SCENE_LEAGUE_WAIT,
+	SCENE_LEAGUE_FIGHT,
 	SCENE_BACK
 };
 class GameNode
@@ -22,8 +23,9 @@ protected:
 	string _imgPath = "Images/";	// 게임에서 사용할 이미지 경로
 	static SCENE_TYPE _scene_forChange;
 	
-	static bool _fClick;	// 클릭 처리를 위한 변수
-	static bool _fDebug;	// 디버그 모드를 위한 변수
+	static bool _fClick;		// 클릭 처리를 위한 변수
+	static bool _fClickLock;
+	static bool _fDebug;		// 디버그 모드를 위한 변수
 protected:
 	void update_checkDebugMode();
 	void update_checkClicked();
@@ -31,6 +33,7 @@ protected:
 	void change_currentScene(SCENE_TYPE type);
 	// append: "Images/[append]"
 	void set_imgPath(string append = "");
+	void set_fClickLock(bool fResult) { _fClickLock = fResult; }
 public:
 	virtual HRESULT init();
 	virtual HRESULT init(bool managerInit);

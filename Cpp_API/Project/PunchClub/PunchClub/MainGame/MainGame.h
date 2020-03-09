@@ -7,6 +7,8 @@
 #include "Scene/GymScene.h"
 #include "Scene/ShopScene.h"
 #include "Scene/SkillTreeScene.h"
+#include "Scene/LeagueWaitingScene.h"
+#include "Scene/LeagueFightingScene.h"
 class MainGame: public GameNode
 {
 protected:

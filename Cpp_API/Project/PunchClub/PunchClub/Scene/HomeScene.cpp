@@ -7,11 +7,15 @@ void HomeScene::update_objectSelected()
 	if (PtInRect(&_friger_rc, m_ptMouse)) 
 	{ 
 		_fFriger = true;
-		if (_fClick == true) { INGAME_UI->set_fInven_friger(true); }
+		if (_fClick == true) 
+		{ 
+			INGAME_UI->set_fInven_friger(true);
+		}
+		PLAYER->set_fObjMove(false);
 	}
 	else { _fFriger = false; }
 	// 소파
-	if (PtInRect(&_sofa_rc, m_ptMouse))
+	if (PtInRect(&_sofa_rc, m_ptMouse) && _fClickLock == false)
 	{
 		_fSofa = true;
 		if (_fClick == true && _fSleep == false) { _fSleep = true; }
@@ -19,7 +23,7 @@ void HomeScene::update_objectSelected()
 	else { _fSofa = false; }
 	
 	// TV
-	if (PtInRect(&_tv_rc, m_ptMouse))
+	if (PtInRect(&_tv_rc, m_ptMouse) && _fClickLock == false)
 	{
 		_fTv = true;
 		if (_fClick == true && _fWatch == false) { _fWatch = true; }
@@ -353,12 +357,15 @@ void HomeScene::update()
 	_aquarium->frameUpdate();
 	_fan->frameUpdate(false, true);
 	_clock->frameUpdate();
-	// 
+	INGAME_UI->update();	// UI를 플레이어보다 먼저 받는다.
+	// 플레이어
 	if(_fSleep == true) {}
 	else if(_fWatch == true) {}
-	else { PLAYER->update(); }
-	
-	INGAME_UI->update();
+	else 
+	{ 
+		PLAYER->update(); 
+		PLAYER->set_fObjMove(true);
+	}
 	change_scene();	// 항상 마지막에 씬을 바꾼다.
 }
 void HomeScene::render()

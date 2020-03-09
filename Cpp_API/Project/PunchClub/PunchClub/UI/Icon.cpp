@@ -79,13 +79,17 @@ void Icon::select_icons(ICON_TYPE type)
 		_scene_forChange = SCENE_HUD_MAP;
 		break;
 	case ICON_LEAGUE:
+		_fLeague = true;
 		break;
 	case ICON_SKILLTREE:
 		_scene_forChange = SCENE_SKILLTREE;
 		break;
 	default:
+		_fLeague = false;
 		break;
 	}
+	// 아이콘을 누를 때 플레이어 못움직이게 한다.
+	if (type != ICON_EMPTY) { _obj->set_fObjMove(false); }
 }
 
 HRESULT Icon::init()

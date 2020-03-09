@@ -6,9 +6,12 @@
 #include "HudBack.h"
 #include "RedButton.h"
 // 클릭했을 때
-#include "Inventory.h"
+#include "Window.h"
 class InGameUI: public GameNode, public SingletonBase<InGameUI>
 {
+private:
+	// 오브젝트에 값을 넣기 위해서 필요하다
+	Object * _obj;
 private:
 	Icon * _icons;
 	HudBack * _hud_back;
@@ -16,12 +19,13 @@ private:
 	RedButton * _red_button;
 	bool _fRedButton;
 	// 냉장고 인벤토리
-	Inventory * _inven_friger;
+	Window * _inven_friger;
 	bool _fInven_friger;
-	// 다른 업데이트를 정지할지 말지
-	bool _fUI_on = false;
+	// 리그 창
+	Window * _window_league;
 protected:
 	void run_red_button();
+	void update_league();
 	void update_friger();
 public:
 	void set_fRedButton(bool fResult) { _fRedButton = fResult; }

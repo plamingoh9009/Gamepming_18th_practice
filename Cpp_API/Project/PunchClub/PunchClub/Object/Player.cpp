@@ -79,7 +79,11 @@ void Player::draw_player()
 void Player::update_player()
 {
 	if (_fIdle) { update_idle_img(); }
-	if (_fClick) { move_player(); }
+	if (_fClick && _fObjMove) 
+	{ 
+		if(m_ptMouse.y < WIN_HALF_H) {}
+		else { move_player(); }
+	}
 }
 void Player::delete_player()
 {

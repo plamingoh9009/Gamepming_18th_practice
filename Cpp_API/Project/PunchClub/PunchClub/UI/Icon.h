@@ -23,6 +23,8 @@ private:
 	RECT _league_rc;
 	RECT _league_back_rc;
 	POINT _icon_center;
+	// 리그 아이콘을 눌렀는지
+	bool _fLeague;
 protected:
 	void init_icons();
 	void draw_icons();
@@ -36,5 +38,8 @@ public:
 public:
 	Icon();
 	~Icon();
+public:
+	bool get_fLeague() { return _fLeague; }
+	void set_fLeague(bool fResult) { _fLeague = fResult; }
 };
 

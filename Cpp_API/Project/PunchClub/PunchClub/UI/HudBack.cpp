@@ -20,6 +20,7 @@ void HudBack::release()
 }
 void HudBack::update()
 {
+		if (PtInRect(&_hud_back_rc, m_ptMouse)) { _obj->set_fObjMove(false); }
 }
 void HudBack::render()
 {

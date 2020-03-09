@@ -147,7 +147,7 @@
     <ClInclude Include="Object\Unit.h">
       <Filter>I_Object\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Inventory.h">
+    <ClInclude Include="UI\Window.h">
       <Filter>I_UI\type</Filter>
     </ClInclude>
   </ItemGroup>
@@ -236,7 +236,7 @@
     <ClCompile Include="Object\Unit.cpp">
       <Filter>I_Object\Unit</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Inventory.cpp">
+    <ClCompile Include="UI\Window.cpp">
       <Filter>I_UI\type</Filter>
     </ClCompile>
   </ItemGroup>

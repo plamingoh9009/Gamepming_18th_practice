@@ -5,6 +5,7 @@ Image* GameNode::_backBuffer = NULL;
 // 인게임 공통 데이터
 SCENE_TYPE GameNode::_scene_forChange = SCENE_EMPTY;
 bool GameNode::_fClick = false;
+bool GameNode::_fClickLock = false;
 bool GameNode::_fDebug = false;
 void GameNode::update_checkDebugMode()
 {
@@ -13,7 +14,7 @@ void GameNode::update_checkDebugMode()
 }
 void GameNode::update_checkClicked()
 {
-	if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON)) { _fClick = true; }
+	if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON) && _fClickLock == false) { _fClick = true; }
 	else { _fClick = false; }
 }
 void GameNode::change_currentScene(SCENE_TYPE type)
@@ -32,11 +33,14 @@ void GameNode::change_currentScene(SCENE_TYPE type)
 	case SCENE_SHOP:
 		SCENEMANAGER->changeScene("Shop");
 		break;
-	case SCENE_LEAGUE:
-		//SCENEMANAGER->changeScene("League");
-		break;
 	case SCENE_SKILLTREE:
 		SCENEMANAGER->changeScene("SkillTree");
+		break;
+	case SCENE_LEAGUE_WAIT:
+		SCENEMANAGER->changeScene("LeagueWait");
+		break;
+	case SCENE_LEAGUE_FIGHT:
+		SCENEMANAGER->changeScene("LeagueFight");
 		break;
 	}
 }
