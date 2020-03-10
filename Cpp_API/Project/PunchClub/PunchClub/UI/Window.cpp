@@ -12,8 +12,8 @@ void Window::init_default()
 	center.y = (LONG)(WIN_HALF_H + _bg->get_height() * 0.07);
 	_bg_rc = RectMakeCenter(center.x, center.y, _bg->get_width(), _bg->get_height());
 	_bg_center = center;
-	_red_button = new RedButton();
-	_red_button->init(_bg_rc.right, _bg_rc.top);
+	_red_button = new Button();
+	_red_button->init(BTN_RED, _bg_rc.right, _bg_rc.top);
 	// 라인을 그리는 기준
 	path = _imgPath + "Locked_back.bmp";
 	_locked_back = new Image;
@@ -159,6 +159,12 @@ void Window::draw_league()
 }
 void Window::update_league()
 {
+	if (PtInRect(&_league_slot[0].btn_show_rc, m_ptMouse))
+	{
+		_fClose = true;
+		_fClickLock = false;
+		_scene_forChange = SCENE_LEAGUE_WAIT;
+	}
 }
 void Window::delete_league()
 {
@@ -207,8 +213,8 @@ void Window::init_league_slots()
 			_league_slot[i].icon_center.y = (LONG)((_league_slot[i].icon_back_rc.top +
 				_league_slot[i].icon_back_rc.bottom) * 0.5);
 			_league_slot[i].icon_rc = RectMakeCenter(
-				_league_slot[i].icon_center.x, 
-				_league_slot[i].icon_center.y, 
+				_league_slot[i].icon_center.x,
+				_league_slot[i].icon_center.y,
 				_league_slot[i].icon->get_width(), _league_slot[i].icon->get_height());
 			// 슬롯의 텍스트를 정하는 부분
 			_league_slot[i].title = "루키 리그";
@@ -225,18 +231,18 @@ void Window::init_league_slots()
 			// 버튼
 			path = _imgPath + "Btn_show.bmp";
 			_league_slot[i].btn_show = new Image;
-			_league_slot[i].btn_show->init(path.c_str(), 
+			_league_slot[i].btn_show->init(path.c_str(),
 				(int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
 			path = _imgPath + "Icon_show.bmp";
 			_league_slot[i].icon_show = new Image;
-			_league_slot[i].icon_show->init(path.c_str(), 
+			_league_slot[i].icon_show->init(path.c_str(),
 				(int)(24 * GAME_MULTIPLE), (int)(24 * GAME_MULTIPLE));
 			// 버튼 위치
 			pos.x = (LONG)(_league_slot[i].back_rc.right -
 				_league_slot[i].btn_show->get_width() * 1.075);
 			pos.y = (LONG)(_league_slot[i].back_rc.bottom -
 				_league_slot[i].btn_show->get_height() * 1.15);
-			_league_slot[i].btn_show_rc = RectMake(pos.x, pos.y, 
+			_league_slot[i].btn_show_rc = RectMake(pos.x, pos.y,
 				_league_slot[i].btn_show->get_width(),
 				_league_slot[i].btn_show->get_height());
 			_league_slot[i].btn_show_center.x = (LONG)(
@@ -276,7 +282,7 @@ void Window::draw_league_slots()
 	{
 		_league_slot[i].back->render(get_memDC(),
 			_league_slot[i].back_rc.left, _league_slot[i].back_rc.top);
-		if (i == 0) 
+		if (i == 0)
 		{
 			_league_slot[i].icon_back->render(get_memDC(),
 				_league_slot[i].icon_back_rc.left, _league_slot[i].icon_back_rc.top);
@@ -285,7 +291,7 @@ void Window::draw_league_slots()
 			// 텍스트
 			FontTextShadow(get_memDC(), _league_slot[i].title_pos.x, _league_slot[i].title_pos.y,
 				_league_slot[i].title.c_str(), "휴먼매직체", 35, RGB(246, 204, 111));
-			
+
 			FontTextOut(get_memDC(), _league_slot[i].desc_pos.x, _league_slot[i].desc_pos.y,
 				_league_slot[i].desc_type[0].c_str(), "휴먼편지체", 25, RGB(255, 193, 59));
 			FontTextOut(get_memDC(), _league_slot[i].desc_pos.x + 40, _league_slot[i].desc_pos.y,
@@ -375,7 +381,6 @@ void Window::release()
 }
 void Window::update()
 {
-	if (_type == WINDOW_LEAGUE) { update_league(); }
 	if (KEYMANAGER->is_onceKeyDown(VK_LBUTTON))
 	{
 		if (PtInRect(&_red_button->get_rc(), m_ptMouse))
@@ -383,6 +388,7 @@ void Window::update()
 			_fClose = true;
 			_fClickLock = false;
 		}
+		update_league();
 	}//if: 클릭 했을 때 인벤토리를 닫는다.
 	else
 	{

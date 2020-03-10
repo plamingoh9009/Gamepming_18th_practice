@@ -135,9 +135,6 @@
     <ClInclude Include="Scene\HudMapScene.h">
       <Filter>I_Scene\type</Filter>
     </ClInclude>
-    <ClInclude Include="UI\RedButton.h">
-      <Filter>I_UI\type</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Player.h">
       <Filter>I_Object\Unit\Player</Filter>
     </ClInclude>
@@ -148,6 +145,18 @@
       <Filter>I_Object\Unit</Filter>
     </ClInclude>
     <ClInclude Include="UI\Window.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Gauge.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Button.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PrefightStat.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PrefightSkillSet.h">
       <Filter>I_UI\type</Filter>
     </ClInclude>
   </ItemGroup>
@@ -224,9 +233,6 @@
     <ClCompile Include="Scene\HudMapScene.cpp">
       <Filter>I_Scene\type</Filter>
     </ClCompile>
-    <ClCompile Include="UI\RedButton.cpp">
-      <Filter>I_UI\type</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Player.cpp">
       <Filter>I_Object\Unit\Player</Filter>
     </ClCompile>
@@ -237,6 +243,18 @@
       <Filter>I_Object\Unit</Filter>
     </ClCompile>
     <ClCompile Include="UI\Window.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Gauge.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Button.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\PrefightStat.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\PrefightSkillSet.cpp">
       <Filter>I_UI\type</Filter>
     </ClCompile>
   </ItemGroup>

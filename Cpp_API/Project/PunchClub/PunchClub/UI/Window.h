@@ -1,6 +1,6 @@
 #pragma once
 #include "UI.h"
-#include "RedButton.h"
+#include "Button.h"
 enum WINDOW_TYPE
 {
 	WINDOW_NONE,
@@ -60,7 +60,7 @@ private:
 	POINT _locked_back_pos;
 	Image * _slot;
 	Image * _green_button;
-	RedButton * _red_button;
+	Button * _red_button;
 	// fg Ό³Έν
 	Image * _fg;
 	RECT _fg_rc;
