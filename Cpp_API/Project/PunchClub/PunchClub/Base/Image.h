@@ -17,6 +17,7 @@ typedef struct tagImage
 	BYTE	loadType;			//로드 타입
 	float	x;					//이미지 x좌표
 	float   y;					//이미지 Y좌표
+	RECT*	rc;					//이미지 좌표 RECT 버전
 	int		currentFrameX;		//현재프레임X
 	int		currentFrameY;		//현재프레임Y
 	int		maxFrameX;			//최대 X프레임 갯수
@@ -57,6 +58,7 @@ typedef struct tagImage
 		height = 0;
 		x = 0;
 		y = 0;
+		rc = nullptr;
 		currentFrameX = 0;
 		currentFrameY = 0;
 		maxFrameX = 0;
@@ -183,15 +185,72 @@ public:
 	inline HDC get_memDC() { return _imageInfo->hMemDC; }
 	//이미지 좌표x 얻기
 	inline float getX() { return _imageInfo->x; }
-	inline void setX(float x) { _imageInfo->x = x; }
+	inline void setX(float x) 
+	{ 
+		_imageInfo->x = x;
+	}
 	//이미지 좌표y 얻기
 	inline float getY() { return _imageInfo->y; }
-	inline void setY(float y) { _imageInfo->y = y; }
+	inline void setY(float y) 
+	{ 
+		_imageInfo->y = y;
+	}
+	// 이미지 좌표 셋
+	inline void set_pos(POINT pos)
+	{
+		RECT rc;
+		_imageInfo->x = (float)(pos.x);
+		_imageInfo->y = (float)(pos.y);
+		rc = RectMake(pos.x, pos.y, _imageInfo->width, _imageInfo->height);
+		set_rect(rc);
+	}
+	// 이미지 RECT 얻기
+	inline void set_rect(RECT rc)
+	{
+		if (_imageInfo->rc == nullptr)
+		{
+			_imageInfo->rc = new RECT;
+			*_imageInfo->rc = rc;
+		}
+		else
+		{
+			*_imageInfo->rc = rc;
+		}
+		_imageInfo->x = (float)(rc.left);
+		_imageInfo->y = (float)(rc.top);
+	}
+	inline RECT get_rect() { return *_imageInfo->rc; }
 	//이미지 센터 좌표 셋팅
 	inline void set_center(float x, float y)
 	{
 		_imageInfo->x = x - (_imageInfo->width / 2);
 		_imageInfo->y = y - (_imageInfo->height / 2);
+		if (_imageInfo->rc == nullptr)
+		{
+			_imageInfo->rc = new RECT;
+			*_imageInfo->rc = RectMakeCenter((int)(x), (int)(y),
+				_imageInfo->width, _imageInfo->height);
+		}
+		else
+		{
+			*_imageInfo->rc = RectMakeCenter((int)(x), (int)(y),
+				_imageInfo->width, _imageInfo->height);
+		}
+	}
+	inline void set_center(POINT center)
+	{
+		set_center((float)(center.x), (float)(center.y));
+	}
+	inline void set_center(RECT rc)
+	{
+		set_center((float)(rc.left), (float)(rc.top));
+	}
+	inline POINT get_center()
+	{
+		POINT center;
+		center.x = (LONG)((_imageInfo->rc->left + _imageInfo->rc->right) * 0.5);
+		center.y = (LONG)((_imageInfo->rc->top + _imageInfo->rc->bottom) * 0.5);
+		return center;
 	}
 	//가로,세로크기 얻기
 	inline int get_width() { return _imageInfo->width; }

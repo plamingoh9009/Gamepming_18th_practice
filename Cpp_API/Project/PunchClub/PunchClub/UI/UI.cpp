@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "UI.h"
 
+MAPICON::TYPE
+UI::_mapIcon_on = MAPICON::ICON_EMPTY;
 HRESULT UI::init()
 {
 	return S_OK;

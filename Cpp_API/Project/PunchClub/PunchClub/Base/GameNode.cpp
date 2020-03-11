@@ -48,6 +48,7 @@ void GameNode::set_imgPath(string append)
 {
 	_imgPath = "Images/" + append;
 }
+
 HRESULT GameNode::init()
 {
 	_hdc = GetDC(m_hWnd);

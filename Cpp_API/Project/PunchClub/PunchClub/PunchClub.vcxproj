@@ -174,14 +174,18 @@
     <ClInclude Include="Scene\ShopScene.h" />
     <ClInclude Include="Scene\SkillTreeScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Scene\WorkScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UI\Gauge.h" />
     <ClInclude Include="UI\HudBack.h" />
-    <ClInclude Include="UI\Icon.h" />
+    <ClInclude Include="UI\Icons\Icon.h" />
+    <ClInclude Include="UI\Icons\MapIcon.h" />
     <ClInclude Include="UI\InGameUI.h" />
     <ClInclude Include="UI\PrefightSkillSet.h" />
     <ClInclude Include="UI\PrefightStat.h" />
+    <ClInclude Include="UI\Slot.h" />
+    <ClInclude Include="UI\uiEnum.h" />
     <ClInclude Include="UI\Window.h" />
     <ClInclude Include="UI\Button.h" />
     <ClInclude Include="UI\UI.h" />
@@ -209,6 +213,7 @@
     <ClCompile Include="Scene\ShopScene.cpp" />
     <ClCompile Include="Scene\SkillTreeScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Scene\WorkScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -217,10 +222,12 @@
     </ClCompile>
     <ClCompile Include="UI\Gauge.cpp" />
     <ClCompile Include="UI\HudBack.cpp" />
-    <ClCompile Include="UI\Icon.cpp" />
+    <ClCompile Include="UI\Icons\Icon.cpp" />
+    <ClCompile Include="UI\Icons\MapIcon.cpp" />
     <ClCompile Include="UI\InGameUI.cpp" />
     <ClCompile Include="UI\PrefightSkillSet.cpp" />
     <ClCompile Include="UI\PrefightStat.cpp" />
+    <ClCompile Include="UI\Slot.cpp" />
     <ClCompile Include="UI\Window.cpp" />
     <ClCompile Include="UI\Button.cpp" />
     <ClCompile Include="UI\UI.cpp" />

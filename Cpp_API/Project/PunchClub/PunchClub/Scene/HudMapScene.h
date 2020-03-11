@@ -1,35 +1,28 @@
 #pragma once
 #include "Scene.h"
+#include "UI/Icons/MapIcon.h"
+#include "UI/Window.h"
 class HudMapScene: public Scene
 {
 private:
+	typedef vector<MapIcon *> MapIcons;
+private:
 	Image * _bg;
 	// 아이콘
-	Image * _player;
-	RECT _player_rc;
-	POINT _player_center;
-	Image * _home;
-	RECT _home_rc;
-	POINT _home_center;
-	Image * _home_select;
-	Image * _gym;
-	RECT _gym_rc;
-	POINT _gym_center;
-	Image * _gym_select;
-	Image * _shop;
-	RECT _shop_rc;
-	POINT _shop_center;
-	Image * _shop_select;
-	//
-	bool _fHome = false;
-	bool _fShop = false;
-	bool _fGym = false;
+	MapIcons _icons;
+	MapIcon * _player;
+	MapIcon * _home;
+	MapIcon * _shop;
+	MapIcon * _gym;
+	MapIcon * _build;
+	// 버스 윈도우
+	Window * _bus;
 protected:
-	void init_player_pos();
-	void init_background();
+	HRESULT init_player_pos();
+	HRESULT init_background();
 	void draw_background();
 	void delete_background();
-	void init_map_icons();
+	HRESULT init_map_icons();
 	void draw_map_icons();
 	void update_map_icons();
 	void delete_map_icons();

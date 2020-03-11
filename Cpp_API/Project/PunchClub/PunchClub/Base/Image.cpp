@@ -281,6 +281,9 @@ void Image::set_fSectionEnd_false()
 	_imageInfo->fSecondEnd = false;
 	_imageInfo->fThirdEnd = false;
 }
+//==========================================
+//##			Bool Check				  ##
+//==========================================
 HRESULT Image::init(int width, int height)
 {
 	//이미지 정보가 들어있다면 릴리즈
@@ -716,7 +719,7 @@ void Image::release()
 		DeleteObject(_blendImage->hOBit);
 		DeleteDC(_blendImage->hMemDC);
 
-
+		SAFE_DELETE(_imageInfo->rc);
 		SAFE_DELETE(_imageInfo);
 		SAFE_DELETE(_fileName);
 		SAFE_DELETE(_blendImage);
@@ -733,8 +736,8 @@ void Image::render(HDC hdc)
 		//GdiTransparentBlt : 비트맵을 불러올 때 특정색상 제외하고 복사해주는 함수
 		GdiTransparentBlt(
 			hdc,					//복사될 장소의 DC
-			0,						//복사될 좌표의 시작점x
-			0,						//복사될 좌표의 시작점y
+			(int)(_imageInfo->x),			//복사될 좌표의 시작점x
+			(int)(_imageInfo->y),			//복사될 좌표의 시작점y
 			_imageInfo->width,		//복사될 이미지 가로크기
 			_imageInfo->height,		//복사될 이미지 세로크기
 			_imageInfo->hMemDC,		//복사될 대상 DC
@@ -749,7 +752,7 @@ void Image::render(HDC hdc)
 	{
 		//SRCCOPY : 복사해주는 함수 가로 세로를 재정의해서 복사
 		//DC간의 영역끼리 고속복사 해주는 함수
-		BitBlt(hdc, 0, 0, _imageInfo->width, _imageInfo->height,
+		BitBlt(hdc, (int)(_imageInfo->x), (int)(_imageInfo->y), _imageInfo->width, _imageInfo->height,
 			_imageInfo->hMemDC, 0, 0, SRCCOPY);
 	}
 }
@@ -1092,8 +1095,9 @@ void Image::alphaRender(HDC hdc, int destX, int destY, BYTE alpha)
 		BitBlt(_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height,
 			hdc, destX, destY, SRCCOPY);
 
-		GdiTransparentBlt(_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height,
-			_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, _transColor);
+		GdiTransparentBlt(_blendImage->hMemDC, 0, 0, 
+			_imageInfo->width, _imageInfo->height, _imageInfo->hMemDC, 0, 0, 
+			_imageInfo->width, _imageInfo->height, _transColor);
 
 		AlphaBlend(hdc, destX, destY, _imageInfo->width, _imageInfo->height,
 			_blendImage->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, _blendFunc);

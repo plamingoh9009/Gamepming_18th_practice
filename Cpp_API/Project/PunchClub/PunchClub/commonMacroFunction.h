@@ -121,3 +121,47 @@ inline void FontTextShadow(HDC hdc, int drawX, int drawY, const char * str,
 	FontTextOut(hdc, drawX + shadow_move, drawY + shadow_move, str, fontName, fontSize, RGB(1, 1, 1));
 	FontTextOut(hdc, drawX, drawY, str, fontName, fontSize, color);
 }
+
+// 안전하게 종료하는 함수
+template<class MYCLASS>
+inline HRESULT Release(MYCLASS myC)
+{
+	if (myC != nullptr)
+	{
+		myC->release();
+		myC = nullptr;
+		return S_OK;
+	}
+	else
+	{
+		delete(myC);
+		return S_OK;
+	}
+	return E_FAIL;
+}
+template<class MYCLASS>
+inline HRESULT Draw(MYCLASS myC)
+{
+	if (myC != nullptr)
+	{
+		myC->render();
+		return S_OK;
+	}
+	else
+	{
+		return E_FAIL;
+	}
+}
+template<class MYCLASS>
+inline HRESULT Draw(MYCLASS myC, HDC hdc)
+{
+	if (myC != nullptr)
+	{
+		myC->render(hdc);
+		return S_OK;
+	}
+	else
+	{
+		return E_FAIL;
+	}
+}

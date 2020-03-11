@@ -2,7 +2,7 @@
 #include "Base/GameNode.h"
 #include "Base/SingletonBase.h"
 // UI
-#include "Icon.h"
+#include "Icons/Icon.h"
 #include "HudBack.h"
 #include "Button.h"
 // 클릭했을 때

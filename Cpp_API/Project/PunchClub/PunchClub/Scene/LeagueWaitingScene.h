@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "UI/InGameUI.h"
 #include "UI/PrefightStat.h"
+#include "UI/PrefightSkillSet.h"
 class LeagueWaitingScene: public Scene
 {
 private:
@@ -22,6 +23,9 @@ private:
 	Image * _enemy;
 	RECT _player_rc;
 	RECT _enemy_rc;
+	// Prefight Skill set
+	PrefightSkillSet * _player_skill;
+	PrefightSkillSet * _enemy_skill;
 	// Button
 	Button * _fight_button;
 protected:
@@ -32,6 +36,9 @@ protected:
 	void draw_picture();
 	void update_picture();
 	void delete_picture();
+	void init_prefight_skill();
+	void draw_prefight_skill();
+	void delete_prefight_skill();
 public:
 	virtual HRESULT init();
 	virtual void release();

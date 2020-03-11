@@ -1,63 +1,85 @@
 #include "stdafx.h"
 #include "Window.h"
 
-void Window::init_default()
+HRESULT Window::init_window_bg(WINDOW::TYPE type)
 {
+	_type = type;
 	string path;
-	POINT center;
-	path = _imgPath + "Window_back.bmp";
-	_bg = new Image;
-	_bg->init(path.c_str(), (int)(425 * GAME_MULTIPLE), (int)(300 * GAME_MULTIPLE));
-	center.x = (LONG)(WIN_HALF_W);
-	center.y = (LONG)(WIN_HALF_H + _bg->get_height() * 0.07);
-	_bg_rc = RectMakeCenter(center.x, center.y, _bg->get_width(), _bg->get_height());
-	_bg_center = center;
-	_red_button = new Button();
-	_red_button->init(BTN_RED, _bg_rc.right, _bg_rc.top);
-	// 라인을 그리는 기준
-	path = _imgPath + "Locked_back.bmp";
-	_locked_back = new Image;
-	_locked_back->init(path.c_str(), (int)(419 * GAME_MULTIPLE), (int)(234 * GAME_MULTIPLE));
-	_locked_back_pos.x = (LONG)(_bg_rc.left + 6);
-	_locked_back_pos.y = (LONG)(_bg_rc.top + _bg->get_height() * 0.2 + 4);
-	_locked_back_rc = RectMake((int)(_locked_back_pos.x), (int)(_locked_back_pos.y),
-		_locked_back->get_width(), _locked_back->get_height());
+	POINT center, pos;
+	HRESULT result;
+	int result_cnt = 0;
+	switch (type)
+	{
+	case WINDOW::WINDOW_NONE:
+	case WINDOW::WINDOW_SHOP:
+	case WINDOW::WINDOW_FRIGER:
+	case WINDOW::WINDOW_LEAGUE:
+		// Background Image
+		path = _imgPath + "Window_back.bmp";
+		_bg = new Image;
+		result = _bg->init(path.c_str(), (int)(425 * GAME_MULTIPLE), (int)(300 * GAME_MULTIPLE));
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		center.x = (LONG)(WIN_HALF_W);
+		center.y = (LONG)(WIN_HALF_H + _bg->get_height() * 0.07);
+		_bg->set_center(center);
+		// Red button Class
+		_red_button = new Button();
+		result = _red_button->init(BTN_RED, _bg->get_rect().right, _bg->get_rect().top);
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		// 라인을 그리는 기준
+		path = _imgPath + "Locked_back.bmp";
+		_locked_back = new Image;
+		result = _locked_back->init(path.c_str(),
+			(int)(419 * GAME_MULTIPLE), (int)(234 * GAME_MULTIPLE));
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		pos.x = (LONG)(_bg->getX() + 6);
+		pos.y = (LONG)(_bg->getY() + _bg->get_height() * 0.2 + 4);
+		_locked_back->set_pos(pos);
+		break;
+	case WINDOW::WINDOW_BUS:
+		// Background Image
+		path = _imgPath + "Window_back.bmp";
+		_bg = new Image;
+		result = _bg->init(path.c_str(), (int)(425 * GAME_MULTIPLE), (int)(300 * GAME_MULTIPLE));
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		center.x = (LONG)(WIN_HALF_W);
+		center.y = (LONG)(WIN_HALF_H + _bg->get_height() * 0.07);
+		_bg->set_center(center);
+		// Red button Class
+		_red_button = new Button();
+		result = _red_button->init(BTN_RED, _bg->get_rect().right, _bg->get_rect().top);
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		break;
+	}
+	result = (result_cnt == 0 ? S_OK : E_FAIL);
+	return result;
 }
-void Window::draw_default()
+void Window::delete_window_bg()
 {
-	_bg->render(get_memDC(), _bg_rc.left, _bg_rc.top);
-	_red_button->render();
+	Release(_bg);
+	Release(_red_button);
+	Release(_locked_back);
 }
-void Window::delete_default()
+void Window::draw_window_bg()
 {
-	_bg->release();
-	_bg = nullptr;
-	_slot->release();
-	_slot = nullptr;
-	_red_button->release();
-	_red_button = nullptr;
-	_locked_back->release();
-	_locked_back = nullptr;
+	Draw(_bg, get_memDC());
+	Draw(_red_button);
 }
+
 void Window::init_inventory()
 {
 	string path;
-	path = _imgPath + "Inven_slot.bmp";
-	_slot = new Image;
-	_slot->init(path.c_str(), (int)(212 * GAME_MULTIPLE), (int)(60 * GAME_MULTIPLE));
-	path = _imgPath + "Btn_green.bmp";
-
 	_fg = new Image;
 	switch (_type)
 	{
-	case WINDOW_FRIGER:
+	case WINDOW::WINDOW_FRIGER:
 		path = _imgPath + "Hdr_friger.bmp";
 		_fg->init(path.c_str(), (int)(79 * GAME_MULTIPLE), (int)(40 * GAME_MULTIPLE));
 		// 글씨
 		_fg_title = "냉장고";
 		_fg_descr = "당신이 산 식료품이 보관됩니다. 식료품을 슈퍼에서 구입할 수 있습니다.";
 		break;
-	case WINDOW_SHOP:
+	case WINDOW::WINDOW_SHOP:
 		path = _imgPath + "Hdr_shop.bmp";
 		_fg->init(path.c_str(), (int)(89 * GAME_MULTIPLE), (int)(47 * GAME_MULTIPLE));
 		// 글씨
@@ -65,88 +87,95 @@ void Window::init_inventory()
 		_fg_descr = "식료품 및 에너지 드링크를 구입할 수 있습니다.";
 		break;
 	}
-	_fg_rc = RectMake((int)(_bg_rc.left), (int)(_bg_rc.top + 10),
-		(int)(_bg->get_width() * 0.25), (int)(_bg->get_height() * 0.2));
-	_fg_center.x = (LONG)((_fg_rc.left + _fg_rc.right) * 0.5);
-	_fg_center.y = (LONG)((_fg_rc.top + _fg_rc.bottom) * 0.5);
-	_fg_title_pos.x = _fg_rc.right;
-	_fg_title_pos.y = _fg_rc.top + 20;
+	_fg->set_rect(
+		RectMake(
+		(int)(_bg->getX()), (int)(_bg->getY() + 10),
+			(int)(_bg->get_width() * 0.25), (int)(_bg->get_height() * 0.2)
+		)
+	);
+	_fg_title_pos.x = _fg->get_rect().right;
+	_fg_title_pos.y = _fg->get_rect().top + 20;
 	_fg_descr_pos.x = _fg_title_pos.x;
 	_fg_descr_pos.y = _fg_title_pos.y + 40;
-	_fg_rc = RectMakeCenter(_fg_center.x, _fg_center.y,
-		_fg->get_width(), _fg->get_height());
+	_fg->set_rect(
+		RectMakeCenter(
+			_fg->get_center().x, _fg->get_center().y,
+			_fg->get_width(), _fg->get_height()
+		)
+	);
 	// 라인 초기화
-	_line_pos.x = (LONG)(_locked_back_rc.left);
-	_line_pos.y = (LONG)(_locked_back_rc.top);
+	_line_pos.x = (LONG)(_locked_back->getX());
+	_line_pos.y = (LONG)(_locked_back->getY());
 }
 void Window::draw_inventory()
 {
 	// Line을 그린다.
 	ColorLine(get_memDC(), _line_pos.x, (int)(_line_pos.y - 2),
-		_locked_back_rc.right, (int)(_line_pos.y - 2),
+		_locked_back->get_rect().right, (int)(_line_pos.y - 2),
 		1, RGB(94, 84, 64));
 	ColorLine(get_memDC(), _line_pos.x, _line_pos.y,
-		_locked_back_rc.right - 1, _line_pos.y,
+		_locked_back->get_rect().right - 1, _line_pos.y,
 		2, RGB(78, 68, 50));
-	_locked_back->alphaRender(get_memDC(), _locked_back_rc.left, _locked_back_rc.top, 32);
+	_locked_back->alphaRender(get_memDC(), 32);
 	// fg 이미지를 그린다.
-	_fg->render(get_memDC(), _fg_rc.left, _fg_rc.top);
+	Draw(_fg, get_memDC());
 	FontTextShadow(get_memDC(), _fg_title_pos.x, _fg_title_pos.y, _fg_title.c_str(),
 		"휴먼매직체", 35, RGB(254, 254, 254));
 	FontTextOut(get_memDC(), _fg_descr_pos.x, _fg_descr_pos.y, _fg_descr.c_str(),
 		"휴먼편지체", 25, RGB(58, 47, 24));
-	if (_fDebug) { ColorRect(get_memDC(), _fg_rc); }
+	if (_fDebug) { ColorRect(get_memDC(), _fg->get_rect()); }
 }
 void Window::delete_inventory()
 {
-	_fg->release();
-	_fg = nullptr;
+	Release(_fg);
 }
 
 void Window::init_league()
 {
 	set_imgPath("UI/Window/League/");
 	string path;
-	POINT pos;
+	POINT pos, center;
 	path = _imgPath + "League_fg.bmp";
 	// 라인 초기화
-	_line_pos.x = (LONG)(_locked_back_rc.left);
-	_line_pos.y = (LONG)((_bg_rc.top + _locked_back_rc.top) * 0.5);
-	_line_pos_ver.x = (LONG)((_bg_rc.left + _bg_rc.right) * 0.45);
-	_line_pos_ver.y = (LONG)(_bg_rc.bottom - 8);
+	_line_pos.x = (LONG)(_locked_back->get_rect().left);
+	_line_pos.y = (LONG)((_bg->get_rect().top + _locked_back->get_rect().top) * 0.5);
+	_line_pos_ver.x = (LONG)((_bg->get_rect().left + _bg->get_rect().right) * 0.45);
+	_line_pos_ver.y = (LONG)(_bg->get_rect().bottom - 8);
 	// 리그 아저씨 이미지
 	_fg = new Image;
 	_fg->init(path.c_str(), (int)(159 * GAME_MULTIPLE), (int)(180 * GAME_MULTIPLE));
 	pos.x = (LONG)(_line_pos.x);
 	pos.y = (LONG)(_line_pos.y);
-	_fg_rc = RectMake(pos.x, pos.y,
+	_fg->set_rect(
+		RectMake(pos.x, pos.y,
 		(int)(_line_pos_ver.x - _line_pos.x),
-		(int)(_line_pos_ver.y - _line_pos.y));
-	_fg_center.x = (LONG)((_fg_rc.left + _fg_rc.right) * 0.5);
-	_fg_center.y = (LONG)((_fg_rc.top + _fg_rc.bottom) * 0.525);
-	_fg_rc = RectMakeCenter(_fg_center.x, _fg_center.y,
-		_fg->get_width(), _fg->get_height());
+			(int)(_line_pos_ver.y - _line_pos.y)
+		)
+	);
+	center.x = (LONG)((_fg->get_rect().left + _fg->get_rect().right) * 0.5);
+	center.y = (LONG)((_fg->get_rect().top + _fg->get_rect().bottom) * 0.525);
+	_fg->set_center(center);
 	// 리그 글씨
 	_fg_title = "리그";
-	_fg_title_pos.x = (LONG)(_bg_center.x);
-	_fg_title_pos.y = (LONG)((_line_pos.y + _bg_rc.top) * 0.46);
+	_fg_title_pos.x = (LONG)(_bg->get_center().x);
+	_fg_title_pos.y = (LONG)((_line_pos.y + _bg->get_rect().top) * 0.46);
 	// 리그 슬롯을 위한 렉트
 	init_league_slots();
 }
 void Window::draw_league()
 {
 	// 가로 Line을 그린다.
-	ColorLine(get_memDC(), _locked_back_rc.left, (int)(_line_pos.y - 2),
-		_locked_back_rc.right, (int)(_line_pos.y - 2),
+	ColorLine(get_memDC(), _locked_back->get_rect().left, (int)(_line_pos.y - 2),
+		_locked_back->get_rect().right, (int)(_line_pos.y - 2),
 		1, RGB(94, 84, 64));
-	ColorLine(get_memDC(), _locked_back_rc.left, _line_pos.y,
-		_locked_back_rc.right - 1, _line_pos.y,
+	ColorLine(get_memDC(), _locked_back->get_rect().left, _line_pos.y,
+		_locked_back->get_rect().right - 1, _line_pos.y,
 		2, RGB(78, 68, 50));
 	// 세로 Line을 잡는다.
 	ColorLine(get_memDC(), _line_pos_ver.x, _line_pos.y,
 		_line_pos_ver.x, _line_pos_ver.y, 2, RGB(94, 84, 64));
 	// 리그 아저씨를 그린다
-	_fg->render(get_memDC(), _fg_rc.left, _fg_rc.top);
+	Draw(_fg, get_memDC());
 	// 리그 타이틀을 띄운다.
 	FontTextShadow(get_memDC(), _fg_title_pos.x, _fg_title_pos.y, _fg_title.c_str(),
 		"휴먼매직체", 35, RGB(254, 254, 254));
@@ -154,7 +183,7 @@ void Window::draw_league()
 	// 디버그 모드
 	if (_fDebug)
 	{
-		ColorRect(get_memDC(), _fg_rc);
+		ColorRect(get_memDC(), _fg->get_rect());
 	}
 }
 void Window::update_league()
@@ -168,16 +197,15 @@ void Window::update_league()
 }
 void Window::delete_league()
 {
-	_fg->release();
-	_fg = nullptr;
+	Release(_fg);
 	delete_league_slots();
 }
 void Window::init_league_slots()
 {
 	string path;
 	POINT pos;
-	int width = (int)(_bg_rc.right - _line_pos_ver.x - 6);
-	int height = (int)(_bg_rc.bottom - _line_pos.y - 6);
+	int width = (int)(_bg->get_rect().right - _line_pos_ver.x - 6);
+	int height = (int)(_bg->get_rect().bottom - _line_pos.y - 6);
 	_league_slots_rc = RectMake(_line_pos_ver.x + 2, _line_pos.y, width, height);
 	height = (int)(height / 3);
 	for (int i = 0; i < 3; i++)
@@ -348,35 +376,49 @@ void Window::delete_league_slots()
 	}
 }
 
-HRESULT Window::init()
+void Window::update_fOpenBus()
+{
+	// 윈도우를 열지 말지 정한다.
+	if (_mapIcon_on == MAPICON::ICON_EMPTY) { _fOpenBus = false; }
+	else { _fOpenBus = true; }
+}
+
+HRESULT Window::init(WINDOW::TYPE type)
 {
 	set_imgPath("UI/Window/");
-	init_default();
-
-	_fClose = false;
-	return S_OK;
-}
-HRESULT Window::init(WINDOW_TYPE type)
-{
 	_type = type;
-	init();
-	if (_type == WINDOW_FRIGER || _type == WINDOW_SHOP)
+	// Background 초기화
+	init_window_bg(type);
+	// Foreground Image 초기화
+	switch (type)
 	{
+	case WINDOW::WINDOW_FRIGER:
 		init_inventory();
+		break;
+	case WINDOW::WINDOW_SHOP:
+		init_inventory();
+		break;
+	case WINDOW::WINDOW_LEAGUE:
+		init_league();
+		break;
 	}
-	else if (_type == WINDOW_LEAGUE) { init_league(); }
+	_fClose = false;
 	return S_OK;
 }
 void Window::release()
 {
-	delete_default();
-	if (_type == WINDOW_FRIGER || _type == WINDOW_SHOP)
+	delete_window_bg();
+	switch (_type)
 	{
+	case WINDOW::WINDOW_FRIGER:
 		delete_inventory();
-	}
-	else if (_type == WINDOW_LEAGUE)
-	{
+		break;
+	case WINDOW::WINDOW_SHOP:
+		delete_inventory();
+		break;
+	case WINDOW::WINDOW_LEAGUE:
 		delete_league();
+		break;
 	}
 }
 void Window::update()
@@ -386,9 +428,16 @@ void Window::update()
 		if (PtInRect(&_red_button->get_rc(), m_ptMouse))
 		{
 			_fClose = true;
+			_fOpenBus = false;
 			_fClickLock = false;
+			_mapIcon_on = MAPICON::ICON_EMPTY;
+		}// 닫기 버튼을 누르면 닫는다.
+		switch (_type)
+		{
+		case WINDOW::WINDOW_LEAGUE:
+			update_league();
+			break;
 		}
-		update_league();
 	}//if: 클릭 했을 때 인벤토리를 닫는다.
 	else
 	{
@@ -398,16 +447,23 @@ void Window::update()
 }
 void Window::render()
 {
-	draw_default();
-	if (_type == WINDOW_FRIGER || _type == WINDOW_SHOP)
+	draw_window_bg();
+	switch (_type)
 	{
+	case WINDOW::WINDOW_FRIGER:
 		draw_inventory();
+		break;
+	case WINDOW::WINDOW_SHOP:
+		draw_inventory();
+		break;
+	case WINDOW::WINDOW_LEAGUE:
+		draw_league();
+		break;
 	}
-	else if (_type == WINDOW_LEAGUE) { draw_league(); }
 }
 Window::Window()
 {
-	_type = WINDOW_NONE;
+	_type = WINDOW::WINDOW_NONE;
 }
 Window::~Window()
 {

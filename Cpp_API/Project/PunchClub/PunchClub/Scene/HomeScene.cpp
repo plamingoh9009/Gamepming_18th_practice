@@ -343,8 +343,7 @@ HRESULT HomeScene::init()
 }
 void HomeScene::release()
 {
-	_bg->release();
-	_bg = nullptr;
+	Release(_bg);
 	delete_furniture();
 }
 void HomeScene::update()

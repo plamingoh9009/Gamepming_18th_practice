@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "LeagueWaitingScene.h"
 
-
+//==========================================
+//##			Prefight Window			  ##
+//==========================================
 void LeagueWaitingScene::init_prefight_window()
 {
 	string path;
@@ -63,7 +65,9 @@ void LeagueWaitingScene::delete_prefight_window()
 	_enemyStat->release();
 	_enemyStat = nullptr;
 }
-
+//==========================================
+//##			Charactor Image			  ##
+//==========================================
 void LeagueWaitingScene::init_picture()
 {
 	set_imgPath("League/");
@@ -99,6 +103,37 @@ void LeagueWaitingScene::delete_picture()
 	_enemy->release();
 	_enemy = nullptr;
 }
+//==========================================
+//##			Prefight Skill			  ##
+//==========================================
+void LeagueWaitingScene::init_prefight_skill()
+{
+	// Player Side
+	POINT center;
+	_player_skill = new PrefightSkillSet;
+	_player_skill->init();
+	center.x = (LONG)(_player_window_center.x - _player_skill->get_width() * 0.475);
+	center.y = (LONG)(_player_window_center.y + _player_skill->get_height() * 2.75);
+	_player_skill->set_center(center);
+	// Enemy Side
+	_enemy_skill = new PrefightSkillSet;
+	_enemy_skill->init();
+	center.x = (LONG)(_enemy_window_center.x + _enemy_skill->get_width() * 0.475);
+	center.y = (LONG)(_enemy_window_center.y + _enemy_skill->get_height() * 2.75);
+	_enemy_skill->set_center(center);
+}
+void LeagueWaitingScene::draw_prefight_skill()
+{
+	_player_skill->render();
+	_enemy_skill->render();
+}
+void LeagueWaitingScene::delete_prefight_skill()
+{
+	_player_skill->release();
+	_player_skill = nullptr;
+	_enemy_skill->release();
+	_enemy_skill = nullptr;
+}
 
 HRESULT LeagueWaitingScene::init()
 {
@@ -110,6 +145,8 @@ HRESULT LeagueWaitingScene::init()
 	init_prefight_window();
 	// Window Picture
 	init_picture();
+	// Skill set
+	init_prefight_skill();
 	// Button
 	POINT center;
 	center.x = (LONG)(_vs_center.x);
@@ -126,6 +163,7 @@ void LeagueWaitingScene::release()
 	_bg = nullptr;
 	delete_prefight_window();
 	delete_picture();
+	delete_prefight_skill();
 	_fight_button->release();
 	_fight_button = nullptr;
 }
@@ -141,6 +179,7 @@ void LeagueWaitingScene::render()
 	_bg->render(get_memDC(), 0, 0);
 	draw_prefight_window();
 	draw_picture();
+	draw_prefight_skill();
 	_fight_button->render();
 	INGAME_UI->render();
 }

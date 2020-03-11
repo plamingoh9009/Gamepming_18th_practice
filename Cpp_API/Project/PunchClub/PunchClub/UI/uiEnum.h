@@ -1,0 +1,24 @@
+#pragma once
+namespace MAPICON
+{
+	enum TYPE
+	{
+		ICON_EMPTY,
+		ICON_HOME,
+		ICON_SHOP,
+		ICON_GYM,
+		ICON_BUILD,
+		ICON_PLAYER
+	};
+}
+namespace WINDOW
+{
+	enum TYPE
+	{
+		WINDOW_NONE,
+		WINDOW_FRIGER,
+		WINDOW_SHOP,
+		WINDOW_LEAGUE,
+		WINDOW_BUS
+	};
+}
