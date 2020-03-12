@@ -1,157 +1,185 @@
 #include "stdafx.h"
 #include "Button.h"
 
-void Button::init_red_button()
+HRESULT Button::init_red_button()
 {
+	// Result to return
+	HRESULT result;
+	int result_cnt = 0;
+	// Init
 	string path;
-	POINT center;
+	_button = new Image;
 	path = _imgPath + "Btn_red_back.bmp";
-	_red_button = new Image;
-	_red_button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-	center.x = (LONG)(WINSIZEX - _red_button->get_width() * 1);
-	center.y = (LONG)(0 + _red_button->get_height() * 1);
-	_button_rc = RectMakeCenter(center.x, center.y,
-		_red_button->get_width(), _red_button->get_height());
-	_button_center = center;
-	path = _imgPath + "Btn_del.bmp";
-	_del_icon = new Image;
-	_del_icon->init(path.c_str(), (int)(18 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
-	center.x -= (LONG)(_del_icon->get_width() * 0.06);
-	center.y -= (LONG)(_del_icon->get_height() * 0.06);
-	_fore_rc = RectMakeCenter(center.x, center.y,
-		_del_icon->get_width(), _del_icon->get_height());
+	result = _button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	result_cnt = (result == S_OK ? result_cnt: result_cnt++);
+	// Return
+	result = (result_cnt == 0 ? S_OK : E_FAIL);
+	return result;
 }
-void Button::init_red_button(int x, int y)
+//==========================================
+//##		Long Red Button			  ##
+//==========================================
+HRESULT Button::init_long_red_button()
 {
-	string path;
-	POINT center;
-	path = _imgPath + "Btn_red_back.bmp";
-	_red_button = new Image;
-	_red_button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-	center.x = (LONG)(x - _red_button->get_width() * 0.7);
-	center.y = (LONG)(y + _red_button->get_height() * 0.7);
-	_button_rc = RectMakeCenter(center.x, center.y,
-		_red_button->get_width(), _red_button->get_height());
-	_button_center = center;
-	path = _imgPath + "Btn_del.bmp";
-	_del_icon = new Image;
-	_del_icon->init(path.c_str(), (int)(18 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
-	center.x -= (LONG)(_del_icon->get_width() * 0.06);
-	center.y -= (LONG)(_del_icon->get_height() * 0.06);
-	_fore_rc = RectMakeCenter(center.x, center.y,
-		_del_icon->get_width(), _del_icon->get_height());
-}
-void Button::draw_red_button()
-{
-	_red_button->render(get_memDC(), _button_rc.left, _button_rc.top);
-	_del_icon->render(get_memDC(), _fore_rc.left, _fore_rc.top);
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _button_rc, RGB(255, 77, 77));
-		ColorRect(get_memDC(), _fore_rc);
-	}
-}
-void Button::delete_red_button()
-{
-	_red_button->release();
-	_del_icon->release();
-	_red_button = nullptr;
-	_del_icon = nullptr;
-}
+	// Result to return
+	HRESULT result;
 
-void Button::init_long_red_button(POINT center)
-{
 	string path = _imgPath + "Btn_red_long.bmp";
-	_btn_red_long = new Image;
-	_btn_red_long->init(path.c_str(), (int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-	_button_rc = RectMakeCenter(center.x, center.y,
-		_btn_red_long->get_width(), _btn_red_long->get_height());
-	_button_center = center;
-}
-void Button::draw_long_red_button()
-{
-	_btn_red_long->render(get_memDC(), _button_rc.left, _button_rc.top);
+	_button = new Image;
+	result = _button->init(path.c_str(), (int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	// Return
+	return result;
 }
 void Button::update_long_red_button()
 {
 }
-void Button::delete_long_red_button()
+HRESULT Button::init_delete_red_button()
 {
-	_btn_red_long->release();
-	_btn_red_long = nullptr;
+	// Result to return
+	HRESULT result;
+	int result_cnt = 0;
+	string path;
+	// Init
+	_button = new Image;
+	path = _imgPath + "Btn_red_back.bmp";
+	result = _button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_icon = new Image;
+	path = _imgPath + "del_icon.bmp";
+	result = _icon->init(path.c_str(), (int)(18 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_iconType = BUTTON::ICN_DELETE;
+	// Return
+	result = (result_cnt == 0 ? S_OK : E_FAIL);
+	return result;
+}
+void Button::update_delete_red_button()
+{
+	if (_fClick)
+	{
+		if (PtInRect(&_button->get_rect(), m_ptMouse))
+		{
+			_fCloseWindow = true;
+		}
+	}
+}
+//==========================================
+//##		Long Green Button			  ##
+//==========================================
+HRESULT Button::init_long_green_button()
+{
+	HRESULT result;
+
+	string path = _imgPath + "Btn_green_long.bmp";
+	_button = new Image;
+	result = _button->init(path.c_str(), (int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	return result;
+}
+void Button::update_long_green_button()
+{
+}
+//==========================================
+//##		Bus Green Button			  ##
+//==========================================
+HRESULT Button::init_bus_green_button()
+{
+	HRESULT result;
+
+	string path = _imgPath + "Btn_bus_green.bmp";
+	_button = new Image;
+	result = _button->init(path.c_str(), (int)(107 * GAME_MULTIPLE), (int)(30 * GAME_MULTIPLE));
+	return result;
+}
+void Button::update_bus_green_button()
+{
+	switch (_iconType)
+	{
+	case BUTTON::ICN_DOLLAR:
+		break;
+	case BUTTON::ICN_TIME_DAYS:
+		break;
+	}
+	_fCloseWindow = true;
+	_fplayerIcon_move = true;
 }
 
 void Button::draw_text_toButton()
 {
-	FontTextOut(get_memDC(), _text_pos.x, _text_pos.y, _text.c_str(),
-		"ÈŞ¸Õ¸ÅÁ÷Ã¼", 25, RGB(254, 254, 254));
+	_text.render(get_memDC());
 }
 
 HRESULT Button::init()
 {
 	set_imgPath("UI/Button/");
 	init_red_button();
-	_type = BTN_RED;
+	_type = BUTTON::BTN_RED;
 	return S_OK;
 }
-HRESULT Button::init(BTN_TYPE type, int right, int top)
+HRESULT Button::init(BUTTON::TYPE type)
 {
+	// Result to return
+	HRESULT result;
+
 	set_imgPath("UI/Button/");
+	_type = type;
 	switch (type)
 	{
-	case BTN_RED:
-		init_red_button(right, top);
+	case BUTTON::BTN_RED:
+		result = init_red_button();
+		break;
+	case BUTTON::BTN_RED_LONG:
+		result = init_long_red_button();
+		break;
+	case BUTTON::BTN_DELETE_RED:
+		result = init_delete_red_button();
+		break;
+	case BUTTON::BTN_GREEN_LONG:
+		result = init_long_green_button();
+		break;
+	case BUTTON::BTN_BUS_GREEN :
+		result = init_bus_green_button();
 		break;
 	default:
+		result = E_FAIL;
 		break;
 	}
-	_type = type;
-	return S_OK;
+	return result;
 }
-HRESULT Button::init(BTN_TYPE type, POINT center)
-{
-	set_imgPath("UI/Button/");
-	switch (type)
-	{
-	case BTN_RED_LONG:
-		init_long_red_button(center);
-		break;
-	default:
-		break;
-	}
-	_type = type;
-	return S_OK;
-}
+
 void Button::release()
 {
-	switch (_type)
+	if (_button != nullptr)
 	{
-	case BTN_RED:
-		delete_red_button();
-		break;
-	case BTN_RED_LONG:
-		delete_long_red_button();
-	default:
-		break;
+		Release(_button);
+	}
+	if (_icon != nullptr)
+	{
+		Release(_icon);
 	}
 }
 void Button::update()
 {
+	switch (_type)
+	{
+	case BUTTON::BTN_DELETE_RED:
+		update_delete_red_button();
+		break;
+	case BUTTON::BTN_BUS_GREEN:
+		update_bus_green_button();
+		break;
+	}
 }
 void Button::render()
 {
-	switch (_type)
-	{
-	case BTN_RED:
-		draw_red_button();
-		break;
-	case BTN_RED_LONG:
-		draw_long_red_button();
-		break;
-	default:
-		break;
-	}
+	if (_button != nullptr) { Draw(_button, get_memDC()); }
+	if (_icon != nullptr) { Draw(_icon, get_memDC()); }
 	if (_fText) { draw_text_toButton(); }
+
+	if (_fDebug)
+	{
+		ColorRect(get_memDC(), _button->get_rect(), RGB(255, 77, 77));
+		ColorRect(get_memDC(), _icon->get_rect());
+	}
 }
 Button::Button()
 {
@@ -162,8 +190,46 @@ Button::~Button()
 
 void Button::set_text_toButton(string text)
 {
-	_text = text;
+	POINT pos;
+	_text = MyText(MYTEXT::TXT_TITLE, text);
+	pos.x = (LONG)(_button->get_center().x - text.length() * 5);
+	pos.y = (LONG)(_button->get_center().y - 25 * 0.5);
+	_text.set_pos(pos);
+	_text.set_size(25);
 	_fText = true;
-	_text_pos.x = (LONG)(_button_center.x - text.length() * 5);
-	_text_pos.y = (LONG)(_button_center.y - 8);
+}
+
+void Button::set_icon_toButton(BUTTON::ICON type, POINT center)
+{
+	string path;
+	_icon = new Image;
+	_iconType = type;
+	switch (type)
+	{
+	case BUTTON::ICN_DOLLAR:
+		path = _imgPath + "dollar_icon.bmp";
+		_icon->init(path.c_str(), (int)(15 * GAME_MULTIPLE), (int)(15 * GAME_MULTIPLE));
+		break;
+	case BUTTON::ICN_TIME_DAYS:
+		path = _imgPath + "time_days_icon.bmp";
+		_icon->init(path.c_str(), (int)(11 * GAME_MULTIPLE), (int)(11 * GAME_MULTIPLE));
+		break;
+	}
+	_icon->set_center(center);
+}
+void Button::set_center(POINT center)
+{
+	_button->set_center(center);
+}
+
+void Button::set_pos_toRT_edge(RECT rc)
+{
+	POINT center;
+	center.x = (LONG)(rc.right - _button->get_width() * 0.7);
+	center.y = (LONG)(rc.top + _button->get_height() * 0.7);
+	_button->set_center(center);
+
+	center.x -= (LONG)(_icon->get_width() * 0.06);
+	center.y -= (LONG)(_icon->get_height() * 0.06);
+	_icon->set_center(center);
 }

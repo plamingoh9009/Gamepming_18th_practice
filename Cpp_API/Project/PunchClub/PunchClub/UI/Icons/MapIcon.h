@@ -4,15 +4,18 @@
 class MapIcon: public UI
 {
 private:
-	MAPICON::TYPE _type = MAPICON::ICON_EMPTY;
+	MAPICON::TYPE _type = MAPICON::ICN_EMPTY;
 	Image * _icon_off;
 	Image * _icon_on;
 	POINT _center;
 	// 건물 아이콘에 사용할 변수
 	bool _fIcon = false;
 	// 플레이어 아이콘에 사용할 변수
-	MAPICON::TYPE _current_location = MAPICON::ICON_EMPTY;
+	MAPICON::TYPE _current_location = MAPICON::ICN_EMPTY;
 protected:
+	// Player Icon
+	void update_playerIcon();
+	bool is_player_atHere();
 	HRESULT init_icon();
 	void draw_icon();
 	void delete_icon();

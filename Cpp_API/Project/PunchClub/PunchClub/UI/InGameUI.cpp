@@ -21,7 +21,7 @@ void InGameUI::update_league()
 	if (_window_league->is_closeWindow())
 	{
 		_icons->set_fLeague(false);
-		_window_league->init(WINDOW::WINDOW_LEAGUE);
+		_window_league->init(WINDOW::WND_LEAGUE);
 	}
 }
 // ====================================
@@ -33,7 +33,7 @@ void InGameUI::update_friger()
 	if (_inven_friger->is_closeWindow())
 	{
 		_fInven_friger = false;
-		_inven_friger->init(WINDOW::WINDOW_FRIGER);
+		_inven_friger->init(WINDOW::WND_FRIGER);
 	}
 }
 
@@ -64,13 +64,16 @@ HRESULT InGameUI::init()
 	_hud_back = new HudBack;
 	_hud_back->init();
 	_red_button = new Button;
-	_red_button->init();
+	_red_button->init(BUTTON::BTN_DELETE_RED);
+	_red_button->set_pos_toRT_edge(
+		RectMake(0, 0, WINSIZEX, WINSIZEY)
+	);
 	_fRedButton = false;
 	_inven_friger = new Window;
-	_inven_friger->init(WINDOW::WINDOW_FRIGER);
+	_inven_friger->init(WINDOW::WND_FRIGER);
 	_fInven_friger = false;
 	_window_league = new Window;
-	_window_league->init(WINDOW::WINDOW_LEAGUE);
+	_window_league->init(WINDOW::WND_LEAGUE);
 	return S_OK;
 }
 HRESULT InGameUI::init(UI_TYPE type)

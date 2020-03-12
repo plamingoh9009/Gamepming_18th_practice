@@ -152,7 +152,8 @@ HRESULT LeagueWaitingScene::init()
 	center.x = (LONG)(_vs_center.x);
 	center.y = (LONG)(WINSIZEY - _pfVs->get_height() * 0.6);
 	_fight_button = new Button;
-	_fight_button->init(BTN_RED_LONG, center);
+	_fight_button->init(BUTTON::BTN_RED_LONG);
+	_fight_button->set_center(center);
 	_fight_button->set_text_toButton("ÆÄÀÌÆ®");
 	INGAME_UI->init(UI_LEAGUE_WAIT);
 	return S_OK;

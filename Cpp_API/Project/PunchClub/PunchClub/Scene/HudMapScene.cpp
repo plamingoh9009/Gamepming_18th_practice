@@ -7,19 +7,19 @@ HRESULT HudMapScene::init_player_pos()
 	MAPICON::TYPE type = _player->get_current_location();
 	switch (type)
 	{
-	case MAPICON::ICON_HOME:
+	case MAPICON::ICN_HOME:
 		_player->set_center(_home->get_center());
 		result = S_OK;
 		break;
-	case MAPICON::ICON_SHOP:
+	case MAPICON::ICN_SHOP:
 		_player->set_center(_shop->get_center());
 		result = S_OK;
 		break;
-	case MAPICON::ICON_GYM:
+	case MAPICON::ICN_GYM:
 		_player->set_center(_gym->get_center());
 		result = S_OK;
 		break;
-	case MAPICON::ICON_BUILD:
+	case MAPICON::ICN_BUILD:
 		_player->set_center(_build->get_center());
 		result = S_OK;
 		break;
@@ -55,7 +55,7 @@ HRESULT HudMapScene::init_map_icons()
 	POINT center;
 	// 집
 	_home = new MapIcon;
-	result = _home->init(MAPICON::ICON_HOME);
+	result = _home->init(MAPICON::ICN_HOME);
 	center.x = (LONG)(WIN_HALF_W - WIN_HALF_W * 0.38);
 	center.y = (LONG)(WIN_HALF_H + WIN_HALF_H * 0.42);
 	_home->set_center(center);
@@ -63,7 +63,7 @@ HRESULT HudMapScene::init_map_icons()
 	else result_cnt++;
 	// 수퍼마켓
 	_shop = new MapIcon;
-	result = _shop->init(MAPICON::ICON_SHOP);
+	result = _shop->init(MAPICON::ICN_SHOP);
 	center.x = (LONG)(WIN_HALF_W + _shop->get_width() * 0.7);
 	center.y = (LONG)(WIN_HALF_H + _shop->get_height() * 0.25);
 	_shop->set_center(center);
@@ -71,7 +71,7 @@ HRESULT HudMapScene::init_map_icons()
 	else result_cnt++;
 	// 체육관
 	_gym = new MapIcon;
-	result = _gym->init(MAPICON::ICON_GYM);
+	result = _gym->init(MAPICON::ICN_GYM);
 	center.x = (LONG)(WIN_HALF_W - _gym->get_width() * 0.85);
 	center.y = (LONG)(WIN_HALF_H - _gym->get_height() * 0.3);
 	_gym->set_center(center);
@@ -79,7 +79,7 @@ HRESULT HudMapScene::init_map_icons()
 	else result_cnt++;
 	// 공사장
 	_build = new MapIcon;
-	result = _build->init(MAPICON::ICON_BUILD);
+	result = _build->init(MAPICON::ICN_BUILD);
 	center.x = (LONG)(WIN_HALF_W - _build->get_width() * 4.3125);
 	center.y = (LONG)(WIN_HALF_H - _build->get_height() * 2);
 	_build->set_center(center);
@@ -87,9 +87,9 @@ HRESULT HudMapScene::init_map_icons()
 	else result_cnt++;
 	// 캐릭터 이미지 로드
 	_player = new MapIcon;
-	result = _player->init(MAPICON::ICON_PLAYER);
+	result = _player->init(MAPICON::ICN_PLAYER);
 	_player->set_center(_home->get_center());
-	_player->set_current_location(MAPICON::ICON_HOME);
+	_player->set_current_location(MAPICON::ICN_HOME);
 	if (result == S_OK) {}
 	else result_cnt++;
 	// Return
@@ -145,7 +145,7 @@ HRESULT HudMapScene::init()
 	(result == S_OK ? 1 : result_cnt++);
 	// 버스 윈도우
 	_bus = new Window;
-	_bus->init(WINDOW::WINDOW_BUS);
+	_bus->init(WINDOW::WND_BUS);
 	// UI
 	INGAME_UI->init();
 	INGAME_UI->set_fRedButton(true);

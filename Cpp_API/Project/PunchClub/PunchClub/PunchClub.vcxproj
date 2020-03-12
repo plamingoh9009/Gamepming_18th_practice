@@ -185,6 +185,7 @@
     <ClInclude Include="UI\PrefightSkillSet.h" />
     <ClInclude Include="UI\PrefightStat.h" />
     <ClInclude Include="UI\Slot.h" />
+    <ClInclude Include="UI\MyText.h" />
     <ClInclude Include="UI\uiEnum.h" />
     <ClInclude Include="UI\Window.h" />
     <ClInclude Include="UI\Button.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="UI\PrefightSkillSet.cpp" />
     <ClCompile Include="UI\PrefightStat.cpp" />
     <ClCompile Include="UI\Slot.cpp" />
+    <ClCompile Include="UI\MyText.cpp" />
     <ClCompile Include="UI\Window.cpp" />
     <ClCompile Include="UI\Button.cpp" />
     <ClCompile Include="UI\UI.cpp" />

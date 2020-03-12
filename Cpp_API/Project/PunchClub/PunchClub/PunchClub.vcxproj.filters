@@ -49,6 +49,9 @@
     <Filter Include="I_UI\type\Icons">
       <UniqueIdentifier>{8fef9942-26d6-430e-b5dc-cbbdd1bce5bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="I_UI\base">
+      <UniqueIdentifier>{07ad248b-69f8-4424-9571-dfadef4d98dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -174,6 +177,9 @@
     <ClInclude Include="UI\uiEnum.h">
       <Filter>I_UI</Filter>
     </ClInclude>
+    <ClInclude Include="UI\MyText.h">
+      <Filter>I_UI\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PunchClub.cpp">
@@ -280,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="UI\Icons\MapIcon.cpp">
       <Filter>I_UI\type\Icons</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\MyText.cpp">
+      <Filter>I_UI\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

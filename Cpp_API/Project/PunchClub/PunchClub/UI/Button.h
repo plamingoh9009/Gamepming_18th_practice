@@ -1,55 +1,53 @@
 #pragma once
 #include "UI.h"
-enum BTN_TYPE
-{
-	BTN_NONE,
-	BTN_RED,
-	BTN_RED_LONG,
-	BTN_BLUE_LONG
-};
+
 class Button: public UI
 {
 private:
-	BTN_TYPE _type;
-	Image * _red_button;
-	// Long Red Button
-	Image * _btn_red_long;
-	// Long Blue Button
-	Image * _btn_blue_long;
-	// Icon
-	Image * _del_icon;
-	Image * _show_icon;
-	// 위치
-	RECT _button_rc;
-	RECT _fore_rc;
-	POINT _button_center;
+	BUTTON::TYPE _type;
+	Image * _button;
+	BUTTON::ICON _iconType;
+	Image * _icon;
 	// 텍스트
-	string _text = "";
+	MyText _text;
 	bool _fText = false;
-	POINT _text_pos;
+	// 윈도우 닫기
+	bool _fCloseWindow = false;
 protected:
-	void init_red_button();
-	void init_red_button(int x, int y);
-	void draw_red_button();
-	void delete_red_button();
+	HRESULT init_red_button();
 	// long red
-	void init_long_red_button(POINT center);
-	void draw_long_red_button();
+	HRESULT init_long_red_button();
 	void update_long_red_button();
-	void delete_long_red_button();
+	// Delete red
+	HRESULT init_delete_red_button();
+	void update_delete_red_button();
+	// long green
+	HRESULT init_long_green_button();
+	void update_long_green_button();
+	// Bus green
+	HRESULT init_bus_green_button();
+	void update_bus_green_button();
 	// Text
 	void draw_text_toButton();
 public:
 	virtual HRESULT init();
-	virtual HRESULT init(BTN_TYPE type, int right, int top);
-	virtual HRESULT init(BTN_TYPE type, POINT center);
+	virtual HRESULT init(BUTTON::TYPE type);
 	virtual void release();
 	virtual void update();
 	virtual void render();
 public:
 	Button();
 	~Button();
-	RECT get_rc() { return _button_rc; }
+	RECT get_rc() { return _button->get_rect(); }
+	int get_width() { return _button->get_width(); }
+	int get_height() { return _button->get_height(); }
+	int get_icon_width() { return _icon->get_width(); }
+	int get_icon_height() { return _icon->get_height(); }
+	POINT get_center() { return _button->get_center(); }
 	void set_text_toButton(string text);
+	void set_icon_toButton(BUTTON::ICON type, POINT center);
+	void set_center(POINT center);
+	void set_pos_toRT_edge(RECT rc);
+	bool is_closeWindow() { return _fCloseWindow; }
 };
 

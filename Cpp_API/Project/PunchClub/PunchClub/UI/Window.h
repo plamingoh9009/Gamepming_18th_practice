@@ -52,16 +52,22 @@ private:
 	Button * _red_button;
 	// fg 설명
 	Image * _fg;
-	string _fg_title;
-	POINT _fg_title_pos;
-	string _fg_descr;
-	POINT _fg_descr_pos;
+	MyText _fg_title;
+	MyText _fg_descr;
+	// Inside Window
+	Image * _inside;
 	// 라인 위치
 	POINT _line_pos;
 	POINT _line_pos_ver;
 	// 리그 슬롯을 위한 렉트
 	RECT _league_slots_rc;
 	LeagueSlot _league_slot[3];
+	// 버스 윈도우를 위한 변수
+	Image * _bus;
+	MyText _bus_distance_str;
+	int _bus_distance = 10;
+	Button * _btn_bus;
+	Button * _btn_walk;
 	bool _fClose;
 	bool _fOpenBus = false;
 protected:
@@ -81,8 +87,17 @@ protected:
 	void init_league_slots();
 	void draw_league_slots();
 	void delete_league_slots();
+	// 버스 윈도우를 초기화한다.
+	HRESULT init_bus_fg();
+	void draw_bus_fg();
+	void delete_bus_fg();
+	void update_bus();
+	// bus_str: {string; Data} for description Text
+	// bus_dist: {int; Data} that destination how far from player
+	string map_bus_distance(string bus_str, int bus_dist);
+	void close_window();
 public:
-	// 버스창을 열지 말지 정한다.
+	// 버스 윈도우를 열지 말지 정한다.
 	void update_fOpenBus();
 public:
 	virtual HRESULT init(WINDOW::TYPE type);

@@ -94,10 +94,9 @@ inline void EllipseMakeCenter(HDC hdc, int x, int y, int width, int height)
 
 }
 // 글자 폰트 바꿔서 출력하는 함수
-inline void FontTextOut(HDC hdc, int drawX, int drawY, const char * str,
-	char * fontName, int fontSize = 20, COLORREF color = RGB(0, 0, 0))
+inline void FontTextOut(HDC hdc, int drawX, int drawY, LPCSTR str,
+	LPCSTR fontName, int fontSize = 20, COLORREF color = RGB(0, 0, 0))
 {
-	char * text = const_cast<char*>(str);
 	// 글자의 색깔을 바꾸는 부분
 	COLORREF oldTextColor = SetTextColor(hdc, color);
 	// 글자의 폰트를 바꾸는 부분
@@ -106,7 +105,7 @@ inline void FontTextOut(HDC hdc, int drawX, int drawY, const char * str,
 	HFONT oldFont = (HFONT)SelectObject(hdc, font);
 	// 배경을 투명하게 바꾸는 부분
 	SetBkMode(hdc, TRANSPARENT);
-	TextOut(hdc, drawX, drawY, text, strlen(text));
+	TextOut(hdc, drawX, drawY, str, strlen(str));
 	// 바꿨던 글자 색깔을 해제하는 부분
 	SetTextColor(hdc, oldTextColor);
 	// 폰트를 해제하는 부분
@@ -114,8 +113,8 @@ inline void FontTextOut(HDC hdc, int drawX, int drawY, const char * str,
 	DeleteObject(font);
 }
 // 그림자를 추가해주는 함수
-inline void FontTextShadow(HDC hdc, int drawX, int drawY, const char * str,
-	char * fontName, int fontSize = 20, COLORREF color = RGB(0, 0, 0))
+inline void FontTextShadow(HDC hdc, int drawX, int drawY, LPCSTR str,
+	LPCSTR fontName, int fontSize = 20, COLORREF color = RGB(0, 0, 0))
 {
 	int shadow_move = (int)(fontSize * 0.1);
 	FontTextOut(hdc, drawX + shadow_move, drawY + shadow_move, str, fontName, fontSize, RGB(1, 1, 1));
