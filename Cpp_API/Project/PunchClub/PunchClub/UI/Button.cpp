@@ -92,15 +92,21 @@ HRESULT Button::init_bus_green_button()
 }
 void Button::update_bus_green_button()
 {
-	switch (_iconType)
+	if (_fClick)
 	{
-	case BUTTON::ICN_DOLLAR:
-		break;
-	case BUTTON::ICN_TIME_DAYS:
-		break;
+		if (PtInRect(&_button->get_rect(), m_ptMouse))
+		{
+			switch (_iconType)
+			{
+			case BUTTON::ICN_DOLLAR:
+				break;
+			case BUTTON::ICN_TIME_DAYS:
+				break;
+			}
+			_fCloseWindow = true;
+			_fplayerIcon_move = true;
+		}
 	}
-	_fCloseWindow = true;
-	_fplayerIcon_move = true;
 }
 
 void Button::draw_text_toButton()

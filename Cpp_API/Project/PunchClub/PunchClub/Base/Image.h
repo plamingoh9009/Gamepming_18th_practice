@@ -156,9 +156,11 @@ public:
 	void render(HDC hdc, int destX, int destY, int width, int height);
 	void render(HDC hdc, int destX, int destY, int sourX, int sourY, int sourWidth, int sourHeight);
 	//프레임렌더
+	void frameRender(HDC hdc);
 	void frameRender(HDC hdc, int destX, int destY);
 	void frameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
 	void frameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, int width, int height);
+	void frameAlphaRender(HDC hdc, BYTE alpha);
 	//루프렌더(hdc, 루프시킬영역, x오프셋, y오프셋)
 	void loopRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY);
 	void loopAlphaRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY, BYTE alpha);
@@ -201,7 +203,14 @@ public:
 		RECT rc;
 		_imageInfo->x = (float)(pos.x);
 		_imageInfo->y = (float)(pos.y);
-		rc = RectMake(pos.x, pos.y, _imageInfo->width, _imageInfo->height);
+		if (_imageInfo->frameWidth != 0 && _imageInfo->frameHeight != 0)
+		{
+			rc = RectMake(pos.x, pos.y, _imageInfo->frameWidth, _imageInfo->frameHeight);
+		}
+		else
+		{
+			rc = RectMake(pos.x, pos.y, _imageInfo->width, _imageInfo->height);
+		}
 		set_rect(rc);
 	}
 	// 이미지 RECT 얻기
@@ -225,16 +234,28 @@ public:
 	{
 		_imageInfo->x = x - (_imageInfo->width / 2);
 		_imageInfo->y = y - (_imageInfo->height / 2);
+		int width, height;
+		if (_imageInfo->frameWidth != 0 && _imageInfo->frameHeight != 0)
+		{
+			width = _imageInfo->frameWidth;
+			height = _imageInfo->frameHeight;
+		}
+		else
+		{
+			width = _imageInfo->width;
+			height = _imageInfo->height;
+		}
+
 		if (_imageInfo->rc == nullptr)
 		{
 			_imageInfo->rc = new RECT;
 			*_imageInfo->rc = RectMakeCenter((int)(x), (int)(y),
-				_imageInfo->width, _imageInfo->height);
+				width, height);
 		}
 		else
 		{
 			*_imageInfo->rc = RectMakeCenter((int)(x), (int)(y),
-				_imageInfo->width, _imageInfo->height);
+				width, height);
 		}
 	}
 	inline void set_center(POINT center)

@@ -1,32 +1,26 @@
 #include "stdafx.h"
 #include "HudMapScene.h"
 
-HRESULT HudMapScene::init_player_pos()
+void HudMapScene::update_player_pos()
 {
-	HRESULT result = E_FAIL;
 	MAPICON::TYPE type = _player->get_current_location();
 	switch (type)
 	{
 	case MAPICON::ICN_HOME:
 		_player->set_center(_home->get_center());
-		result = S_OK;
 		break;
 	case MAPICON::ICN_SHOP:
 		_player->set_center(_shop->get_center());
-		result = S_OK;
 		break;
 	case MAPICON::ICN_GYM:
 		_player->set_center(_gym->get_center());
-		result = S_OK;
 		break;
 	case MAPICON::ICN_BUILD:
 		_player->set_center(_build->get_center());
-		result = S_OK;
 		break;
 	default:
 		break;
 	}
-	return result;
 }
 HRESULT HudMapScene::init_background()
 {
@@ -52,44 +46,30 @@ HRESULT HudMapScene::init_map_icons()
 {
 	HRESULT result;
 	int result_cnt = 0;
-	POINT center;
 	// 집
 	_home = new MapIcon;
 	result = _home->init(MAPICON::ICN_HOME);
-	center.x = (LONG)(WIN_HALF_W - WIN_HALF_W * 0.38);
-	center.y = (LONG)(WIN_HALF_H + WIN_HALF_H * 0.42);
-	_home->set_center(center);
 	if (result == S_OK) _icons.push_back(_home);
 	else result_cnt++;
 	// 수퍼마켓
 	_shop = new MapIcon;
 	result = _shop->init(MAPICON::ICN_SHOP);
-	center.x = (LONG)(WIN_HALF_W + _shop->get_width() * 0.7);
-	center.y = (LONG)(WIN_HALF_H + _shop->get_height() * 0.25);
-	_shop->set_center(center);
 	if (result == S_OK) _icons.push_back(_shop);
 	else result_cnt++;
 	// 체육관
 	_gym = new MapIcon;
 	result = _gym->init(MAPICON::ICN_GYM);
-	center.x = (LONG)(WIN_HALF_W - _gym->get_width() * 0.85);
-	center.y = (LONG)(WIN_HALF_H - _gym->get_height() * 0.3);
-	_gym->set_center(center);
 	if (result == S_OK) _icons.push_back(_gym);
 	else result_cnt++;
 	// 공사장
 	_build = new MapIcon;
 	result = _build->init(MAPICON::ICN_BUILD);
-	center.x = (LONG)(WIN_HALF_W - _build->get_width() * 4.3125);
-	center.y = (LONG)(WIN_HALF_H - _build->get_height() * 2);
-	_build->set_center(center);
 	if (result == S_OK) _icons.push_back(_build);
 	else result_cnt++;
 	// 캐릭터 이미지 로드
 	_player = new MapIcon;
 	result = _player->init(MAPICON::ICN_PLAYER);
 	_player->set_center(_home->get_center());
-	_player->set_current_location(MAPICON::ICN_HOME);
 	if (result == S_OK) {}
 	else result_cnt++;
 	// Return
@@ -111,6 +91,11 @@ void HudMapScene::update_map_icons()
 	for (; iter != _icons.end(); iter++)
 	{
 		(*iter)->update();
+		if ((*iter)->get_fOpenBus())
+		{
+			_bus_wnd->set_fOpenBus(true);
+			(*iter)->set_fOpenBus(false);
+		}
 	}
 	_player->update();
 }
@@ -131,6 +116,18 @@ void HudMapScene::delete_map_icons()
 	swap(MapIcons(), _icons);
 }
 
+void HudMapScene::close_windowsAll()
+{
+	if (_bus_wnd != nullptr)
+	{
+		_bus_wnd->close_window();
+	}
+	if (_build_wnd != nullptr)
+	{
+		_build_wnd->close_window();
+	}
+}
+
 HRESULT HudMapScene::init()
 {
 	HRESULT result;
@@ -141,11 +138,12 @@ HRESULT HudMapScene::init()
 	(result == S_OK ? 1 : result_cnt++);
 	result = init_map_icons();
 	(result == S_OK ? 1 : result_cnt++);
-	result = init_player_pos();
-	(result == S_OK ? 1 : result_cnt++);
 	// 버스 윈도우
-	_bus = new Window;
-	_bus->init(WINDOW::WND_BUS);
+	_bus_wnd = new Window;
+	_bus_wnd->init(WINDOW::WND_BUS);
+	// 공사장 윈도우
+	_build_wnd = new Window;
+	_build_wnd->init(WINDOW::WND_BUILD);
 	// UI
 	INGAME_UI->init();
 	INGAME_UI->set_fRedButton(true);
@@ -157,19 +155,29 @@ void HudMapScene::release()
 {
 	delete_background();
 	delete_map_icons();
-	Release(_bus);
+	Release(_bus_wnd);
+	Release(_build_wnd);
 }
 void HudMapScene::update()
 {
-	if (_bus->is_openBus() == true) 
+	if (_bus_wnd->is_openBus() == true) 
 	{
-		_bus->update();
+		_bus_wnd->update();
+		if (_bus_wnd->is_openBuild() == true)
+		{
+			_build_wnd->set_openWindow(true);
+		}
+	}
+	else if (_build_wnd->is_openWindow() == true)
+	{
+		_build_wnd->update();
 	}
 	else
 	{
 		update_scene();
+		close_windowsAll();
 		update_map_icons();
-		_bus->update_fOpenBus();
+		update_player_pos();
 		INGAME_UI->update();
 		change_scene();
 	}
@@ -178,9 +186,13 @@ void HudMapScene::render()
 {
 	draw_background();
 	draw_map_icons();
-	if (_bus->is_openBus() == true)
+	if (_bus_wnd->is_openBus() == true)
 	{
-		Draw(_bus);
+		Draw(_bus_wnd);
+	}
+	else if (_build_wnd->is_openWindow() == true)
+	{
+		Draw(_build_wnd);
 	}
 	INGAME_UI->render();
 }

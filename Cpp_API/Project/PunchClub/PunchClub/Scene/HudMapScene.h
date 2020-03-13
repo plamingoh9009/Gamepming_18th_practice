@@ -15,10 +15,11 @@ private:
 	MapIcon * _shop;
 	MapIcon * _gym;
 	MapIcon * _build;
-	// 버스 윈도우
-	Window * _bus;
+	// 윈도우
+	Window * _bus_wnd;
+	Window * _build_wnd;
 protected:
-	HRESULT init_player_pos();
+	void update_player_pos();
 	HRESULT init_background();
 	void draw_background();
 	void delete_background();
@@ -26,6 +27,8 @@ protected:
 	void draw_map_icons();
 	void update_map_icons();
 	void delete_map_icons();
+	// 모든 윈도우를 닫는다.
+	void close_windowsAll();
 public:
 	virtual HRESULT init();
 	virtual void release();

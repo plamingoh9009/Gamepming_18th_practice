@@ -7,11 +7,9 @@ private:
 	MAPICON::TYPE _type = MAPICON::ICN_EMPTY;
 	Image * _icon_off;
 	Image * _icon_on;
-	POINT _center;
 	// 건물 아이콘에 사용할 변수
 	bool _fIcon = false;
-	// 플레이어 아이콘에 사용할 변수
-	MAPICON::TYPE _current_location = MAPICON::ICN_EMPTY;
+	bool _fOpenBus = false;
 protected:
 	// Player Icon
 	void update_playerIcon();
@@ -30,10 +28,13 @@ public:
 	~MapIcon();
 public:
 	HRESULT set_center(POINT center);
-	POINT get_center() { return _center; }
+	POINT get_center() { return _icon_off->get_center(); }
 	int get_width() { return _icon_off->get_width(); }
 	int get_height() { return _icon_off->get_height(); }
-	MAPICON::TYPE get_current_location() { return _current_location; }
-	void set_current_location(MAPICON::TYPE location) { _current_location = location; }
+	bool is_playerIcon_moveOK() { return _fplayerIcon_move; }
+	MAPICON::TYPE get_current_location() { return _playerIcon_location; }
+	void set_current_location(MAPICON::TYPE location) { _playerIcon_location = location; }
+	// 버스 윈도우 컨트롤
+	bool get_fOpenBus() { return _fOpenBus; }
+	void set_fOpenBus(bool fResult) { _fOpenBus = fResult; }
 };
-

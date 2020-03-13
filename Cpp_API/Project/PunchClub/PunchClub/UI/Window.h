@@ -69,7 +69,13 @@ private:
 	Button * _btn_bus;
 	Button * _btn_walk;
 	bool _fClose;
+	bool _fOpen = false;
+	bool _fOpenBuild = false;
 	bool _fOpenBus = false;
+	// 공사장 윈도우를 위한 변수
+	Image * _work_jhammer;
+	Image * _work_dust;
+	Button * _btn_build;
 protected:
 	HRESULT init_window_bg(WINDOW::TYPE type);
 	void delete_window_bg();
@@ -89,16 +95,19 @@ protected:
 	void delete_league_slots();
 	// 버스 윈도우를 초기화한다.
 	HRESULT init_bus_fg();
-	void draw_bus_fg();
-	void delete_bus_fg();
+	void draw_bus();
+	void delete_bus();
 	void update_bus();
 	// bus_str: {string; Data} for description Text
 	// bus_dist: {int; Data} that destination how far from player
 	string map_bus_distance(string bus_str, int bus_dist);
-	void close_window();
+	// 공사장 윈도우를 초기화한다.
+	HRESULT init_build_fg();
+	void draw_build();
+	void delete_build();
+	void update_build();
 public:
-	// 버스 윈도우를 열지 말지 정한다.
-	void update_fOpenBus();
+	void close_window();
 public:
 	virtual HRESULT init(WINDOW::TYPE type);
 	virtual void release();
@@ -108,6 +117,11 @@ public:
 	Window();
 	~Window();
 	bool is_closeWindow() { return _fClose; }
+	bool is_openWindow() { return _fOpen; }
+	void set_openWindow(bool fResult) { _fOpen = fResult; }
+	bool is_openBuild() { return _fOpenBuild; }
+	void set_fOpenBuild(bool fResult) { _fOpenBuild = fResult; }
 	bool is_openBus() { return _fOpenBus; }
+	void set_fOpenBus(bool fResult) { _fOpenBus = fResult; }
 };
 

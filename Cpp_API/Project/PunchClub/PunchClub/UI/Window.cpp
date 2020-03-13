@@ -53,6 +53,17 @@ HRESULT Window::init_window_bg(WINDOW::TYPE type)
 		_red_button->set_pos_toRT_edge(_bg->get_rect());
 		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
 		break;
+	case WINDOW::WND_BUILD:
+		set_imgPath("UI/Window/Build/");
+		//Background Image
+		path = _imgPath + "build_window_back.bmp";
+		_bg = new Image;
+		result = _bg->init(path.c_str(), (int)(285 * GAME_MULTIPLE), (int)(280 * GAME_MULTIPLE));
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		center.x = (LONG)(WIN_HALF_W);
+		center.y = (LONG)(WIN_HALF_H + _bg->get_height() * 0.07);
+		_bg->set_center(center);
+		break;
 	}
 	result = (result_cnt == 0 ? S_OK : E_FAIL);
 	return result;
@@ -66,7 +77,6 @@ void Window::delete_window_bg()
 void Window::draw_window_bg()
 {
 	Draw(_bg, get_memDC());
-	Draw(_red_button);
 }
 
 void Window::init_inventory()
@@ -130,6 +140,8 @@ void Window::draw_inventory()
 	_fg_title.render(get_memDC());
 	_fg_descr.render(get_memDC());
 	if (_fDebug) { ColorRect(get_memDC(), _fg->get_rect()); }
+	// Delete button을 그린다.
+	Draw(_red_button);
 }
 void Window::delete_inventory()
 {
@@ -186,6 +198,8 @@ void Window::draw_league()
 	// 리그 타이틀을 띄운다.
 	_fg_title.render(get_memDC());
 	draw_league_slots();
+	// Delete button Draw
+	Draw(_red_button);
 	// 디버그 모드
 	if (_fDebug)
 	{
@@ -369,16 +383,11 @@ void Window::delete_league_slots()
 {
 	for (int i = 0; i < 3; i++)
 	{
-		_league_slot[i].back->release();
-		_league_slot[i].back = nullptr;
-		_league_slot[i].lock_back->release();
-		_league_slot[i].lock_back = nullptr;
-		_league_slot[i].lock->release();
-		_league_slot[i].lock = nullptr;
-		_league_slot[i].icon->release();
-		_league_slot[i].icon = nullptr;
-		_league_slot[i].icon_back->release();
-		_league_slot[i].icon_back = nullptr;
+		Release(_league_slot[i].back);
+		Release(_league_slot[i].lock_back);
+		Release(_league_slot[i].lock);
+		Release(_league_slot[i].icon);
+		Release(_league_slot[i].icon_back);
 	}
 }
 //==========================================
@@ -466,7 +475,7 @@ HRESULT Window::init_bus_fg()
 	result = (result_cnt == 0 ? S_OK : E_FAIL);
 	return result;
 }
-void Window::draw_bus_fg()
+void Window::draw_bus()
 {
 	Draw(_inside, get_memDC());
 	Draw(_fg, get_memDC());
@@ -478,8 +487,9 @@ void Window::draw_bus_fg()
 	// Button
 	Draw(_btn_bus);
 	Draw(_btn_walk);
+	Draw(_red_button);
 }
-void Window::delete_bus_fg()
+void Window::delete_bus()
 {
 	Release(_inside);
 	Release(_fg);
@@ -492,13 +502,14 @@ void Window::update_bus()
 	_btn_bus->update();
 	_btn_walk->update();
 	// Close Window
-	if (_btn_bus->is_closeWindow() == true)
+	if (_btn_bus->is_closeWindow() == true ||
+		_btn_walk->is_closeWindow() == true)
 	{
 		close_window();
-	}
-	else if (_btn_bus->is_closeWindow() == true)
-	{
-		close_window();
+		if (_mapIcon_on == MAPICON::ICN_BUILD)
+		{
+			_fOpenBuild = true;
+		}//if: Open Build Window
 	}
 }
 string Window::map_bus_distance(string bus_str, int bus_dist)
@@ -507,18 +518,109 @@ string Window::map_bus_distance(string bus_str, int bus_dist)
 	bus_str.append(" km");
 	return bus_str;
 }
+//==========================================
+//##		공사장 Foreground 초기화		  ##
+//==========================================
+HRESULT Window::init_build_fg()
+{
+	string path;
+	POINT center, pos;
+	HRESULT result;
+	int result_cnt = 0;
+	// Inside Window
+	_inside = new Image;
+	path = _imgPath + "build_inside.bmp";
+	result = _inside->init(path.c_str(), (int)(267 * GAME_MULTIPLE), (int)(152 * GAME_MULTIPLE));
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	center.x = (LONG)(_bg->get_center().x);
+	center.y = (LONG)(_bg->get_center().y - _inside->get_height() * 0.36);
+	_inside->set_center(center);
+	// Foreground Image
+	_fg = new Image;
+	path = _imgPath + "work_jhammer_bg.bmp";
+	result = _fg->init(path.c_str(), (int)(265 * GAME_MULTIPLE), (int)(150 * GAME_MULTIPLE));
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_fg->set_center(_inside->get_center());
+	// Work Image
+	_work_jhammer = new Image;
+	path = _imgPath + "work_jhammer.bmp";
+	result = _work_jhammer->init(path.c_str(), (int)(276 * GAME_MULTIPLE), (int)(75 * GAME_MULTIPLE), 3, 1);
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_work_jhammer->set_frameSection(1, 0, 2, 0.3f);
+	center.x = (LONG)(_fg->get_center().x - _work_jhammer->get_frameWidth() * 0.2);
+	center.y = (LONG)(_fg->get_center().y);
+	_work_jhammer->set_center(center);
+	_work_dust = new Image;
+	path = _imgPath + "work_dust.bmp";
+	result = _work_dust->init(path.c_str(), (int)(228 * GAME_MULTIPLE), (int)(27 * GAME_MULTIPLE), 6, 1);
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_work_dust->set_frameSection(1, 0, 5, 0.3f);
+	center.x = (LONG)(_work_jhammer->get_rect().right - _work_dust->get_frameWidth() * 0.375);
+	center.y = (LONG)(_work_jhammer->get_rect().bottom - _work_dust->get_frameHeight() * 0.25);
+	_work_dust->set_center(center);
+	// Text
+	_fg_title = MyText(MYTEXT::TXT_DESCR, "일을 끝낼 때마다 다음을 획득:", RGB(0, 43, 61));
+	pos.x = (LONG)(_inside->get_center().x - 150);
+	pos.y = (LONG)(_inside->get_rect().bottom + 20);
+	_fg_title.set_size(30);
+	_fg_title.set_pos(pos);
+	_fg_descr = MyText(MYTEXT::TXT_DESCR, "50", RGB(0, 43, 61));
+	pos.x = (LONG)(_inside->get_center().x);
+	pos.y = (LONG)(pos.y + 45);
+	_fg_descr.set_size(30);
+	_fg_descr.set_pos(pos);
+	// Start Green Button
+	_btn_build = new Button;
+	_btn_build->init(BUTTON::BTN_BUS_GREEN);
+	center.x = (LONG)(_bg->get_center().x);
+	center.y = (LONG)(_bg->get_rect().bottom - _btn_build->get_height() * 0.75);
+	_btn_build->set_center(center);
+	_btn_build->set_text_toButton("시작");
+	center.x = (LONG)(_fg_descr.get_pos().x - 20);
+	center.y = (LONG)(_fg_descr.get_pos().y + 10);
+	_btn_build->set_icon_toButton(BUTTON::ICN_DOLLAR, center);
+
+	// Red button Class
+	_red_button = new Button();
+	result = _red_button->init(BUTTON::BTN_DELETE_RED);
+	_red_button->set_pos_toRT_edge(_inside->get_rect());
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+
+	return S_OK;
+}
+void Window::draw_build()
+{
+	Draw(_inside, get_memDC());
+	Draw(_fg, get_memDC());
+	_work_dust->frameAlphaRender(get_memDC(), 128);
+	_work_jhammer->frameRender(get_memDC());
+	// Text
+	_fg_title.render(get_memDC());
+	_fg_descr.render(get_memDC());
+	// Button
+	Draw(_btn_build);
+	Draw(_red_button);
+}
+void Window::delete_build()
+{
+	Release(_inside);
+	Release(_fg);
+	Release(_work_jhammer);
+	Release(_btn_build);
+}
+void Window::update_build()
+{
+	_work_jhammer->frameUpdate(false);
+	_work_dust->frameUpdate(false);
+}
+
 void Window::close_window()
 {
 	_fClose = true;
+	_fOpen = false;
 	_fOpenBus = false;
+	_fOpenBuild = false;
 	_fClickLock = false;
-	_mapIcon_on = MAPICON::ICN_EMPTY;
-}
-void Window::update_fOpenBus()
-{
-	// 윈도우를 열지 말지 정한다.
-	if (_mapIcon_on == MAPICON::ICN_EMPTY) { _fOpenBus = false; }
-	else { _fOpenBus = true; }
 }
 
 HRESULT Window::init(WINDOW::TYPE type)
@@ -546,6 +648,10 @@ HRESULT Window::init(WINDOW::TYPE type)
 		result = init_bus_fg();
 		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
 		break;
+	case WINDOW::WND_BUILD :
+		result = init_build_fg();
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		break;
 	}
 	_fClose = false;
 	result = (result_cnt == 0 ? S_OK : E_FAIL);
@@ -566,27 +672,39 @@ void Window::release()
 		delete_league();
 		break;
 	case WINDOW::WND_BUS  :
-		delete_bus_fg();
+		delete_bus();
+		break;
+	case WINDOW::WND_BUILD :
+		delete_build();
 		break;
 	}
 }
 void Window::update()
 {
+	switch (_type)
+	{
+	case WINDOW::WND_BUILD:
+		update_build();
+		break;
+	default:
+		break;
+	}//switch: 언제나 업데이트 되어야 하는 것
 	if (KEYMANAGER->is_onceKeyDown(VK_LBUTTON))
 	{
 		if (PtInRect(&_red_button->get_rc(), m_ptMouse))
 		{
 			close_window();
 		}// 닫기 버튼을 누르면 닫는다.
+
 		switch (_type)
 		{
-		case WINDOW::WND_LEAGUE :
+		case WINDOW::WND_LEAGUE:
 			update_league();
 			break;
 		case WINDOW::WND_BUS:
 			update_bus();
 			break;
-		}
+		}//switch: 클릭했을 때 update 되어야 함
 	}//if: 클릭 했을 때 인벤토리를 닫는다.
 	else
 	{
@@ -609,7 +727,10 @@ void Window::render()
 		draw_league();
 		break;
 	case WINDOW::WND_BUS :
-		draw_bus_fg();
+		draw_bus();
+		break;
+	case WINDOW::WND_BUILD :
+		draw_build();
 		break;
 	}
 }

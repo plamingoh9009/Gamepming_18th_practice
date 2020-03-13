@@ -19,7 +19,8 @@ namespace WINDOW
 		WND_FRIGER,
 		WND_SHOP,
 		WND_LEAGUE,
-		WND_BUS
+		WND_BUS,
+		WND_BUILD
 	};
 }
 namespace MYTEXT

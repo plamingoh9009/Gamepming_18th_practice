@@ -10,6 +10,7 @@ protected:
 	
 	static POINT _playerIcon_center;	// UI 에서 공유하는 플레이어 아이콘의 좌표다.
 	static bool _fplayerIcon_move;		// UI 에서 공유하는 플레이어 렌더를 업데이트 할지 말지 결정한다.
+	static MAPICON::TYPE _playerIcon_location;	// UI 에서 공유하는 플레이어 아이콘 위치다.
 public:
 	virtual HRESULT init();
 	virtual void release();
