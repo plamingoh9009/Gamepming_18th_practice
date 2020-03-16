@@ -154,6 +154,8 @@ void MapIcon::update_icon()
 			if (is_player_atHere() == true)
 			{
 				_mapIcon_on = MAPICON::ICN_EMPTY;
+				_scene_forChange = SCENE_BACK;
+				_fClick = false;
 			}
 			else
 			{
@@ -171,24 +173,85 @@ void MapIcon::update_icon()
 		update_playerIcon();
 	}
 }
+HRESULT MapIcon::init_hint()
+{
+	POINT center;
+	string title, descr;
+	if (_type != MAPICON::ICN_PLAYER)
+	{
+		center.x = (LONG)(_icon_off->get_center().x);
+		center.y = (LONG)(_icon_off->get_center().y);
+		_hint->set_center(center);
+	}
+	switch (_type)
+	{
+	case MAPICON::ICN_HOME:
+		title = "자택";
+		descr = "냉장고에서 밥을 먹거나, 방에서 휴식할 수 있습니다.";
+		_hint->set_texts(title, descr);
+		break;
+	case MAPICON::ICN_SHOP:
+		title = "슈퍼";
+		descr = "식료품 및 에너지드링크를 구입할 수 있습니다.";
+		_hint->set_texts(title, descr);
+		break;
+	case MAPICON::ICN_GYM:
+		title = "체육관";
+		descr = "적당한 가격을 지불하여 열심히 트레이닝을 합니다.";
+		_hint->set_texts(title, descr);
+		break;
+	case MAPICON::ICN_BUILD:
+		title = "일";
+		descr = "시간과 체력을 소모해서 돈을 법니다.";
+		_hint->set_texts(title, descr);
+		break;
+	}
+	return S_OK;
+}
+//==========================================
+//##			Hint					  ##
+//==========================================
+void MapIcon::update_hint()
+{
+	if (_fIcon == true)
+	{
+		_hint->update();
+	}
+}
+void MapIcon::draw_hint()
+{
+	if (_fIcon == true)
+	{
+		Draw(_hint);
+	}
+}
 
 HRESULT MapIcon::init(MAPICON::TYPE type)
 {
 	set_imgPath("UI/Icon/");
+	HRESULT result;
+	int result_cnt = 0;
+
 	_type = type;
-	if (init_icon() == S_OK)
-	{
-		return S_OK;
-	}
-	return E_FAIL;
+	result = init_icon();
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_hint = new Hint;
+	result = _hint->init();
+	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	result = (result_cnt == 0 ? S_OK : E_FAIL);
+	// Hint
+	init_hint();
+	return result;
 }
 void MapIcon::release()
 {
 	delete_icon();
+	Release(_hint);
 }
 void MapIcon::update()
 {
 	update_icon();
+	update_hint();
 }
 void MapIcon::render()
 {
@@ -215,6 +278,6 @@ HRESULT MapIcon::set_center(POINT center)
 		_icon_off->set_rect(rc);
 		_icon_on->set_rect(rc);
 		return S_OK;
-	}
+	}//else: 플레이어 아이콘 말고 다른 아이콘이면 on, off 셋팅
 	return E_FAIL;
 }

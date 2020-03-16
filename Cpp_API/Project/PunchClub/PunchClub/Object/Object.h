@@ -1,5 +1,6 @@
 #pragma once
 #include "Base/GameNode.h"
+#include "objEnum.h"
 class Object: public GameNode
 {
 protected:

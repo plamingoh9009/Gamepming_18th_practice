@@ -52,6 +52,9 @@
     <Filter Include="I_UI\base">
       <UniqueIdentifier>{07ad248b-69f8-4424-9571-dfadef4d98dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="I_Object\type">
+      <UniqueIdentifier>{4e81356f-146b-405c-b320-85e8a044b6dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -180,6 +183,18 @@
     <ClInclude Include="UI\MyText.h">
       <Filter>I_UI\base</Filter>
     </ClInclude>
+    <ClInclude Include="UI\Hint.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Cursor.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Facility.h">
+      <Filter>I_Object\type</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\objEnum.h">
+      <Filter>I_Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PunchClub.cpp">
@@ -289,6 +304,15 @@
     </ClCompile>
     <ClCompile Include="UI\MyText.cpp">
       <Filter>I_UI\base</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Hint.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Cursor.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Facility.cpp">
+      <Filter>I_Object\type</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

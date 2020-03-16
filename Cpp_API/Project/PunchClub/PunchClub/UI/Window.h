@@ -68,14 +68,17 @@ private:
 	int _bus_distance = 10;
 	Button * _btn_bus;
 	Button * _btn_walk;
-	bool _fClose;
-	bool _fOpen = false;
-	bool _fOpenBuild = false;
-	bool _fOpenBus = false;
 	// 공사장 윈도우를 위한 변수
 	Image * _work_jhammer;
 	Image * _work_dust;
 	Button * _btn_build;
+	bool _fClose;
+	bool _fOpen = false;
+	// 버스 윈도우에서 사용할 bool 변수
+	bool _fOpenBuild = false;
+	bool _fOpenBus = false;
+	bool _fOpenShop = false;
+	bool _fOpenGym = false;
 protected:
 	HRESULT init_window_bg(WINDOW::TYPE type);
 	void delete_window_bg();
@@ -121,6 +124,10 @@ public:
 	void set_openWindow(bool fResult) { _fOpen = fResult; }
 	bool is_openBuild() { return _fOpenBuild; }
 	void set_fOpenBuild(bool fResult) { _fOpenBuild = fResult; }
+	bool is_openShop() { return _fOpenShop; }
+	void set_fOpenShop(bool fResult) { _fOpenShop = fResult; }
+	bool is_openGym() { return _fOpenGym; }
+	void set_fOpenGym(bool fResult) { _fOpenGym = fResult; }
 	bool is_openBus() { return _fOpenBus; }
 	void set_fOpenBus(bool fResult) { _fOpenBus = fResult; }
 };

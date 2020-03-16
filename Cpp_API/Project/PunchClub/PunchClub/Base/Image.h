@@ -8,22 +8,22 @@ enum IMAGE_LOAD_KIND
 };
 typedef struct tagImage
 {
-	DWORD	resID;		//리소스 ID
-	HDC		hMemDC;		//메모리 DC
-	HBITMAP hBit;				//비트맵(새로운 비트맵 핸들)
-	HBITMAP hOBit;				//올드 비트맵(기존 비트맵 핸들)
-	int		width;				//이미지 가로크기
-	int		height;				//이미지 세로크기
-	BYTE	loadType;			//로드 타입
-	float	x;					//이미지 x좌표
-	float   y;					//이미지 Y좌표
-	RECT*	rc;					//이미지 좌표 RECT 버전
-	int		currentFrameX;		//현재프레임X
-	int		currentFrameY;		//현재프레임Y
-	int		maxFrameX;			//최대 X프레임 갯수
-	int		maxFrameY;			//최대 Y프레임 갯수
-	int		frameWidth;			//1프레임 가로길이
-	int		frameHeight;		//1프레임 세로길이
+	DWORD		resID;		//리소스 ID
+	HDC			hMemDC;		//메모리 DC
+	HBITMAP		hBit;				//비트맵(새로운 비트맵 핸들)
+	HBITMAP		hOBit;				//올드 비트맵(기존 비트맵 핸들)
+	int			width;				//이미지 가로크기
+	int			height;				//이미지 세로크기
+	BYTE		loadType;			//로드 타입
+	float		x;					//이미지 x좌표
+	float		y;					//이미지 Y좌표
+	RECT*		rc;					//이미지 좌표 RECT 버전
+	int			currentFrameX;		//현재프레임X
+	int			currentFrameY;		//현재프레임Y
+	int			maxFrameX;			//최대 X프레임 갯수
+	int			maxFrameY;			//최대 Y프레임 갯수
+	int			frameWidth;			//1프레임 가로길이
+	int			frameHeight;		//1프레임 세로길이
 	// 프레임 돌릴 때 3구간으로 나눠서 속도 조절 가능한 옵션 추가
 	// Section:		Frame's start ~ end 
 	// Option:		Frame's delay, cntSpeed
@@ -110,6 +110,9 @@ protected:
 	void run_frameSection_reverse(int section);
 	void run_frameUpdate(bool bDefualt, bool bReverse);
 	void set_fSectionEnd_false();
+public:
+	// 이미지 크기 다시 잡아주는 함수
+	void resize_image(int width, int height);
 public:
 	//빈 비트맵 이미지 초기화
 	HRESULT init(int width, int height);

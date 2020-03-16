@@ -1,12 +1,13 @@
 #pragma once
-#include "UI/UI.h"
-
+#include "UI/Hint.h"
 class MapIcon: public UI
 {
 private:
 	MAPICON::TYPE _type = MAPICON::ICN_EMPTY;
 	Image * _icon_off;
 	Image * _icon_on;
+	// Hint 변수
+	Hint * _hint;
 	// 건물 아이콘에 사용할 변수
 	bool _fIcon = false;
 	bool _fOpenBus = false;
@@ -18,6 +19,11 @@ protected:
 	void draw_icon();
 	void delete_icon();
 	void update_icon();
+	// Hint
+	HRESULT init_hint();
+	void update_hint();
+public:
+	void draw_hint();
 public:
 	virtual HRESULT init(MAPICON::TYPE type);
 	virtual void release();

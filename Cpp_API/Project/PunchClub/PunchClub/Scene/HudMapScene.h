@@ -25,6 +25,8 @@ protected:
 	void delete_background();
 	HRESULT init_map_icons();
 	void draw_map_icons();
+	// 힌트는 맵 아이콘보다 나중에 렌더한다.
+	void draw_hints();
 	void update_map_icons();
 	void delete_map_icons();
 	// 모든 윈도우를 닫는다.

@@ -2,6 +2,7 @@
 #include "Base/GameNode.h"
 #include "Base/SingletonBase.h"
 // UI
+#include "Cursor.h"
 #include "Icons/Icon.h"
 #include "HudBack.h"
 #include "Button.h"
@@ -21,7 +22,13 @@ private:
 	// 오브젝트에 값을 넣기 위해서 필요하다
 	Object * _obj;
 private:
-	Icon * _icons;
+	// Cursor
+	Cursor * _cursor = nullptr;
+	// Icons
+	Icon * _icn_hud_map = nullptr;
+	Icon * _icn_league = nullptr;
+	Icon * _icn_skilltree = nullptr;
+
 	HudBack * _hud_back;
 	// 빨간 버튼은 렌더를 할지, 말지 정할 수 있다.
 	Button * _red_button;
@@ -37,6 +44,12 @@ private:
 	UI_TYPE _type = UI_NONE;
 protected:
 	void run_red_button();
+	// Icons
+	HRESULT init_icons();
+	void delete_icons();
+	void draw_icons();
+	void update_icons();
+
 	void update_league();
 	void update_friger();
 	// 게이지

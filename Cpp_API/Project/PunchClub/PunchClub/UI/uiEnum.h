@@ -1,4 +1,14 @@
 #pragma once
+namespace ICON
+{
+	enum TYPE
+	{
+		ICN_EMPTY,
+		ICN_HUD_MAP,
+		ICN_LEAGUE,
+		ICN_SKILLTREE
+	};
+}
 namespace MAPICON
 {
 	enum TYPE

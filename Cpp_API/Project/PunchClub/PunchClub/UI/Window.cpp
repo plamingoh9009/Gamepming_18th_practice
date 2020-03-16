@@ -510,6 +510,14 @@ void Window::update_bus()
 		{
 			_fOpenBuild = true;
 		}//if: Open Build Window
+		else if (_mapIcon_on == MAPICON::ICN_SHOP)
+		{
+			_fOpenShop = true;
+		}
+		else if (_mapIcon_on == MAPICON::ICN_GYM)
+		{
+			_fOpenGym = true;
+		}
 	}
 }
 string Window::map_bus_distance(string bus_str, int bus_dist)

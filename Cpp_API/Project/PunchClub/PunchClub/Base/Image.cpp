@@ -351,7 +351,6 @@ HRESULT Image::init(int width, int height)
 HRESULT Image::init(const char * fileName, int width, int height, bool isTrans, COLORREF transColor)
 {
 	if (fileName == NULL)return E_FAIL;
-
 	//이미지 정보가 있다면 해제
 	if (_imageInfo != NULL)release();
 
@@ -370,7 +369,6 @@ HRESULT Image::init(const char * fileName, int width, int height, bool isTrans, 
 	_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
 	_imageInfo->width = width;
 	_imageInfo->height = height;
-
 	// 이미지 회전을 위한 정보 생성
 	init_forRotate(hdc);
 

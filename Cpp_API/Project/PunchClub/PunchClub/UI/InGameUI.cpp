@@ -12,6 +12,77 @@ void InGameUI::run_red_button()
 		_fClick = false;
 	}//if: 버튼을 눌렀다면 씬을 되돌린다.
 }
+HRESULT InGameUI::init_icons()
+{
+	HRESULT result;
+	int result_cnt = 0;
+	POINT center;
+	double blank;
+	if (_icn_hud_map == nullptr)
+	{
+		_icn_hud_map = new Icon(ICON::ICN_HUD_MAP);
+		result = _icn_hud_map->init();
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		// 위치 잡기
+		center.x = (LONG)(_icn_hud_map->get_width() - _icn_hud_map->get_width() * 0.2);
+		center.y = (LONG)(_icn_hud_map->get_height() - _icn_hud_map->get_height() * 0.2);
+		_icn_hud_map->set_center(center);
+	}
+	blank = _icn_hud_map->get_height() * 0.2;
+	if (_icn_league == nullptr)
+	{
+		_icn_league = new Icon(ICON::ICN_LEAGUE);
+		result = _icn_league->init();
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		// 위치 잡기
+		center.x = (LONG)(_icn_hud_map->get_center().x);
+		center.y = (LONG)(_icn_hud_map->get_center().y + _icn_league->get_height() + blank);
+		_icn_league->set_center(center);
+	}
+	if (_icn_skilltree == nullptr)
+	{
+		_icn_skilltree = new Icon(ICON::ICN_SKILLTREE);
+		result = _icn_skilltree->init();
+		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		// 위치 잡기
+		center.x = (LONG)(_icn_league->get_center().x);
+		center.y = (LONG)(_icn_league->get_center().y + _icn_skilltree->get_height() + blank);
+		_icn_skilltree->set_center(center);
+	}
+	result = (result_cnt == 0 ? S_OK : E_FAIL);
+	return result;
+}
+void InGameUI::delete_icons()
+{
+	Release(_icn_hud_map);
+	Release(_icn_league);
+	Release(_icn_skilltree);
+}
+void InGameUI::draw_icons()
+{
+	Draw(_icn_hud_map);
+	Draw(_icn_league);
+	Draw(_icn_skilltree);
+	// Hints
+	if (_icn_hud_map->get_fHint() == true)
+	{
+		_icn_hud_map->draw_hint();
+	}
+	else if (_icn_league->get_fHint() == true)
+	{
+		_icn_league->draw_hint();
+	}
+	else if (_icn_skilltree->get_fHint() == true)
+	{
+		_icn_skilltree->draw_hint();
+	}
+}
+void InGameUI::update_icons()
+{
+	_icn_hud_map->update();
+	_icn_league->update();
+	_icn_skilltree->update();
+}
 // ====================================
 // ***		리그창 열었을 때			***
 // ====================================
@@ -20,7 +91,7 @@ void InGameUI::update_league()
 	_window_league->update();
 	if (_window_league->is_closeWindow())
 	{
-		_icons->set_fLeague(false);
+		_icn_league->set_fLeague(false);
 		_window_league->init(WINDOW::WND_LEAGUE);
 	}
 }
@@ -59,8 +130,14 @@ HRESULT InGameUI::init()
 {
 	_obj = new Object;
 
-	_icons = new Icon;
-	_icons->init();
+	// Cursor
+	if (_cursor == nullptr)
+	{
+		_cursor = new Cursor;
+		_cursor->init();
+	}
+	// Icons
+	init_icons();
 	_hud_back = new HudBack;
 	_hud_back->init();
 	_red_button = new Button;
@@ -93,8 +170,8 @@ void InGameUI::release()
 {
 	_obj = nullptr;
 
-	_icons->release();
-	_icons = nullptr;
+	Release(_cursor);
+	delete_icons();
 	_hud_back->release();
 	_hud_back = nullptr;
 	_red_button->release();
@@ -115,12 +192,13 @@ void InGameUI::update()
 		break;
 	default:
 		_hud_back->update();
-		_icons->update();
+		update_icons();
 		if (_fRedButton) { run_red_button(); }
 		if (_fInven_friger) { update_friger(); }
-		if (_icons->get_fLeague()) { update_league(); }
+		if (_icn_league->get_fLeague()) { update_league(); }
 		break;
 	}
+	_cursor->update();
 }
 void InGameUI::render()
 {
@@ -130,13 +208,14 @@ void InGameUI::render()
 		draw_gauges();
 		break;
 	default:
-		_icons->render();
+		draw_icons();
 		_hud_back->render();
 		if (_fRedButton) { _red_button->render(); }
 		if (_fInven_friger) { _inven_friger->render(); }
-		if (_icons->get_fLeague()) { _window_league->render(); }
+		if (_icn_league->get_fLeague()) { _window_league->render(); }
 		break;
 	}
+	Draw(_cursor);
 }
 InGameUI::InGameUI()
 {

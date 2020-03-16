@@ -85,6 +85,14 @@ void HudMapScene::draw_map_icons()
 	}
 	_player->render();
 }
+void HudMapScene::draw_hints()
+{
+	auto iter = _icons.begin();
+	for (; iter != _icons.end(); iter++)
+	{
+		(*iter)->draw_hint();
+	}
+}
 void HudMapScene::update_map_icons()
 {
 	auto iter = _icons.begin();
@@ -167,6 +175,16 @@ void HudMapScene::update()
 		{
 			_build_wnd->set_openWindow(true);
 		}
+		else if (_bus_wnd->is_openShop() == true)
+		{
+			_scene_forChange = SCENE_SHOP;
+			_fClick = false;
+		}
+		else if (_bus_wnd->is_openGym() == true)
+		{
+			_scene_forChange = SCENE_GYM;
+			_fClick = false;
+		}
 	}
 	else if (_build_wnd->is_openWindow() == true)
 	{
@@ -178,14 +196,15 @@ void HudMapScene::update()
 		close_windowsAll();
 		update_map_icons();
 		update_player_pos();
-		INGAME_UI->update();
-		change_scene();
 	}
+	INGAME_UI->update();
+	change_scene();
 }
 void HudMapScene::render()
 {
 	draw_background();
 	draw_map_icons();
+	draw_hints();
 	if (_bus_wnd->is_openBus() == true)
 	{
 		Draw(_bus_wnd);
