@@ -10,7 +10,7 @@ private:
 	POINT _player_center;
 	// 이미지 바꿀 때 쓰는 변수
 	bool _fIdle = true;
-	int _idleIndex = 3;
+	int _idleIndex = 0;
 	// 플레이어 능력치
 	float _health = MAX_HUD;
 	float _food = MAX_HUD;
@@ -36,5 +36,7 @@ public:
 public:
 	Player();
 	~Player();
+public:
+	void set_playerCenter(POINT center);
 };
 #define PLAYER	Player::get_singleton()

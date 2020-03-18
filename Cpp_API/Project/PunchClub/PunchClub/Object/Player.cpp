@@ -135,3 +135,11 @@ Player::Player()
 Player::~Player()
 {
 }
+
+void Player::set_playerCenter(POINT center)
+{
+	_player_rc = RectMakeCenter(center.x, center.y, 
+		_player_idle[_idleIndex]->get_frameWidth(),
+		_player_idle[_idleIndex]->get_frameHeight());
+	_player_center = center;
+}
