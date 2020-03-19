@@ -27,3 +27,11 @@ namespace FACILITY
 		PB_PLAYER
 	};
 }
+namespace NPC
+{
+	enum TYPE
+	{
+		NPC_EMPTY,
+		NPC_SHOP
+	};
+}

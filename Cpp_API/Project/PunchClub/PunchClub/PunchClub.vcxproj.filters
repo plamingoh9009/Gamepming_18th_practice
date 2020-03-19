@@ -153,9 +153,6 @@
     <ClInclude Include="UI\Window.h">
       <Filter>I_UI\type</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Gauge.h">
-      <Filter>I_UI\type</Filter>
-    </ClInclude>
     <ClInclude Include="UI\Button.h">
       <Filter>I_UI\type</Filter>
     </ClInclude>
@@ -194,6 +191,15 @@
     </ClInclude>
     <ClInclude Include="Object\objEnum.h">
       <Filter>I_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Npc.h">
+      <Filter>I_Object\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\FightGauge.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Gauge.h">
+      <Filter>I_UI\type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -278,9 +284,6 @@
     <ClCompile Include="UI\Window.cpp">
       <Filter>I_UI\type</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Gauge.cpp">
-      <Filter>I_UI\type</Filter>
-    </ClCompile>
     <ClCompile Include="UI\Button.cpp">
       <Filter>I_UI\type</Filter>
     </ClCompile>
@@ -314,6 +317,15 @@
     <ClCompile Include="Object\Facility.cpp">
       <Filter>I_Object\type</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Npc.cpp">
+      <Filter>I_Object\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\FightGauge.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Gauge.cpp">
+      <Filter>I_UI\type</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PunchClub.rc">
@@ -327,5 +339,8 @@
     <Image Include="PunchClub.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

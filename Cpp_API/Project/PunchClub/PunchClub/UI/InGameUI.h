@@ -9,7 +9,7 @@
 // 클릭했을 때
 #include "Window.h"
 // 싸울 때
-#include "Gauge.h"
+#include "FightGauge.h"
 enum UI_TYPE
 {
 	UI_NONE,
@@ -33,15 +33,15 @@ private:
 	// 빨간 버튼은 렌더를 할지, 말지 정할 수 있다.
 	Button * _red_button;
 	bool _fRedButton;
-	// 냉장고 인벤토리
-	Window * _inven_friger;
-	bool _fInven_friger;
-	// 리그 창
-	Window * _window_league;
+	// Windows
+	Window * _window_league;	// 리그 창
+	Window * _ingame_wnd = nullptr;
+	bool _fIngame_wnd = false;
 	// 리그에서 쓰는 게이지 클래스
-	Gauge * _gauge;
+	FightGauge * _gauge;
 	// 현재 UI에 무엇을 띄울 것인지 기준
 	UI_TYPE _type = UI_NONE;
+	WINDOW::TYPE _wndType = WINDOW::WND_NONE;
 protected:
 	void run_red_button();
 	// Icons
@@ -51,15 +51,14 @@ protected:
 	void update_icons();
 
 	void update_league();
-	void update_friger();
 	// 게이지
 	void init_gauges();
 	void draw_gauges();
 	void update_gauges();
 	void delete_gauges();
-public:
-	void set_fRedButton(bool fResult) { _fRedButton = fResult; }
-	void set_fInven_friger(bool fResult) { _fInven_friger = fResult; }
+	// 상점
+	void update_ingame_wnd();
+	void draw_ingame_wnd();
 public:
 	virtual HRESULT init();
 	virtual HRESULT init(UI_TYPE type);
@@ -69,5 +68,9 @@ public:
 public:
 	InGameUI();
 	~InGameUI();
+public:
+	void set_fRedButton(bool fResult) { _fRedButton = fResult; }
+	void set_windowType(WINDOW::TYPE type);
+	void set_fIngame_wnd(bool fResult) { _fIngame_wnd = fResult; }
 };
 #define INGAME_UI	InGameUI::get_singleton()

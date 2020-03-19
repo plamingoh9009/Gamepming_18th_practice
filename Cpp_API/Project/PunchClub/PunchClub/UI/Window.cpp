@@ -23,8 +23,8 @@ HRESULT Window::init_window_bg(WINDOW::TYPE type)
 		center.y = (LONG)(WIN_HALF_H + _bg->get_height() * 0.07);
 		_bg->set_center(center);
 		// Delete Button
-		_red_button = new Button();
-		result = _red_button->init(BUTTON::BTN_DELETE_RED);
+		_red_button = new Button(BUTTON::BTN_DELETE_RED);
+		result = _red_button->init();
 		_red_button->set_pos_toRT_edge(_bg->get_rect());
 		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
 		// 라인을 그리는 기준
@@ -48,8 +48,8 @@ HRESULT Window::init_window_bg(WINDOW::TYPE type)
 		center.y = (LONG)(WIN_HALF_H + _bg->get_height() * 0.07);
 		_bg->set_center(center);
 		// Red button Class
-		_red_button = new Button();
-		result = _red_button->init(BUTTON::BTN_DELETE_RED);
+		_red_button = new Button(BUTTON::BTN_DELETE_RED);
+		result = _red_button->init();
 		_red_button->set_pos_toRT_edge(_bg->get_rect());
 		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
 		break;
@@ -445,8 +445,8 @@ HRESULT Window::init_bus_fg()
 	//##				Button			  ##
 	//==========================================
 	// Bus
-	_btn_bus = new Button;
-	_btn_bus->init(BUTTON::BTN_BUS_GREEN);
+	_btn_bus = new Button(BUTTON::BTN_BUS_GREEN);
+	_btn_bus->init();
 	center.x = (LONG)(_bg->get_center().x - _btn_bus->get_width() * 0.6);
 	center.y = (LONG)(_bg->get_rect().bottom - _btn_bus->get_height());
 	_btn_bus->set_center(center);
@@ -458,8 +458,8 @@ HRESULT Window::init_bus_fg()
 	center.y = (LONG)(_btn_bus->get_center().y - _btn_bus->get_height() * 0.0625);
 	_btn_bus->set_icon_toButton(BUTTON::ICN_DOLLAR, center);
 	// Walk
-	_btn_walk = new Button;
-	_btn_walk->init(BUTTON::BTN_BUS_GREEN);
+	_btn_walk = new Button(BUTTON::BTN_BUS_GREEN);
+	_btn_walk->init();
 	center.x = (LONG)(_bg->get_center().x + _btn_walk->get_width() * 0.6);
 	center.y = (LONG)(_bg->get_rect().bottom - _btn_walk->get_height());
 	_btn_walk->set_center(center);
@@ -577,9 +577,10 @@ HRESULT Window::init_build_fg()
 	pos.y = (LONG)(pos.y + 45);
 	_fg_descr.set_size(30);
 	_fg_descr.set_pos(pos);
+
 	// Start Green Button
-	_btn_build = new Button;
-	_btn_build->init(BUTTON::BTN_BUS_GREEN);
+	_btn_build = new Button(BUTTON::BTN_BUS_GREEN);
+	_btn_build->init();
 	center.x = (LONG)(_bg->get_center().x);
 	center.y = (LONG)(_bg->get_rect().bottom - _btn_build->get_height() * 0.75);
 	_btn_build->set_center(center);
@@ -588,9 +589,16 @@ HRESULT Window::init_build_fg()
 	center.y = (LONG)(_fg_descr.get_pos().y + 10);
 	_btn_build->set_icon_toButton(BUTTON::ICN_DOLLAR, center);
 
+	// Work Gauge
+	_gauge = new Gauge(GAUGE::GG_WORK);
+	_gauge->init();
+	center.x = (LONG)(_btn_build->get_center().x);
+	center.y = (LONG)(_btn_build->get_center().y - _gauge->get_height() * 1.65);
+	_gauge->set_center(center);
+
 	// Red button Class
-	_red_button = new Button();
-	result = _red_button->init(BUTTON::BTN_DELETE_RED);
+	_red_button = new Button(BUTTON::BTN_DELETE_RED);
+	result = _red_button->init();
 	_red_button->set_pos_toRT_edge(_inside->get_rect());
 	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
 
@@ -605,6 +613,9 @@ void Window::draw_build()
 	// Text
 	_fg_title.render(get_memDC());
 	_fg_descr.render(get_memDC());
+	// Work Gauge
+	Draw(_gauge);
+
 	// Button
 	Draw(_btn_build);
 	Draw(_red_button);
@@ -618,8 +629,60 @@ void Window::delete_build()
 }
 void Window::update_build()
 {
+	// 게이지 업데이트
+	_gauge->update();
+	// 프레임 업데이트
 	_work_jhammer->frameUpdate(false);
 	_work_dust->frameUpdate(false);
+}
+//======================================
+//##		상점 슬롯 초기화			  ##
+//======================================
+HRESULT Window::init_slots()
+{
+	Slot * slot;
+	POINT pos;
+	switch (_type)
+	{
+	case WINDOW::WND_SHOP:
+		slot = new Slot(SLOT::SLT_ITEM, SLOT::ITM_MEAT);
+		slot->init();
+		pos.x = (LONG)(_locked_back->get_rect().left);
+		pos.y = (LONG)(_locked_back->get_rect().top);
+		slot->set_slotPos(pos);
+		_slots.push_back(slot);
+		slot = new Slot(SLOT::SLT_ITEM, SLOT::ITM_SODA);
+		slot->init();
+		slot->set_slotPos(PointMake(pos.x + slot->get_width(), pos.y));
+		_slots.push_back(slot);
+		slot = new Slot(SLOT::SLT_ITEM, SLOT::ITM_PIZZA_BOX);
+		slot->init();
+		pos.x = (LONG)(_locked_back->get_rect().left);
+		pos.y = (LONG)(_locked_back->get_rect().top);
+		slot->set_slotPos(PointMake(pos.x, pos.y + slot->get_height()));
+		_slots.push_back(slot);
+		break;
+	}
+	slot = nullptr;
+	return S_OK;
+}
+void Window::delete_slots()
+{
+	auto iter = _slots.begin();
+	for (; iter != _slots.end();)
+	{
+		Release(*iter);
+		iter = _slots.erase(iter);
+	}
+	swap(_slots, Slots());
+}
+void Window::draw_slots()
+{
+	auto iter = _slots.begin();
+	for (; iter != _slots.end(); iter++)
+	{
+		Draw(*iter);
+	}
 }
 
 void Window::close_window()
@@ -635,9 +698,6 @@ HRESULT Window::init(WINDOW::TYPE type)
 {
 	set_imgPath("UI/Window/");
 	_type = type;
-	// 초기화 여부를 결정
-	HRESULT result;
-	int result_cnt = 0;
 	// Background 초기화
 	init_window_bg(type);
 	// Foreground Image 초기화
@@ -648,22 +708,20 @@ HRESULT Window::init(WINDOW::TYPE type)
 		break;
 	case WINDOW::WND_SHOP :
 		init_inventory();
+		init_slots();
 		break;
 	case WINDOW::WND_LEAGUE :
 		init_league();
 		break;
 	case WINDOW::WND_BUS  :
-		result = init_bus_fg();
-		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		init_bus_fg();
 		break;
 	case WINDOW::WND_BUILD :
-		result = init_build_fg();
-		result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+		init_build_fg();
 		break;
 	}
 	_fClose = false;
-	result = (result_cnt == 0 ? S_OK : E_FAIL);
-	return result;
+	return S_OK;
 }
 void Window::release()
 {
@@ -686,6 +744,7 @@ void Window::release()
 		delete_build();
 		break;
 	}
+	delete_slots();
 }
 void Window::update()
 {
@@ -741,6 +800,7 @@ void Window::render()
 		draw_build();
 		break;
 	}
+	draw_slots();
 }
 Window::Window()
 {

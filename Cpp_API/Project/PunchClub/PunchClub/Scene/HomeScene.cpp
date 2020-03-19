@@ -9,7 +9,7 @@ void HomeScene::update_objectSelected()
 		_fFriger = true;
 		if (_fClick == true) 
 		{ 
-			INGAME_UI->set_fInven_friger(true);
+			INGAME_UI->set_fIngame_wnd(true);
 		}
 		PLAYER->set_fObjMove(false);
 	}
@@ -285,7 +285,7 @@ void HomeScene::draw_furniture()
 }
 void HomeScene::delete_furniture()
 {
-	_kitchenTable->release();
+	Release(_kitchenTable);
 	_friger->release();
 	_friger_select->release();
 	_stand->release();
@@ -297,7 +297,6 @@ void HomeScene::delete_furniture()
 	_tv_select->release();
 	_fan->release();
 	_table->release();
-	_kitchenTable = nullptr;
 	_friger = nullptr;
 	_friger_select = nullptr;
 	_stand = nullptr;
@@ -339,6 +338,7 @@ HRESULT HomeScene::init()
 	PLAYER->init();
 	// UI
 	INGAME_UI->init();
+	INGAME_UI->set_windowType(WINDOW::WND_FRIGER);
 	return S_OK;
 }
 void HomeScene::release()

@@ -36,5 +36,6 @@ public:
 	void set_font(string font) { _font = font; }
 	void set_maxChars(int maxChars);
 	vector<string> get_texts() { return _texts; }
+	string get_text() { return _text; }
 };
 

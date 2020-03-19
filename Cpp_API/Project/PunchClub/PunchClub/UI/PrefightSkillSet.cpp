@@ -7,8 +7,8 @@ void PrefightSkillSet::init_slots()
 	double blank = 0;
 	for (int i = 1; i <= 6; i++)
 	{
-		_slots[i - 1] = new Slot;
-		_slots[i - 1]->init(SLOT::SLOT_ACTIVE_SKILL);
+		_slots[i - 1] = new Slot(SLOT::SLT_ACTIVE_SKILL);
+		_slots[i - 1]->init();
 		
 		center.x = (LONG)(_bg_rc.left + _slots[i-1]->get_width() * 0.575 * i + blank);
 		center.y = (LONG)(_bg_rc.top + _slots[i-1]->get_height() * 0.5 + 2);

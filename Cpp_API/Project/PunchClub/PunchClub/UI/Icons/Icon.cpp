@@ -36,6 +36,22 @@ void Icon::init_icons()
 		descr = "스킬 목록을 열어 새로운 기술을 구입하려면, 이곳을 클릭하세요.";
 		_hint->set_texts(title, descr);
 		break;
+	case ICON::ICN_ENERGY:
+		path = _imgPath + "Energy_icon.bmp";
+		_fg->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(13 * GAME_MULTIPLE));
+		break;
+	case ICON::ICN_FEEL:
+		path = _imgPath + "Feel_icon.bmp";
+		_fg->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(13 * GAME_MULTIPLE));
+		break;
+	case ICON::ICN_FOOD:
+		path = _imgPath + "Food_icon.bmp";
+		_fg->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(13 * GAME_MULTIPLE));
+		break;
+	case ICON::ICN_HEALTH:
+		path = _imgPath + "Health_icon.bmp";
+		_fg->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(13 * GAME_MULTIPLE));
+		break;
 	}
 }
 void Icon::draw_icons()
@@ -106,9 +122,6 @@ void Icon::render()
 {
 	draw_icons();
 }
-Icon::Icon()
-{
-}
 Icon::Icon(ICON::TYPE type)
 {
 	_type = type;
@@ -119,7 +132,34 @@ Icon::~Icon()
 
 void Icon::set_center(POINT center)
 {
-	_bg->set_center(center);
-	_fg->set_center(center);
-	_hint->set_center(center);
+	if (_bg != nullptr)
+	{
+		_bg->set_center(center);
+	}
+	if (_fg != nullptr)
+	{
+		_fg->set_center(center);
+	}
+	if (_hint != nullptr)
+	{
+		_hint->set_center(center);
+	}
+}
+
+void Icon::set_text_toIcon(string str, int size, COLORREF color)
+{
+	POINT pos;
+	switch (_type)
+	{
+	case ICON::ICN_ENERGY:
+	case ICON::ICN_FEEL:
+	case ICON::ICN_FOOD:
+	case ICON::ICN_HEALTH:
+		_icon_txt = MyText(MYTEXT::TXT_DESCR, str, RGB(254, 254, 254));
+		pos.x = (LONG)(_fg->get_rect().right);
+		pos.y = (LONG)(_fg->get_rect().top);
+		_icon_txt.set_pos(pos);
+		_icon_txt.set_size(size);
+		break;
+	}
 }

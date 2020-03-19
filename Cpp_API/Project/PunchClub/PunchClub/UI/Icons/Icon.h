@@ -3,9 +3,10 @@
 class Icon: public UI
 {
 private:
+	ICON::TYPE _type;
 	Image * _bg;
 	Image * _fg;
-	ICON::TYPE _type;
+	MyText _icon_txt;
 	// ÈùÆ®
 	Hint * _hint;
 	bool _fHint = false;
@@ -23,7 +24,6 @@ public:
 	virtual void update();
 	virtual void render();
 public:
-	Icon();
 	Icon(ICON::TYPE type);
 	~Icon();
 public:
@@ -34,5 +34,7 @@ public:
 	int get_height() { return _bg->get_height(); }
 	POINT get_center() { return _bg->get_center(); }
 	bool get_fHint() { return _fHint; }
+	void set_text_toIcon(string str, int size = 25, COLORREF color = RGB(254, 254, 254));
+	string get_text_toIcon() { return _icon_txt.get_text(); }
 };
 

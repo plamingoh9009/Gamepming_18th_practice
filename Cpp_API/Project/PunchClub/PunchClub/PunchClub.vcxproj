@@ -160,6 +160,7 @@
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
     <ClInclude Include="Object\Facility.h" />
+    <ClInclude Include="Object\Npc.h" />
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Object\objEnum.h" />
     <ClInclude Include="Object\Player.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UI\Cursor.h" />
+    <ClInclude Include="UI\FightGauge.h" />
     <ClInclude Include="UI\Gauge.h" />
     <ClInclude Include="UI\Hint.h" />
     <ClInclude Include="UI\HudBack.h" />
@@ -205,6 +207,7 @@
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
     <ClCompile Include="Object\Facility.cpp" />
+    <ClCompile Include="Object\Npc.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Object\Player.cpp" />
     <ClCompile Include="Object\Unit.cpp" />
@@ -227,6 +230,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="UI\Cursor.cpp" />
+    <ClCompile Include="UI\FightGauge.cpp" />
     <ClCompile Include="UI\Gauge.cpp" />
     <ClCompile Include="UI\Hint.cpp" />
     <ClCompile Include="UI\HudBack.cpp" />
@@ -247,6 +251,9 @@
   <ItemGroup>
     <Image Include="PunchClub.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

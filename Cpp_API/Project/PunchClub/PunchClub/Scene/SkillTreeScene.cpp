@@ -20,7 +20,6 @@ void SkillTreeScene::update()
 }
 void SkillTreeScene::render()
 {
-	TextOut(get_memDC(), WIN_HALF_W, WIN_HALF_H, "½ºÅ³ ÆÄÆÄÆÅ", strlen("½ºÅ³ ÆÄÆÄÆÅ"));
 	INGAME_UI->render();
 }
 SkillTreeScene::SkillTreeScene()

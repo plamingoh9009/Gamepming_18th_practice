@@ -1,17 +1,9 @@
 #pragma once
 #include "UI.h"
 #include "Button.h"
+#include "Slot.h"
+#include "Gauge.h"
 
-struct InvenSlot
-{
-	Image * item;
-	RECT item_rc;
-	POINT item_center;
-	RECT slot_rc;
-	POINT slot_center;
-	RECT green_button_rc;
-	POINT green_button_center;
-};
 struct LeagueSlot
 {
 	Image * back = nullptr;
@@ -45,6 +37,8 @@ struct LeagueSlot
 class Window: public UI
 {
 private:
+	typedef vector<Slot *> Slots;
+private:
 	WINDOW::TYPE _type;
 	Image * _bg;
 	Image * _locked_back;
@@ -72,8 +66,11 @@ private:
 	Image * _work_jhammer;
 	Image * _work_dust;
 	Button * _btn_build;
-	bool _fClose;
+	Gauge * _gauge;
+	bool _fClose = false;
 	bool _fOpen = false;
+	// 상점 슬롯
+	Slots _slots;
 	// 버스 윈도우에서 사용할 bool 변수
 	bool _fOpenBuild = false;
 	bool _fOpenBus = false;
@@ -109,6 +106,10 @@ protected:
 	void draw_build();
 	void delete_build();
 	void update_build();
+	// 상점 슬롯을 초기화한다.
+	HRESULT init_slots();
+	void delete_slots();
+	void draw_slots();
 public:
 	void close_window();
 public:

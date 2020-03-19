@@ -1,4 +1,35 @@
 #pragma once
+namespace GAUGE
+{
+	enum TYPE
+	{
+		GG_EMPTY,
+		GG_WORK
+	};
+}
+namespace SLOT
+{
+	enum TYPE
+	{
+		SLT_EMPTY,
+		SLT_ACTIVE_SKILL,
+		SLT_ITEM
+	};
+	enum SKILL
+	{
+		SKL_EMPTY,
+		SKL_BLOCK,
+		SKL_DODGE,
+		SKL_PUNCH
+	};
+	enum ITEM
+	{
+		ITM_EMPTY,
+		ITM_MEAT,
+		ITM_PIZZA_BOX,
+		ITM_SODA
+	};
+}
 namespace ICON
 {
 	enum TYPE
@@ -6,7 +37,12 @@ namespace ICON
 		ICN_EMPTY,
 		ICN_HUD_MAP,
 		ICN_LEAGUE,
-		ICN_SKILLTREE
+		ICN_SKILLTREE,
+		// 아이템 아이콘
+		ICN_ENERGY,
+		ICN_FEEL,
+		ICN_FOOD,
+		ICN_HEALTH
 	};
 }
 namespace MAPICON
@@ -51,7 +87,9 @@ namespace BUTTON
 		BTN_RED_LONG,
 		BTN_DELETE_RED,
 		BTN_BLUE_LONG,
+		BTN_GREEN,
 		BTN_GREEN_LONG,
+		BTN_GREEN_INVEN,
 		BTN_BUS_GREEN
 	};
 	enum ICON

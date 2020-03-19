@@ -2,52 +2,27 @@
 #include "UI.h"
 class Gauge: public UI
 {
-	// 라운드 이미지
-	Image * _round_back;
-	Image * _round_fore;
-	POINT _round_center;
-	RECT _round_back_rc;
-	RECT _round_fore_rc;
-	string _round_title;
-	string _round_desc;
-	string _round_num;
-	// 싸울때 쓰는 게이지
-	Image * _player_back;
-	Image * _playerHp_fore;
-	Image * _playerNrg_fore;
-	Image * _enemy_back;
-	Image * _enemyHp_fore;
-	Image * _enemyNrg_fore;
-	RECT _player_back_rc;
-	RECT _playerHp_rc;
-	RECT _playerNrg_rc;
-	RECT _enemy_back_rc;
-	RECT _enemyHp_rc;
-	RECT _enemyNrg_rc;
-	string _playerHp_str;
-	string _playerNrg_str;
-	string _enemyHp_str;
-	string _enemyNrg_str;
+private:
+	GAUGE::TYPE _type;
+	Image * _bg = nullptr;
+	Image * _fg = nullptr;
+	double _maxGauge;
+	double _currentGauge = 0;
+	double _currentWidth = 0;
+	bool _fGaugeStart = false;
 protected:
-	void init_player_bars();
-	void draw_player_bars();
-	void update_player_bars();
-	void delete_player_bars();
-	void init_enemy_bars();
-	void draw_enemy_bars();
-	void update_enemy_bars();
-	void delete_enemy_bars();
-	void init_round();
-	void draw_round();
-	void update_round();
-	void delete_round();
+	void change_width();
 public:
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
 	virtual void render();
 public:
-	Gauge();
+	Gauge(GAUGE::TYPE type);
 	~Gauge();
+public:
+	void set_center(POINT center);
+	int get_width() { return _bg->get_width(); }
+	int get_height() { return _bg->get_height(); }
 };
 

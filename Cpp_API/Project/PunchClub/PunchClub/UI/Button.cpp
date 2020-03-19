@@ -3,55 +3,38 @@
 
 HRESULT Button::init_red_button()
 {
-	// Result to return
-	HRESULT result;
-	int result_cnt = 0;
+	_button = new Image;
 	// Init
 	string path;
-	_button = new Image;
 	path = _imgPath + "Btn_red_back.bmp";
-	result = _button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-	result_cnt = (result == S_OK ? result_cnt: result_cnt++);
-	// Return
-	result = (result_cnt == 0 ? S_OK : E_FAIL);
-	return result;
+	_button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	return S_OK;
 }
 //==========================================
 //##		Long Red Button			  ##
 //==========================================
 HRESULT Button::init_long_red_button()
 {
-	// Result to return
-	HRESULT result;
-
-	string path = _imgPath + "Btn_red_long.bmp";
 	_button = new Image;
-	result = _button->init(path.c_str(), (int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-	// Return
-	return result;
+	string path = _imgPath + "Btn_red_long.bmp";
+	_button->init(path.c_str(), (int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	return S_OK;
 }
 void Button::update_long_red_button()
 {
 }
 HRESULT Button::init_delete_red_button()
 {
-	// Result to return
-	HRESULT result;
-	int result_cnt = 0;
 	string path;
 	// Init
 	_button = new Image;
 	path = _imgPath + "Btn_red_back.bmp";
-	result = _button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_button->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
 	_icon = new Image;
 	path = _imgPath + "del_icon.bmp";
-	result = _icon->init(path.c_str(), (int)(18 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_icon->init(path.c_str(), (int)(18 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
 	_iconType = BUTTON::ICN_DELETE;
-	// Return
-	result = (result_cnt == 0 ? S_OK : E_FAIL);
-	return result;
+	return S_OK;
 }
 void Button::update_delete_red_button()
 {
@@ -68,12 +51,10 @@ void Button::update_delete_red_button()
 //==========================================
 HRESULT Button::init_long_green_button()
 {
-	HRESULT result;
-
-	string path = _imgPath + "Btn_green_long.bmp";
 	_button = new Image;
-	result = _button->init(path.c_str(), (int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-	return result;
+	string path = _imgPath + "Btn_green_long.bmp";
+	_button->init(path.c_str(), (int)(57 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	return S_OK;
 }
 void Button::update_long_green_button()
 {
@@ -83,12 +64,10 @@ void Button::update_long_green_button()
 //==========================================
 HRESULT Button::init_bus_green_button()
 {
-	HRESULT result;
-
-	string path = _imgPath + "Btn_bus_green.bmp";
 	_button = new Image;
-	result = _button->init(path.c_str(), (int)(107 * GAME_MULTIPLE), (int)(30 * GAME_MULTIPLE));
-	return result;
+	string path = _imgPath + "Btn_bus_green.bmp";
+	_button->init(path.c_str(), (int)(107 * GAME_MULTIPLE), (int)(30 * GAME_MULTIPLE));
+	return S_OK;
 }
 void Button::update_bus_green_button()
 {
@@ -109,6 +88,29 @@ void Button::update_bus_green_button()
 	}
 }
 
+HRESULT Button::init_green_button()
+{
+	_button = new Image;
+	string path = _imgPath + "Btn_green.bmp";
+	_button->init(path.c_str(), (int)(19 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+	return S_OK;
+}
+void Button::update_green_button()
+{
+}
+
+HRESULT Button::init_green_inven()
+{
+	string path = _imgPath + "Btn_green_inven.bmp";
+	_button = new Image;
+	_button->init(path.c_str(), (int)(35 * GAME_MULTIPLE), (int)(15 * GAME_MULTIPLE));
+	return E_NOTIMPL;
+}
+
+void Button::update_green_inven()
+{
+}
+
 void Button::draw_text_toButton()
 {
 	_text.render(get_memDC());
@@ -117,41 +119,32 @@ void Button::draw_text_toButton()
 HRESULT Button::init()
 {
 	set_imgPath("UI/Button/");
-	init_red_button();
-	_type = BUTTON::BTN_RED;
-	return S_OK;
-}
-HRESULT Button::init(BUTTON::TYPE type)
-{
-	// Result to return
-	HRESULT result;
-
-	set_imgPath("UI/Button/");
-	_type = type;
-	switch (type)
+	switch (_type)
 	{
 	case BUTTON::BTN_RED:
-		result = init_red_button();
+		init_red_button();
 		break;
 	case BUTTON::BTN_RED_LONG:
-		result = init_long_red_button();
+		init_long_red_button();
 		break;
 	case BUTTON::BTN_DELETE_RED:
-		result = init_delete_red_button();
+		init_delete_red_button();
 		break;
 	case BUTTON::BTN_GREEN_LONG:
-		result = init_long_green_button();
+		init_long_green_button();
 		break;
-	case BUTTON::BTN_BUS_GREEN :
-		result = init_bus_green_button();
+	case BUTTON::BTN_BUS_GREEN:
+		init_bus_green_button();
 		break;
-	default:
-		result = E_FAIL;
+	case BUTTON::BTN_GREEN:
+		init_green_button();
+		break;
+	case BUTTON::BTN_GREEN_INVEN:
+		init_green_inven();
 		break;
 	}
-	return result;
+	return S_OK;
 }
-
 void Button::release()
 {
 	if (_button != nullptr)
@@ -187,21 +180,22 @@ void Button::render()
 		ColorRect(get_memDC(), _icon->get_rect());
 	}
 }
-Button::Button()
+Button::Button(BUTTON::TYPE type)
 {
+	_type = type;
 }
 Button::~Button()
 {
 }
 
-void Button::set_text_toButton(string text)
+void Button::set_text_toButton(string text, int size, MYTEXT::TYPE type)
 {
 	POINT pos;
-	_text = MyText(MYTEXT::TXT_TITLE, text);
+	_text = MyText(type, text, RGB(254, 254, 254));
 	pos.x = (LONG)(_button->get_center().x - text.length() * 5);
-	pos.y = (LONG)(_button->get_center().y - 25 * 0.5);
+	pos.y = (LONG)(_button->get_center().y - size * 0.5);
 	_text.set_pos(pos);
-	_text.set_size(25);
+	_text.set_size(size);
 	_fText = true;
 }
 
