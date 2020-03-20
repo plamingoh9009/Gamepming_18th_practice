@@ -1,7 +1,7 @@
 #pragma once
 #include "Unit.h"
 #include "Base/SingletonBase.h"
-#define MAX_HUD	100;
+#include "UI/uiEnum.h"
 class Player: public Unit, public SingletonBase<Player>
 {
 private:
@@ -12,10 +12,9 @@ private:
 	bool _fIdle = true;
 	int _idleIndex = 0;
 	// 플레이어 능력치
-	float _health = MAX_HUD;
-	float _food = MAX_HUD;
-	float _energy = MAX_HUD;
-	float _mood = MAX_HUD;
+	PlayerStat _stat;
+	// 플레이어의 첫 위치는 집이다.
+	MAPICON::TYPE _location = MAPICON::ICN_HOME;
 protected:
 	void update_idle_img();
 	void change_idle_img();
@@ -29,6 +28,8 @@ public:
 	void sleep_toSofa();
 	void watch_tv();
 public:
+	void add_money(int money) { _stat.money += money; }
+public:
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
@@ -38,5 +39,8 @@ public:
 	~Player();
 public:
 	void set_playerCenter(POINT center);
+	PlayerStat get_stat() { return _stat; }
+	MAPICON::TYPE get_playerLocation() { return _location; }
+	void set_playerLocation(MAPICON::TYPE type) { _location = type; }
 };
 #define PLAYER	Player::get_singleton()

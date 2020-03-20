@@ -104,6 +104,12 @@ void HudMapScene::update_map_icons()
 			_bus_wnd->set_fOpenBus(true);
 			(*iter)->set_fOpenBus(false);
 		}
+		// 공사장 윈도우 열때 쓰고 있다.
+		if ((*iter)->is_openWindow())
+		{
+			_build_wnd->set_openWindow(true);
+			(*iter)->set_fOpenWindow(false);
+		}
 	}
 	_player->update();
 }
@@ -168,22 +174,33 @@ void HudMapScene::release()
 }
 void HudMapScene::update()
 {
+	update_scene();
+	
 	if (_bus_wnd->is_openBus() == true) 
 	{
 		_bus_wnd->update();
-		if (_bus_wnd->is_openBuild() == true)
+
+		// 윈도우의 버튼을 클릭했을 때
+		if (_bus_wnd->is_clickButton() == true)
 		{
-			_build_wnd->set_openWindow(true);
-		}
-		else if (_bus_wnd->is_openShop() == true)
-		{
-			_scene_forChange = SCENE_SHOP;
-			_fClick = false;
-		}
-		else if (_bus_wnd->is_openGym() == true)
-		{
-			_scene_forChange = SCENE_GYM;
-			_fClick = false;
+			switch (PLAYER->get_playerLocation())
+			{
+			case MAPICON::ICN_HOME:
+				_scene_forChange = SCENE_HOME;
+				break;
+			case MAPICON::ICN_BUILD:
+				_build_wnd->set_openWindow(true);
+				break;
+			case MAPICON::ICN_SHOP:
+				_scene_forChange = SCENE_SHOP;
+				_fClick = false;
+				break;
+			case MAPICON::ICN_GYM:
+				_scene_forChange = SCENE_GYM;
+				_fClick = false;
+				break;
+			}
+			_bus_wnd->set_fClickButton(false);
 		}
 	}
 	else if (_build_wnd->is_openWindow() == true)
@@ -192,7 +209,6 @@ void HudMapScene::update()
 	}
 	else
 	{
-		update_scene();
 		close_windowsAll();
 		update_map_icons();
 		update_player_pos();

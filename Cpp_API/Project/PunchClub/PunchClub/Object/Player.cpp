@@ -98,17 +98,17 @@ void Player::delete_player()
 // ========================================
 void Player::sleep_toSofa()
 {
-	_health += 0.5f;
-	_food -= 3.0f;
-	_energy += 1.0f;
-	_mood += 0.2f;
+	_stat.health += 0.05f;
+	_stat.food -= 0.3f;
+	_stat.energy += 0.1f;
+	_stat.mood += 0.02f;
 }
 void Player::watch_tv()
 {
-	_health -= 0.2f;
-	_food -= 1.0f;
-	_energy += 1.0f;
-	_mood += 3.0f;
+	_stat.health -= 0.1f;
+	_stat.food -= 0.1f;
+	_stat.energy += 0.1f;
+	_stat.mood += 0.3f;
 }
 
 HRESULT Player::init()

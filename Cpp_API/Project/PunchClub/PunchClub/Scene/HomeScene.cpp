@@ -15,7 +15,7 @@ void HomeScene::update_objectSelected()
 	}
 	else { _fFriger = false; }
 	// 소파
-	if (PtInRect(&_sofa_rc, m_ptMouse) && _fClickLock == false)
+	if (PtInRect(&_sofa_rc, m_ptMouse))
 	{
 		_fSofa = true;
 		if (_fClick == true && _fSleep == false) { _fSleep = true; }
@@ -23,7 +23,7 @@ void HomeScene::update_objectSelected()
 	else { _fSofa = false; }
 	
 	// TV
-	if (PtInRect(&_tv_rc, m_ptMouse) && _fClickLock == false)
+	if (PtInRect(&_tv_rc, m_ptMouse))
 	{
 		_fTv = true;
 		if (_fClick == true && _fWatch == false) { _fWatch = true; }
@@ -67,14 +67,9 @@ void HomeScene::init_furniture()
 	path = _imgPath + "Kitchen_table.bmp";
 	_kitchenTable = new Image;
 	_kitchenTable->init(path.c_str(), (int)(142 * GAME_MULTIPLE), (int)(216 * GAME_MULTIPLE));
-	_kitchenTable_center.x =
-		(LONG)(WIN_HALF_W - _kitchenTable->get_width() * 0.57);
-	_kitchenTable_center.y = 
-		(LONG)(WIN_HALF_H - _kitchenTable->get_width() * 0.1);
-	_kitchenTable_rc = RectMakeCenter(
-		(int)(_kitchenTable_center.x),
-		(int)(_kitchenTable_center.y),
-		_kitchenTable->get_width(), _kitchenTable->get_height());
+	center.x = (LONG)(WIN_HALF_W - _kitchenTable->get_width() * 0.57);
+	center.y = (LONG)(WIN_HALF_H - _kitchenTable->get_width() * 0.1);
+	_kitchenTable->set_center(center);
 	// ============================
 	// ***		냉장고			***
 	// ============================
@@ -82,9 +77,9 @@ void HomeScene::init_furniture()
 	_friger = new Image;
 	_friger->init(path.c_str(), (int)(48 * GAME_MULTIPLE), (int)(87 * GAME_MULTIPLE));
 	// 초기 위치
-	_friger_center.x = (LONG)(_kitchenTable_center.x -
+	_friger_center.x = (LONG)(_kitchenTable->get_center().x -
 		_friger->get_width() * 0.86);
-	_friger_center.y = (LONG)(_kitchenTable_center.y +
+	_friger_center.y = (LONG)(_kitchenTable->get_center().y +
 		_friger->get_width() * 0.1);
 	_friger_rc = RectMakeCenter(
 		_friger_center.x, _friger_center.y,
@@ -101,7 +96,7 @@ void HomeScene::init_furniture()
 	_stand->init(path.c_str(), (int)(31 * GAME_MULTIPLE), (int)(78 * GAME_MULTIPLE));
 	// 초기 위치
 	_stand_center.x = (LONG)(WIN_HALF_W - _stand->get_width() * 0.015);
-	_stand_center.y = (LONG)(_kitchenTable_center.y - _stand->get_width() * 0.1);
+	_stand_center.y = (LONG)(_kitchenTable->get_center().y - _stand->get_width() * 0.1);
 	_stand_rc = RectMakeCenter(_stand_center.x, _stand_center.y,
 		_stand->get_width(), _stand->get_height());
 	// ============================
@@ -135,7 +130,7 @@ void HomeScene::init_furniture()
 	_aquarium = new Image;
 	_aquarium->init(path.c_str(), (int)(230 * GAME_MULTIPLE), (int)(78 * GAME_MULTIPLE), 5, 1);
 	_aquarium_pos.x = (LONG)(_sofa_rc.right - _aquarium->get_frameWidth() * 0.25);
-	_aquarium_pos.y = (LONG)(_kitchenTable_center.y - _aquarium->get_frameWidth() * 0.35);
+	_aquarium_pos.y = (LONG)(_kitchenTable->get_center().y - _aquarium->get_frameWidth() * 0.35);
 	_aquarium_rc = RectMake(_aquarium_pos.x, _aquarium_pos.y,
 		_aquarium->get_frameWidth(), _aquarium->get_frameHeight());
 	center.x = (LONG)((_aquarium_rc.left + _aquarium_rc.right) * 0.5);
@@ -181,9 +176,8 @@ void HomeScene::init_furniture()
 	_fan = new Image;
 	_fan->init(path.c_str(), (int)(183 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 3, 1);
 	center.x = (LONG)((_sofa_rc.left + _sofa_rc.right) * 0.5);
-	center.y = (LONG)(_kitchenTable_center.y - _fan->get_frameHeight() * 0.92);
-	_fan_center = center;
-	_fan_rc = RectMakeCenter(center.x, center.y, _fan->get_frameWidth(), _fan->get_frameHeight());
+	center.y = (LONG)(_kitchenTable->get_center().y - _fan->get_frameHeight() * 0.92);
+	_fan->set_center(center);
 	_fan->set_frameSection(1, 2, 0, 0.09f);
 	// ============================
 	// ***		테이블			***
@@ -239,8 +233,6 @@ void HomeScene::draw_furniture()
 	else { _friger->render(get_memDC(), _friger_rc.left, _friger_rc.top); }
 	_stand->render(get_memDC(), _stand_rc.left, _stand_rc.top);
 	_phone->render(get_memDC(), _phone_rc.left, _phone_rc.top);
-	_kitchenTable->render(get_memDC(), _kitchenTable_rc.left,
-		_kitchenTable_rc.top);
 	_aquarium->frameRender(get_memDC(), _aquarium_rc.left, _aquarium_rc.top);
 	_aquarium_fg->render(get_memDC(), _aquarium_fg_rc.left, _aquarium_fg_rc.top);
 	// 소파 렌더
@@ -277,7 +269,6 @@ void HomeScene::draw_furniture()
 			_tv_watch->frameRender(get_memDC(), _tv_watch_rc.left, _tv_watch_rc.top);
 		}
 	}
-	_fan->frameRender(get_memDC(), _fan_rc.left, _fan_rc.top);
 	_table->render(get_memDC(), _table_rc.left, _table_rc.top);
 	_bookshelf->render(get_memDC(), _bookshelf_rc.left, _bookshelf_rc.top);
 	_clock->frameRender(get_memDC(), _clock_rc.left, _clock_rc.top);
@@ -311,14 +302,14 @@ void HomeScene::delete_furniture()
 }
 void HomeScene::draw_rects()
 {
-	ColorRect(get_memDC(), _kitchenTable_rc, RGB(83, 91, 90));
+	ColorRect(get_memDC(), _kitchenTable->get_rect(), RGB(83, 91, 90));
 	ColorRect(get_memDC(), _friger_rc, RGB(193, 215, 222));
 	ColorRect(get_memDC(), _stand_rc, RGB(255, 245, 112));
 	ColorRect(get_memDC(), _aquarium_rc, RGB(205, 229, 214));
 	ColorRect(get_memDC(), _aquarium_fg_rc, RGB(71, 72, 73));
 	ColorRect(get_memDC(), _sofa_rc, RGB(170, 114, 97));
 	ColorRect(get_memDC(), _tv_rc, RGB(149, 113, 73));
-	ColorRect(get_memDC(), _fan_rc, RGB(119, 128, 126));
+	ColorRect(get_memDC(), _fan->get_rect(), RGB(119, 128, 126));
 	ColorRect(get_memDC(), _table_rc, RGB(145, 108, 70));
 	ColorRect(get_memDC(), _bookshelf_rc, RGB(180, 146, 104));
 	ColorRect(get_memDC(), _clock_rc, RGB(116, 46, 25));
@@ -328,10 +319,19 @@ HRESULT HomeScene::init()
 {
 	add_currentScene_toList(SCENE_HOME);
 	set_imgPath("Home/");
-	string path = _imgPath + "Kitchen_bg.bmp";
+	POINT center;
+	string path;
+	// Background
 	_bg = new Image;
-	_bg->init(path.c_str(), (int)(682 * GAME_MULTIPLE),
-		(int)(383 * GAME_MULTIPLE));
+	path = _imgPath + "Kitchen_bg.bmp";
+	_bg->init(path.c_str(), (int)(682 * GAME_MULTIPLE), (int)(383 * GAME_MULTIPLE));
+	// Ceil
+	_ceil = new Image;
+	path = _imgPath + "home_ceil.bmp";
+	_ceil->init(path.c_str(), (int)(456 * GAME_MULTIPLE), (int)(78 * GAME_MULTIPLE));
+	center.x = (LONG)(WIN_HALF_W);
+	center.y = (LONG)(0 + _ceil->get_height() * 0.5);
+	_ceil->set_center(center);
 	// 배치할 가구 초기화
 	init_furniture();
 	// Player
@@ -344,6 +344,7 @@ HRESULT HomeScene::init()
 void HomeScene::release()
 {
 	Release(_bg);
+	Release(_ceil);
 	delete_furniture();
 }
 void HomeScene::update()
@@ -369,7 +370,11 @@ void HomeScene::update()
 }
 void HomeScene::render()
 {
-	_bg->render(get_memDC());
+	Draw(_bg, get_memDC());
+	// 천장보다 뒤에 있는 오브젝트
+	Draw(_kitchenTable, get_memDC());
+	_fan->frameRender(get_memDC());
+	Draw(_ceil, get_memDC());
 	draw_furniture();
 	if(_fSleep == true) {}
 	else if(_fWatch == true) {}

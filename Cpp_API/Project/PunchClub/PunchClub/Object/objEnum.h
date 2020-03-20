@@ -35,3 +35,17 @@ namespace NPC
 		NPC_SHOP
 	};
 }
+struct PlayerStat
+{
+	double health = 800;
+	double food = 600;
+	double energy = 600;
+	double mood = 600;
+	// Stat for fight
+	double str = 1250;
+	double agl = 1250;
+	double stm = 1250;
+	// SP & Money
+	int skillPoint = 3;
+	int money = 35;
+};

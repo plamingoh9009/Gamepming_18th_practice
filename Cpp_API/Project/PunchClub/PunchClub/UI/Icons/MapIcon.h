@@ -4,13 +4,15 @@ class MapIcon: public UI
 {
 private:
 	MAPICON::TYPE _type = MAPICON::ICN_EMPTY;
+	SCENE_TYPE _sceneType = SCENE_EMPTY;
 	Image * _icon_off;
 	Image * _icon_on;
 	// Hint 변수
 	Hint * _hint;
 	// 건물 아이콘에 사용할 변수
-	bool _fIcon = false;
+	bool _fIcon = false;	// 아이콘 On, Off에 사용하는 변수
 	bool _fOpenBus = false;
+	bool _fOpenWindow = false;
 protected:
 	// Player Icon
 	void update_playerIcon();
@@ -43,4 +45,6 @@ public:
 	// 버스 윈도우 컨트롤
 	bool get_fOpenBus() { return _fOpenBus; }
 	void set_fOpenBus(bool fResult) { _fOpenBus = fResult; }
+	bool is_openWindow() { return _fOpenWindow; }
+	void set_fOpenWindow(bool fResult) { _fOpenWindow = fResult; }
 };

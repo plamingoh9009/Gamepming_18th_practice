@@ -55,6 +55,9 @@
     <Filter Include="I_Object\type">
       <UniqueIdentifier>{4e81356f-146b-405c-b320-85e8a044b6dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="I_UI\type\Gauges">
+      <UniqueIdentifier>{18bb7513-a700-4933-a511-2a66e6024788}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -135,9 +138,6 @@
     <ClInclude Include="UI\InGameUI.h">
       <Filter>I_UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI\HudBack.h">
-      <Filter>I_UI\type</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\HudMapScene.h">
       <Filter>I_Scene\type</Filter>
     </ClInclude>
@@ -196,10 +196,13 @@
       <Filter>I_Object\Unit</Filter>
     </ClInclude>
     <ClInclude Include="UI\FightGauge.h">
-      <Filter>I_UI\type</Filter>
+      <Filter>I_UI\type\Gauges</Filter>
     </ClInclude>
     <ClInclude Include="UI\Gauge.h">
-      <Filter>I_UI\type</Filter>
+      <Filter>I_UI\type\Gauges</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\HudBack.h">
+      <Filter>I_UI\type\Gauges</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,9 +269,6 @@
     <ClCompile Include="UI\InGameUI.cpp">
       <Filter>I_UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI\HudBack.cpp">
-      <Filter>I_UI\type</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\HudMapScene.cpp">
       <Filter>I_Scene\type</Filter>
     </ClCompile>
@@ -321,10 +321,13 @@
       <Filter>I_Object\Unit</Filter>
     </ClCompile>
     <ClCompile Include="UI\FightGauge.cpp">
-      <Filter>I_UI\type</Filter>
+      <Filter>I_UI\type\Gauges</Filter>
     </ClCompile>
     <ClCompile Include="UI\Gauge.cpp">
-      <Filter>I_UI\type</Filter>
+      <Filter>I_UI\type\Gauges</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\HudBack.cpp">
+      <Filter>I_UI\type\Gauges</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

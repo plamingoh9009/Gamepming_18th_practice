@@ -72,10 +72,8 @@ private:
 	// 상점 슬롯
 	Slots _slots;
 	// 버스 윈도우에서 사용할 bool 변수
-	bool _fOpenBuild = false;
 	bool _fOpenBus = false;
-	bool _fOpenShop = false;
-	bool _fOpenGym = false;
+	bool _fClickButton = false;
 protected:
 	HRESULT init_window_bg(WINDOW::TYPE type);
 	void delete_window_bg();
@@ -123,13 +121,9 @@ public:
 	bool is_closeWindow() { return _fClose; }
 	bool is_openWindow() { return _fOpen; }
 	void set_openWindow(bool fResult) { _fOpen = fResult; }
-	bool is_openBuild() { return _fOpenBuild; }
-	void set_fOpenBuild(bool fResult) { _fOpenBuild = fResult; }
-	bool is_openShop() { return _fOpenShop; }
-	void set_fOpenShop(bool fResult) { _fOpenShop = fResult; }
-	bool is_openGym() { return _fOpenGym; }
-	void set_fOpenGym(bool fResult) { _fOpenGym = fResult; }
 	bool is_openBus() { return _fOpenBus; }
 	void set_fOpenBus(bool fResult) { _fOpenBus = fResult; }
+	bool is_clickButton() { return _fClickButton; }
+	void set_fClickButton(bool fResult) { _fClickButton = fResult; }
 };
 

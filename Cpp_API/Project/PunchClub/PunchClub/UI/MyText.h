@@ -37,5 +37,6 @@ public:
 	void set_maxChars(int maxChars);
 	vector<string> get_texts() { return _texts; }
 	string get_text() { return _text; }
+	void set_text(string str) { _text = str; }
 };
 

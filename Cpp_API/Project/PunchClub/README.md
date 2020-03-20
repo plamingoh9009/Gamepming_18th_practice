@@ -1,8 +1,8 @@
 # PunchClub Copy Project
-# Ver. 1.8.5
+# Ver. 1.9.1
 - 수정내용: 
-    - 상점 슬롯 1차 OK
-    - 공사장 게이지 하는 중..
+    - hud back 게이지 1군데 OK
+    - Stat 게이지 손보는 중..
     - 원작 해상도: 1366 x 768(16:9)
 - 개발환경
  - OS:              Windows10

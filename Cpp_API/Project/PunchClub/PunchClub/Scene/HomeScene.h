@@ -4,11 +4,10 @@ class HomeScene: public Scene
 {
 private:
 	Image * _bg;
+	Image * _ceil;
 	// 가구, 가전용 변수
 	// 요리하는 곳
 	Image * _kitchenTable;
-	RECT _kitchenTable_rc;
-	POINT _kitchenTable_center;
 	// 냉장고
 	Image * _friger;
 	RECT _friger_rc;
@@ -43,8 +42,6 @@ private:
 	RECT _tv_watch_rc;
 	// 천장 선풍기
 	Image * _fan;
-	RECT _fan_rc;
-	POINT _fan_center;
 	// 식탁
 	Image * _table;
 	RECT _table_rc;

@@ -13,6 +13,9 @@ private:
 	bool _fText = false;
 	// 윈도우 닫기
 	bool _fCloseWindow = false;
+	// 버튼 눌렀는지
+	bool _fClickButton = false;
+	bool _fToggleButton = false;
 protected:
 	HRESULT init_red_button();
 	// long red
@@ -35,6 +38,8 @@ protected:
 	void update_green_inven();
 	// Text
 	void draw_text_toButton();
+	// Is Click?
+	void check_click_button();
 public:
 	virtual HRESULT init();
 	virtual void release();
@@ -53,6 +58,9 @@ public:
 	void set_icon_toButton(BUTTON::ICON type, POINT center);
 	void set_center(POINT center);
 	void set_pos_toRT_edge(RECT rc);
+	void set_fClickButton(bool fResult) { _fClickButton = fResult; }
 	bool is_closeWindow() { return _fCloseWindow; }
+	bool is_clickButton() { return _fClickButton; }
+	bool is_toggleButton() { return _fToggleButton; }
 };
 

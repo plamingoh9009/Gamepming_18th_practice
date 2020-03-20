@@ -11,8 +11,6 @@ void Icon::init_icons()
 	path = _imgPath + "Hud_btn_main_bg.bmp";
 	_bg->init(path.c_str(), (int)(41 * GAME_MULTIPLE), (int)(41 * GAME_MULTIPLE));
 	_fg = new Image;
-	_hint = new Hint;
-	_hint->init();
 	switch (_type)
 	{
 	case ICON::ICN_HUD_MAP:
@@ -20,6 +18,9 @@ void Icon::init_icons()
 		_fg->init(path.c_str(), (int)(35 * GAME_MULTIPLE), (int)(33 * GAME_MULTIPLE));
 		title = "시내 지도";
 		descr = "클릭하면 시내 지도를 열어, 다른 장소로 이동할 수 있습니다.";
+		// Hint
+		_hint = new Hint;
+		_hint->init();
 		_hint->set_texts(title, descr);
 		break;
 	case ICON::ICN_LEAGUE:
@@ -27,6 +28,9 @@ void Icon::init_icons()
 		_fg->init(path.c_str(), (int)(26 * GAME_MULTIPLE), (int)(29 * GAME_MULTIPLE));
 		title = "파이트 리그";
 		descr = "리그, 대전 상태, 다음 시합에 관한 정보를 볼 수 있습니다.";
+		// Hint
+		_hint = new Hint;
+		_hint->init();
 		_hint->set_texts(title, descr);
 		break;
 	case ICON::ICN_SKILLTREE:
@@ -34,6 +38,9 @@ void Icon::init_icons()
 		_fg->init(path.c_str(), (int)(37 * GAME_MULTIPLE), (int)(37 * GAME_MULTIPLE));
 		title = "스킬 트리";
 		descr = "스킬 목록을 열어 새로운 기술을 구입하려면, 이곳을 클릭하세요.";
+		// Hint
+		_hint = new Hint;
+		_hint->init();
 		_hint->set_texts(title, descr);
 		break;
 	case ICON::ICN_ENERGY:
@@ -50,18 +57,39 @@ void Icon::init_icons()
 		break;
 	case ICON::ICN_HEALTH:
 		path = _imgPath + "Health_icon.bmp";
-		_fg->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(13 * GAME_MULTIPLE));
+		_bg->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(13 * GAME_MULTIPLE));
+		break;
+	case ICON::ICN_STR:
+		path = _imgPath + "icon_str.bmp";
+		_fg->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+		_fFgOnly = true;
+		break;
+	case ICON::ICN_AGL:
+		path = _imgPath + "icon_agl.bmp";
+		_fg->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+		_fFgOnly = true;
+		break;
+	case ICON::ICN_STM:
+		path = _imgPath + "icon_stm.bmp";
+		_fg->init(path.c_str(), (int)(20 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
+		_fFgOnly = true;
 		break;
 	}
 }
 void Icon::draw_icons()
 {
-	Draw(_bg, get_memDC());
-	Draw(_fg, get_memDC());
-	if (_fDebug)
+	if (_fFgOnly == false)
 	{
-		ColorRect(get_memDC(), _bg->get_rect());
+		Draw(_bg, get_memDC());
+		if (_bg != nullptr)
+		{
+			if (_fDebug)
+			{
+				ColorRect(get_memDC(), _bg->get_rect());
+			}
+		}
 	}
+	Draw(_fg, get_memDC());
 }
 void Icon::delete_icons()
 {
@@ -75,7 +103,7 @@ void Icon::draw_hint()
 
 HRESULT Icon::init()
 {
-	set_imgPath("UI/");
+	set_imgPath("UI/Icon/");
 	init_icons();
 	return S_OK;
 }
@@ -121,6 +149,10 @@ void Icon::update()
 void Icon::render()
 {
 	draw_icons();
+	if (_fIconText == true)
+	{
+		_icon_txt.render(get_memDC());
+	}
 }
 Icon::Icon(ICON::TYPE type)
 {
@@ -146,20 +178,54 @@ void Icon::set_center(POINT center)
 	}
 }
 
+int Icon::get_width()
+{
+	if (_fFgOnly == true)
+	{
+		return _fg->get_width();
+	}
+	else
+	{
+		return _bg->get_width();
+	}
+}
+int Icon::get_height()
+{
+	if (_fFgOnly == true)
+	{
+		return _fg->get_height();
+	}
+	else
+	{
+		return _bg->get_height();
+	}
+}
+POINT Icon::get_center()
+{
+	if (_fFgOnly == true)
+	{
+		return _fg->get_center();
+	}
+	else
+	{
+		return _bg->get_center();
+	}
+}
+
 void Icon::set_text_toIcon(string str, int size, COLORREF color)
 {
 	POINT pos;
 	switch (_type)
 	{
-	case ICON::ICN_ENERGY:
-	case ICON::ICN_FEEL:
-	case ICON::ICN_FOOD:
-	case ICON::ICN_HEALTH:
-		_icon_txt = MyText(MYTEXT::TXT_DESCR, str, RGB(254, 254, 254));
-		pos.x = (LONG)(_fg->get_rect().right);
-		pos.y = (LONG)(_fg->get_rect().top);
+	case ICON::ICN_STR:
+	case ICON::ICN_AGL:
+	case ICON::ICN_STM:
+		_icon_txt = MyText(MYTEXT::TXT_TITLE, str, RGB(254, 254, 254));
+		pos.x = (LONG)(_fg->get_rect().right + 10);
+		pos.y = (LONG)(_fg->get_rect().top + 8);
 		_icon_txt.set_pos(pos);
-		_icon_txt.set_size(size);
+		_icon_txt.set_size(30);
+		_fIconText = true;
 		break;
 	}
 }

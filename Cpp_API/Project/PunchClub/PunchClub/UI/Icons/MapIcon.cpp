@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "MapIcon.h"
-
+#include "Object/Player.h"
 void MapIcon::update_playerIcon()
 {
 	if (_fplayerIcon_move == true)
 	{
-		_playerIcon_location = _mapIcon_on;
+		_playerIcon_location = PLAYER->get_playerLocation();
 		_fplayerIcon_move = false;
 	}
 }
@@ -40,6 +40,7 @@ HRESULT MapIcon::init_icon()
 		center.y = (LONG)(WIN_HALF_H + WIN_HALF_H * 0.42);
 		_icon_off->set_center(center);
 		_icon_on->set_center(center);
+		_sceneType = SCENE_HOME;
 		break;
 	case MAPICON::ICN_SHOP:
 		path = _imgPath + "Hud_shop.bmp";
@@ -50,6 +51,7 @@ HRESULT MapIcon::init_icon()
 		center.y = (LONG)(WIN_HALF_H + _icon_off->get_height() * 0.25);
 		_icon_off->set_center(center);
 		_icon_on->set_center(center);
+		_sceneType = SCENE_SHOP;
 		break;
 	case MAPICON::ICN_GYM:
 		path = _imgPath + "Hud_gym.bmp";
@@ -60,6 +62,7 @@ HRESULT MapIcon::init_icon()
 		center.y = (LONG)(WIN_HALF_H - _icon_off->get_height() * 0.3);
 		_icon_off->set_center(center);
 		_icon_on->set_center(center);
+		_sceneType = SCENE_GYM;
 		break;
 	case MAPICON::ICN_BUILD:
 		path = _imgPath + "Hud_build.bmp";
@@ -70,12 +73,12 @@ HRESULT MapIcon::init_icon()
 		center.y = (LONG)(WIN_HALF_H - _icon_off->get_height() * 2);
 		_icon_off->set_center(center);
 		_icon_on->set_center(center);
+		_sceneType = SCENE_BUILD;
 		break;
 	case MAPICON::ICN_PLAYER:
 		path = _imgPath + "Map_player.bmp";
 		_icon_off->init(path.c_str(), (int)(30 * GAME_MULTIPLE), (int)(40 * GAME_MULTIPLE));
 		_icon_on = nullptr;
-		_playerIcon_location = MAPICON::ICN_HOME;
 		break;
 	default:
 		break;
@@ -153,13 +156,14 @@ void MapIcon::update_icon()
 		{
 			if (is_player_atHere() == true)
 			{
-				_mapIcon_on = MAPICON::ICN_EMPTY;
-				_scene_forChange = SCENE_BACK;
+				_scene_forChange = _sceneType;
 				_fClick = false;
+				// 공사장 윈도우 열 때 쓰고 있다.
+				_fOpenWindow = true;
 			}
 			else
 			{
-				_mapIcon_on = _type;
+				PLAYER->set_playerLocation(_type);
 				_fOpenBus = true;
 			}
 		}//if: 클릭하면 플레이어의 위치 업데이트, 플레이어가 여기 있으면 업데이트 X

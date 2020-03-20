@@ -272,8 +272,8 @@ public:
 	inline POINT get_center()
 	{
 		POINT center;
-		center.x = (LONG)((_imageInfo->rc->left + _imageInfo->rc->right) * 0.5);
-		center.y = (LONG)((_imageInfo->rc->top + _imageInfo->rc->bottom) * 0.5);
+		center.x = (LONG)(_imageInfo->rc->left + (_imageInfo->rc->right - _imageInfo->rc->left) * 0.5);
+		center.y = (LONG)(_imageInfo->rc->top + (_imageInfo->rc->bottom - _imageInfo->rc->top) * 0.5);
 		return center;
 	}
 	//가로,세로크기 얻기

@@ -116,6 +116,18 @@ void Button::draw_text_toButton()
 	_text.render(get_memDC());
 }
 
+void Button::check_click_button()
+{
+	if (_button != nullptr)
+	{
+		if (PtInRect(&_button->get_rect(), m_ptMouse))
+		{
+			_fClickButton = true;
+			_fToggleButton = !_fToggleButton;
+		}
+	}
+}
+
 HRESULT Button::init()
 {
 	set_imgPath("UI/Button/");
@@ -134,6 +146,7 @@ HRESULT Button::init()
 		init_long_green_button();
 		break;
 	case BUTTON::BTN_BUS_GREEN:
+	case BUTTON::BTN_WORK_GREEN:
 		init_bus_green_button();
 		break;
 	case BUTTON::BTN_GREEN:
@@ -166,6 +179,15 @@ void Button::update()
 	case BUTTON::BTN_BUS_GREEN:
 		update_bus_green_button();
 		break;
+	}
+
+	if (_fClick == true)
+	{
+		check_click_button();
+	}
+	else
+	{
+		_fClickButton = false;
 	}
 }
 void Button::render()

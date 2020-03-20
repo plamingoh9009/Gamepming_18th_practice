@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Window.h"
-
+#include "Object/Player.h"
 HRESULT Window::init_window_bg(WINDOW::TYPE type)
 {
 	_type = type;
@@ -11,9 +11,9 @@ HRESULT Window::init_window_bg(WINDOW::TYPE type)
 	switch (type)
 	{
 	case WINDOW::WND_NONE:
-	case WINDOW::WND_SHOP :
-	case WINDOW::WND_FRIGER :
-	case WINDOW::WND_LEAGUE :
+	case WINDOW::WND_SHOP:
+	case WINDOW::WND_FRIGER:
+	case WINDOW::WND_LEAGUE:
 		// Background Image
 		path = _imgPath + "Window_back.bmp";
 		_bg = new Image;
@@ -37,7 +37,7 @@ HRESULT Window::init_window_bg(WINDOW::TYPE type)
 		pos.y = (LONG)(_bg->getY() + _bg->get_height() * 0.2 + 4);
 		_locked_back->set_pos(pos);
 		break;
-	case WINDOW::WND_BUS  :
+	case WINDOW::WND_BUS:
 		set_imgPath("UI/Window/Bus/");
 		// Background Image
 		path = _imgPath + "bus_window_back.bmp";
@@ -86,20 +86,20 @@ void Window::init_inventory()
 	_fg = new Image;
 	switch (_type)
 	{
-	case WINDOW::WND_FRIGER :
+	case WINDOW::WND_FRIGER:
 		path = _imgPath + "Hdr_friger.bmp";
 		_fg->init(path.c_str(), (int)(79 * GAME_MULTIPLE), (int)(40 * GAME_MULTIPLE));
 		// 글씨
 		_fg_title = MyText(MYTEXT::TXT_TITLE, "냉장고", RGB(254, 254, 254));
-		_fg_descr = MyText(MYTEXT::TXT_DESCR, 
+		_fg_descr = MyText(MYTEXT::TXT_DESCR,
 			"당신이 산 식료품이 보관됩니다. 식료품을 슈퍼에서 구입할 수 있습니다.", RGB(58, 47, 24));
 		break;
-	case WINDOW::WND_SHOP :
+	case WINDOW::WND_SHOP:
 		path = _imgPath + "Hdr_shop.bmp";
 		_fg->init(path.c_str(), (int)(89 * GAME_MULTIPLE), (int)(47 * GAME_MULTIPLE));
 		// 글씨
 		_fg_title = MyText(MYTEXT::TXT_TITLE, "슈퍼", RGB(254, 254, 254));
-		_fg_descr = MyText(MYTEXT::TXT_DESCR, 
+		_fg_descr = MyText(MYTEXT::TXT_DESCR,
 			"식료품 및 에너지 드링크를 구입할 수 있습니다.", RGB(58, 47, 24));
 		break;
 	}
@@ -211,7 +211,6 @@ void Window::update_league()
 	if (PtInRect(&_league_slot[0].btn_show_rc, m_ptMouse))
 	{
 		_fClose = true;
-		_fClickLock = false;
 		_scene_forChange = SCENE_LEAGUE_WAIT;
 	}
 }
@@ -402,7 +401,7 @@ HRESULT Window::init_bus_fg()
 	// Result for Return
 	HRESULT result;
 	int result_cnt = 0;
-	
+
 	// Bus Window
 	_inside = new Image;
 	path = _imgPath + "bus_inside.bmp";
@@ -436,7 +435,7 @@ HRESULT Window::init_bus_fg()
 	pos.x = (LONG)(_bg->get_center().x - 5);
 	pos.y = (LONG)(_inside->get_rect().bottom + 15);
 	_fg_descr.set_pos(pos);
-	_bus_distance_str = MyText(MYTEXT::TXT_DESCR, 
+	_bus_distance_str = MyText(MYTEXT::TXT_DESCR,
 		map_bus_distance("이동 거리: ", _bus_distance), RGB(30, 83, 103));
 	pos.x = (LONG)(pos.x - 60);
 	pos.y = (LONG)(pos.y + 30);
@@ -506,18 +505,7 @@ void Window::update_bus()
 		_btn_walk->is_closeWindow() == true)
 	{
 		close_window();
-		if (_mapIcon_on == MAPICON::ICN_BUILD)
-		{
-			_fOpenBuild = true;
-		}//if: Open Build Window
-		else if (_mapIcon_on == MAPICON::ICN_SHOP)
-		{
-			_fOpenShop = true;
-		}
-		else if (_mapIcon_on == MAPICON::ICN_GYM)
-		{
-			_fOpenGym = true;
-		}
+		_fClickButton = true;
 	}
 }
 string Window::map_bus_distance(string bus_str, int bus_dist)
@@ -579,7 +567,7 @@ HRESULT Window::init_build_fg()
 	_fg_descr.set_pos(pos);
 
 	// Start Green Button
-	_btn_build = new Button(BUTTON::BTN_BUS_GREEN);
+	_btn_build = new Button(BUTTON::BTN_WORK_GREEN);
 	_btn_build->init();
 	center.x = (LONG)(_bg->get_center().x);
 	center.y = (LONG)(_bg->get_rect().bottom - _btn_build->get_height() * 0.75);
@@ -629,8 +617,23 @@ void Window::delete_build()
 }
 void Window::update_build()
 {
+	// 버튼 업데이트
+	_btn_build->update();
+
 	// 게이지 업데이트
 	_gauge->update();
+	// 여기서 시작 버튼을 눌렀는지 여부를 게이지에 넘겨준다.
+	if (_btn_build->is_toggleButton() == true)
+	{
+		_gauge->start();
+		_btn_build->set_text_toButton("중지");
+	}
+	else
+	{
+		_gauge->pause();
+		_btn_build->set_text_toButton("시작");
+	}
+
 	// 프레임 업데이트
 	_work_jhammer->frameUpdate(false);
 	_work_dust->frameUpdate(false);
@@ -690,8 +693,6 @@ void Window::close_window()
 	_fClose = true;
 	_fOpen = false;
 	_fOpenBus = false;
-	_fOpenBuild = false;
-	_fClickLock = false;
 }
 
 HRESULT Window::init(WINDOW::TYPE type)
@@ -703,20 +704,20 @@ HRESULT Window::init(WINDOW::TYPE type)
 	// Foreground Image 초기화
 	switch (type)
 	{
-	case WINDOW::WND_FRIGER :
+	case WINDOW::WND_FRIGER:
 		init_inventory();
 		break;
-	case WINDOW::WND_SHOP :
+	case WINDOW::WND_SHOP:
 		init_inventory();
 		init_slots();
 		break;
-	case WINDOW::WND_LEAGUE :
+	case WINDOW::WND_LEAGUE:
 		init_league();
 		break;
-	case WINDOW::WND_BUS  :
+	case WINDOW::WND_BUS:
 		init_bus_fg();
 		break;
-	case WINDOW::WND_BUILD :
+	case WINDOW::WND_BUILD:
 		init_build_fg();
 		break;
 	}
@@ -728,19 +729,19 @@ void Window::release()
 	delete_window_bg();
 	switch (_type)
 	{
-	case WINDOW::WND_FRIGER :
+	case WINDOW::WND_FRIGER:
 		delete_inventory();
 		break;
-	case WINDOW::WND_SHOP :
+	case WINDOW::WND_SHOP:
 		delete_inventory();
 		break;
-	case WINDOW::WND_LEAGUE :
+	case WINDOW::WND_LEAGUE:
 		delete_league();
 		break;
-	case WINDOW::WND_BUS  :
+	case WINDOW::WND_BUS:
 		delete_bus();
 		break;
-	case WINDOW::WND_BUILD :
+	case WINDOW::WND_BUILD:
 		delete_build();
 		break;
 	}
@@ -756,7 +757,7 @@ void Window::update()
 	default:
 		break;
 	}//switch: 언제나 업데이트 되어야 하는 것
-	if (KEYMANAGER->is_onceKeyDown(VK_LBUTTON))
+	if (_fClick == true)
 	{
 		if (PtInRect(&_red_button->get_rc(), m_ptMouse))
 		{
@@ -773,30 +774,25 @@ void Window::update()
 			break;
 		}//switch: 클릭했을 때 update 되어야 함
 	}//if: 클릭 했을 때 인벤토리를 닫는다.
-	else
-	{
-		// 윈도우가 열린 동안 윈도우 밖은 클릭할 수 없다.
-		_fClickLock = true;
-	}
 }
 void Window::render()
 {
 	draw_window_bg();
 	switch (_type)
 	{
-	case WINDOW::WND_FRIGER :
+	case WINDOW::WND_FRIGER:
 		draw_inventory();
 		break;
-	case WINDOW::WND_SHOP :
+	case WINDOW::WND_SHOP:
 		draw_inventory();
 		break;
-	case WINDOW::WND_LEAGUE :
+	case WINDOW::WND_LEAGUE:
 		draw_league();
 		break;
-	case WINDOW::WND_BUS :
+	case WINDOW::WND_BUS:
 		draw_bus();
 		break;
-	case WINDOW::WND_BUILD :
+	case WINDOW::WND_BUILD:
 		draw_build();
 		break;
 	}

@@ -1,10 +1,56 @@
 #include "stdafx.h"
 #include "Gauge.h"
-
-void Gauge::change_width()
+#include "Object/Player.h"
+void Gauge::run_gauge()
 {
-	double temp = (double)(_currentGauge / _maxGauge * _fg->get_width());
-	_currentWidth = (int)(temp);
+	// 일정 시간을 주고, 게이지를 올린다.
+	_time += TIMEMANAGER->get_elapsedTime();
+	if (1.0f <= _time)
+	{
+		if (_currentGauge < _maxGauge)
+		{
+			_currentGauge += _gaugeSpeed;
+		}
+		// 게이지 value로 width 값을 정의한다.
+		sync_gauge_fromValue();
+
+		_time = 0;	// 시간을 초기화
+	}
+
+	if (_currentGauge == _maxGauge)
+	{
+		_currentGauge = 0;
+		action();
+	}//if: 현 게이지가 꽉차면 되돌린다.
+}
+
+void Gauge::sync_gauge_fromValue()
+{
+	sync_gauge_fromValue(_currentGauge);
+}
+void Gauge::sync_gauge_fromValue(double value)
+{
+	double temp;
+	double gaugeWidth;
+
+	if (value > _maxGauge)
+	{
+		value = _maxGauge;
+	}
+	gaugeWidth = _fg->get_width();
+	temp = (value / _maxGauge) * gaugeWidth;
+	// 출력할 게이지 값을 정의
+	_currentWidth = temp;
+}
+
+void Gauge::action()
+{
+	switch (_type)
+	{
+	case GAUGE::GG_WORK:
+		PLAYER->add_money(50);
+		break;
+	}
 }
 
 HRESULT Gauge::init()
@@ -20,7 +66,12 @@ HRESULT Gauge::init()
 		_fg = new Image;
 		path = _imgPath + "work_pb.bmp";
 		_fg->init(path.c_str(), (int)(223 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
-		_maxGauge = 100;
+		_gaugeSpeed = 80;
+		break;
+	case GAUGE::GG_STAT_SMALL:
+		_fg = new Image;
+		path = _imgPath + "hud_bar_small.bmp";
+		_fg->init(path.c_str(), (int)(51 * GAME_MULTIPLE), (int)(6 * GAME_MULTIPLE));
 		break;
 	}
 	return S_OK;
@@ -35,7 +86,13 @@ void Gauge::update()
 	switch (_type)
 	{
 	case GAUGE::GG_WORK:
-		change_width();
+		if (_fGaugeRun == true)
+		{
+			run_gauge();
+		}
+		break;
+	default:
+		sync_gauge_fromValue();
 		break;
 	}
 }
@@ -66,4 +123,14 @@ void Gauge::set_center(POINT center)
 	{
 		_fg->set_center(center);
 	}
+}
+
+void Gauge::start()
+{
+	_fGaugeRun = true;
+}
+
+void Gauge::pause()
+{
+	_fGaugeRun = false;
 }

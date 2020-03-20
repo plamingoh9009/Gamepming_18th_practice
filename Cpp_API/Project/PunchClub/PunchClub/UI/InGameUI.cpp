@@ -197,7 +197,7 @@ void InGameUI::update()
 		update_gauges();
 		break;
 	default:
-		_hud_back->update();
+		_hud_back->update_datas_fromPlayer();
 		update_icons();
 		if (_fRedButton) { run_red_button(); }
 		if (_icn_league->get_fLeague()) { update_league(); }

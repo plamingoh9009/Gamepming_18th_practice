@@ -4,7 +4,8 @@ namespace GAUGE
 	enum TYPE
 	{
 		GG_EMPTY,
-		GG_WORK
+		GG_WORK,
+		GG_STAT_SMALL
 	};
 }
 namespace SLOT
@@ -42,7 +43,11 @@ namespace ICON
 		ICN_ENERGY,
 		ICN_FEEL,
 		ICN_FOOD,
-		ICN_HEALTH
+		ICN_HEALTH,
+		// 스탯 아이콘
+		ICN_STR,
+		ICN_AGL,
+		ICN_STM
 	};
 }
 namespace MAPICON
@@ -90,7 +95,8 @@ namespace BUTTON
 		BTN_GREEN,
 		BTN_GREEN_LONG,
 		BTN_GREEN_INVEN,
-		BTN_BUS_GREEN
+		BTN_BUS_GREEN,
+		BTN_WORK_GREEN
 	};
 	enum ICON
 	{
