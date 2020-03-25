@@ -48,17 +48,17 @@ void GymScene::update_objs()
 HRESULT GymScene::init_treadmills()
 {
 	POINT center;
-	_treadmill_mid = new Facility(FACILITY::OBJ_TREADMILL, FACILITY::TRM_YELLOW_GIRL);
+	_treadmill_mid = new Facility(MYOBJECT::OBJ_TREADMILL, MYOBJECT::TRM_YELLOW_GIRL);
 	_treadmill_mid->init();
 	center.x = (LONG)(WIN_HALF_W + _treadmill_mid->get_width() * 1.8);
 	center.y = (LONG)(WIN_HALF_H - _treadmill_mid->get_height());
 	_treadmill_mid->set_center(center);
 	_objs.push_back(_treadmill_mid);
-	_treadmill_left = new Facility(FACILITY::OBJ_TREADMILL, FACILITY::TRM_ORANGE_GIRL);
+	_treadmill_left = new Facility(MYOBJECT::OBJ_TREADMILL, MYOBJECT::TRM_ORANGE_GIRL);
 	_treadmill_left->init();
 	_treadmill_left->set_center(PointMake(center.x - 100, center.y));
 	_objs.push_back(_treadmill_left);
-	_treadmill_right = new Facility(FACILITY::OBJ_TREADMILL, FACILITY::TRM_PLAYER);
+	_treadmill_right = new Facility(MYOBJECT::OBJ_TREADMILL, MYOBJECT::TRM_PLAYER);
 	_treadmill_right->init();
 	_treadmill_right->set_center(PointMake(center.x + 100, center.y));
 	_objs.push_back(_treadmill_right);
@@ -74,7 +74,7 @@ void GymScene::delete_treadmills()
 HRESULT GymScene::init_barbells()
 {
 	POINT center;
-	_barbell = new Facility(FACILITY::OBJ_BARBELL, FACILITY::BBL_PLAYER);
+	_barbell = new Facility(MYOBJECT::OBJ_BARBELL, MYOBJECT::BBL_PLAYER);
 	_barbell->init();
 	center.x = (LONG)(_door->get_rect().left - _barbell->get_width() * 0.85);
 	center.y = (LONG)(_door->get_rect().top - _barbell->get_height() * 0.2438);
@@ -89,7 +89,7 @@ void GymScene::delete_barbells()
 HRESULT GymScene::init_yungchun()
 {
 	POINT center;
-	_yungchun = new Facility(FACILITY::OBJ_YUNGCHUN, FACILITY::YCN_PLAYER);
+	_yungchun = new Facility(MYOBJECT::OBJ_YUNGCHUN, MYOBJECT::YCN_PLAYER);
 	_yungchun->init();
 	center.x = (LONG)(_treadmill_right->get_center().x);
 	center.y = (LONG)(WINSIZEY - _yungchun->get_height() * 1);
@@ -104,7 +104,7 @@ void GymScene::delete_yungchun()
 HRESULT GymScene::init_tire()
 {
 	POINT center;
-	_tire = new Facility(FACILITY::OBJ_TIRE, FACILITY::TIR_PLAYER);
+	_tire = new Facility(MYOBJECT::OBJ_TIRE, MYOBJECT::TIR_PLAYER);
 	_tire->init();
 	center.x = (LONG)(WIN_HALF_W);
 	center.y = (LONG)(_yungchun->get_center().y);
@@ -119,7 +119,7 @@ void GymScene::delete_tire()
 HRESULT GymScene::init_benchPress()
 {
 	POINT center;
-	_benchPress = new Facility(FACILITY::OBJ_BENCH_PRESS, FACILITY::BP_PLAYER);
+	_benchPress = new Facility(MYOBJECT::OBJ_BENCH_PRESS, MYOBJECT::BP_PLAYER);
 	_benchPress->init();
 	center.x = (LONG)(WIN_HALF_W - _benchPress->get_width() * 2);
 	center.y = (LONG)(WIN_HALF_H + _benchPress->get_height() * 0.5);
@@ -134,7 +134,7 @@ void GymScene::delete_benchPress()
 HRESULT GymScene::init_punchbugs()
 {
 	POINT center;
-	_punchbug = new Facility(FACILITY::OBJ_PUNCHBUG, FACILITY::PB_PLAYER);
+	_punchbug = new Facility(MYOBJECT::OBJ_PUNCHBUG, MYOBJECT::PB_PLAYER);
 	_punchbug->init();
 	center.x = (LONG)(WIN_HALF_W - _punchbug->get_width() * 2);
 	center.y = (LONG)(WIN_HALF_H - _punchbug->get_height() * 0.6);

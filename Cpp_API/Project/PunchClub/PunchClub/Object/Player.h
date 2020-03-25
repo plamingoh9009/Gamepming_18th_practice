@@ -8,6 +8,7 @@ class Player : public Unit, public SingletonBase<Player>
 {
 private:
 	typedef map<SLOT::ITEM, int> ItemList;
+	const double STAT_EXP = 100;
 private:
 	Image * _player_idle[4];
 	RECT _player_rc;
@@ -23,11 +24,12 @@ private:
 	// 플레이어의 타이머
 	double _time = 0;
 	// 플레이어가 무엇을 할지 결정하는 변수다.
-	PLAYER_ACTION _actionType = ACTION_EMPTY;
+	PLAYER_SET::ACTION _actionType = PLAYER_SET::ACTION_EMPTY;
 	bool _fAction = false;
 	bool _fActionInit = false;
 	bool _fClickReady = false;
 	bool _fTired = false;
+	bool _fVisible = true;
 protected:
 	void update_idle_img();
 	void change_idle_img();
@@ -39,19 +41,22 @@ protected:
 	void delete_player();
 	double limit_stat(double stat, bool fZeroSet = false);
 	bool is_tired() { return _fTired; }
+	void hide_player();
 protected:
 	void action();
 	void use(SLOT::ITEM itemType);
 	void add_stat(double health, double food, double mood, double energy);
-	inline void Tired()
-	{
-		_fAction = false;
-		_fTired = true;
-		_hunger->Visible();
-	}
+	void add_stat_forFight(int effectsStat, bool isLostExp = false);
+	void Tired();
 public:
-	inline void action_start() { _fAction = true; }
-	inline void action_pause() { _fAction = false; }
+	inline void action_start() 
+	{ 
+		_fAction = true;
+	}
+	inline void action_pause() 
+	{ 
+		_fAction = false;
+	}
 	inline void action_init() { _fActionInit = true; }
 public:
 	inline void add_money(int money) { _myStat.money += money; }
@@ -69,9 +74,10 @@ public:
 	PlayerStat get_stat() { return _myStat; }
 	MAPICON::TYPE get_playerLocation() { return _location; }
 	POINT get_playerCenter() { return _player_center; }
+	PLAYER_SET::ACTION get_actionType() { return _actionType; }
 	void set_playerCenter(POINT center);
 	void set_playerLocation(MAPICON::TYPE type) { _location = type; }
-	void set_playerAction(PLAYER_ACTION type) { _actionType = type; }
+	void set_playerAction(PLAYER_SET::ACTION type) { _actionType = type; }
 	int how_many_items(SLOT::ITEM itemType);
 	bool is_stop_action() { return !_fAction; }
 };

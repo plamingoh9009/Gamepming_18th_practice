@@ -160,6 +160,7 @@
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
     <ClInclude Include="Object\Facility.h" />
+    <ClInclude Include="Object\Furniture.h" />
     <ClInclude Include="Object\Npc.h" />
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Object\objEnum.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
     <ClCompile Include="Object\Facility.cpp" />
+    <ClCompile Include="Object\Furniture.cpp" />
     <ClCompile Include="Object\Npc.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Object\Player.cpp" />

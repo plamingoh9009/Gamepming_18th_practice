@@ -115,7 +115,7 @@ HRESULT Gauge::init()
 		path = _imgPath + "work_pb.bmp";
 		_fg->init(path.c_str(), (int)(223 * GAME_MULTIPLE), (int)(20 * GAME_MULTIPLE));
 		sync_gauge_fromValue(PLAYER->get_stat().workGauge);
-		PLAYER->set_playerAction(ACTION_WORK);
+		PLAYER->set_playerAction(PLAYER_SET::ACTION_WORK);
 		break;
 	case GAUGE::GG_STAT_SMALL:
 		_fg = new Image;

@@ -1,79 +1,43 @@
 #pragma once
 #include "Scene.h"
+#include "Object/Furniture.h"
 class HomeScene: public Scene
 {
 private:
+	typedef vector<Furniture*> Furnitures;
+private:
 	Image * _bg;
 	Image * _ceil;
-	// 가구, 가전용 변수
-	// 요리하는 곳
-	Image * _kitchenTable;
-	// 냉장고
-	Image * _friger;
-	RECT _friger_rc;
-	POINT _friger_center;
-	Image * _friger_select;
-	// 스탠드
-	Image * _stand;
-	RECT _stand_rc;
-	POINT _stand_center;
-	// 소파
-	Image * _sofa;
-	RECT _sofa_rc;
-	POINT _sofa_pos;
-	POINT _sofa_center;
-	Image * _sofa_select;
-	Image * _sofa_sleep;	// 잠자는 이미지
-	RECT _sofa_sleep_rc;
-	// 수조
-	Image * _aquarium;
-	RECT _aquarium_rc;
-	POINT _aquarium_pos;
-	POINT _aquarium_center;
-	Image * _aquarium_fg;
-	RECT _aquarium_fg_rc;
-	// TV
-	Image * _tv;
-	RECT _tv_rc;
-	POINT _tv_pos;
-	POINT _tv_center;
-	Image * _tv_select;
-	Image * _tv_watch;
-	RECT _tv_watch_rc;
-	// 천장 선풍기
-	Image * _fan;
-	// 식탁
-	Image * _table;
-	RECT _table_rc;
-	POINT _table_center;
-	// 책장
-	Image * _bookshelf;
-	RECT _bookshelf_rc;
-	POINT _bookshelf_center;
-	POINT _bookshelf_pos;
-	// 시계
-	Image * _clock;
-	RECT _clock_rc;
-	POINT _clock_center;
-	POINT _clock_pos;
-	// 전화기
-	Image * _phone;
-	RECT _phone_rc;
-	POINT _phone_center;
-	// bool 변수
-	bool _fFriger = false;
-	bool _fSofa = false;
-	bool _fSleep = false;
-	bool _fTv = false;
-	bool _fWatch = false;
+	// Furnitures
+	Furnitures _objs;
+	Furniture * _kitchentable;	// 주방 테이블
+	Furniture * _friger;		// 냉장고
+	Furniture * _stand;			// 스탠드
+	Furniture * _sofa;			// 소파
+	Furniture * _aquarium;		// 수조
+	Furniture * _tv;			// TV
+	Furniture * _fan;			// 천장 선풍기
+	Furniture * _table;			// 식탁
+	Furniture * _bookshelf;		// 책장
+	Furniture * _clock;			// 시계
+	Furniture * _phone;			// 전화기
 protected:
-	void update_objectSelected();
-	void done_action();
+	void init_friger();
+	void init_sofa();
+	void init_tv();
+	void init_aquarium();
+	void init_fan();
+	void init_clock();
+	void init_kitchentable();
+	void init_stand();
+	void init_table();
+	void init_bookshelf();
+	void init_phone();
 protected:
-	void init_furniture();
-	void draw_furniture();
-	void delete_furniture();
-	void draw_rects();
+	void init_furnitures();
+	void draw_furnitures();
+	void delete_furnitures();
+	void update_furnitures();
 public:
 	virtual HRESULT init();
 	virtual void release();

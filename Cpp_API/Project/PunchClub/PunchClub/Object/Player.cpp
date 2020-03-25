@@ -91,16 +91,6 @@ void Player::update_player()
 		if (m_ptMouse.y < WIN_HALF_H) {}
 		else { move_player(); }
 	}
-	// 플레이어의 액션을 종료
-	if (_fClick)
-	{
-		if (_fClickReady && _fAction)
-		{
-			action_pause();
-			_fClickReady = false;
-			_fClick = false;
-		}
-	}
 }
 void Player::delete_player()
 {
@@ -129,52 +119,84 @@ double Player::limit_stat(double stat, bool fZeroSet)
 	}
 	return stat;
 }
+void Player::hide_player()
+{
+	switch (_actionType)
+	{
+	case PLAYER_SET::ACTION_SLEEP_SOFA:
+	case PLAYER_SET::ACTION_WATCH_TV:
+	// Training
+	case PLAYER_SET::ACTION_TREADMILL:
+	case	PLAYER_SET::ACTION_BARBELL:
+	case	PLAYER_SET::ACTION_HIT_TIRE:
+	case	PLAYER_SET::ACTION_BENCH_PRESS:
+	case	PLAYER_SET::ACTION_PUNCHBUG:
+	case	PLAYER_SET::ACTION_YUNGCHUN:
+		_fVisible = false;
+		break;
+	}
+}
 // ========================================
 // ***			플레이어 행동				***
 // ========================================
 void Player::action()
 {
-	if (_actionType != ACTION_EMPTY)
+	if (_actionType != PLAYER_SET::ACTION_EMPTY)
 	{
 		if (_fAction)
 		{
+			hide_player();
 			// 일정 시간을 주고, 행동을 한다.
 			_time += TIMEMANAGER->get_elapsedTime();
 			if (1.0f <= _time)
 			{
 				switch (_actionType)
 				{
-				case ACTION_WORK:
-					if (_myStat.food < 120 || _myStat.energy < 120)
-					{
-						Tired();
-					}
-					else
-					{
-						_myStat.workGauge += 80;
-						// 일하면 모든 상태가 전부 떨어지지만 스탯이 오른다.
-						add_stat(10, -20, -10, -25);
-					}
+				case PLAYER_SET::ACTION_WORK:
+					Tired();
+					_myStat.workGauge += 80;
+					// 일하면 모든 상태가 전부 떨어지지만 스탯이 오른다.
+					add_stat(10, -20, -10, -25);
+					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::AGL | PLAYER_SET::STM);
 					break;
-				case ACTION_SLEEP_SOFA:
-					if (_myStat.food < 120)
-					{
-						Tired();
-					}
-					else
-					{
-						add_stat(10, -30, 2, 40);
-					}
+				case PLAYER_SET::ACTION_SLEEP_SOFA:
+					Tired();
+					add_stat(10, -30, 2, 40);
 					break;
-				case ACTION_WATCH_TV:
-					if (_myStat.food < 120)
-					{
-						Tired();
-					}
-					else
-					{
-						add_stat(10, -10, 30, 10);
-					}
+				case PLAYER_SET::ACTION_WATCH_TV:
+					Tired();
+					add_stat(10, -10, 30, 10);
+					break;
+					// Trainig
+				case PLAYER_SET::ACTION_TREADMILL:
+					Tired();
+					add_stat(10, -10, -5, -15);
+					add_stat_forFight(PLAYER_SET::STM);
+					break;
+				case PLAYER_SET::ACTION_BARBELL:
+					Tired();
+					add_stat(10, -10, -5, -15);
+					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::STM);
+					break;
+				case PLAYER_SET::ACTION_HIT_TIRE:
+					Tired();
+					add_stat(10, -10, -5, -15);
+					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::AGL | PLAYER_SET::STM);
+					break;
+				case PLAYER_SET::ACTION_BENCH_PRESS:
+					Tired();
+					add_stat(10, -10, -5, -15);
+					add_stat_forFight(PLAYER_SET::STR);
+					break;
+				case PLAYER_SET::ACTION_PUNCHBUG:
+					Tired();
+					add_stat(10, -10, -5, -15);
+					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::AGL | PLAYER_SET::STM);
+					break;
+				case PLAYER_SET::ACTION_YUNGCHUN:
+					Tired();
+					add_stat(10, -10, -5, -15);
+					add_stat_forFight(PLAYER_SET::AGL | PLAYER_SET::STM);
 					break;
 				}
 				_time = 0;
@@ -185,7 +207,7 @@ void Player::action()
 			{
 				switch (_actionType)
 				{
-				case ACTION_WORK:
+				case PLAYER_SET::ACTION_WORK:
 					_myStat.workGauge = limit_stat(_myStat.workGauge, true);
 					break;
 				default:
@@ -198,8 +220,12 @@ void Player::action()
 				_fActionInit = false;
 			}
 		}//if: fAction이 True 라면 플레이어가 행동한다.
-		
 	}//if: actionType이 정의되어 있을 때
+	if(_fAction == false)
+	{
+		_actionType = PLAYER_SET::ACTION_EMPTY;
+		_fVisible = true;
+	}//else: 액션을 멈추면 플레이어를 볼 수 있다.
 }
 //==========================================
 //##			아이템 사용				  ##
@@ -226,6 +252,47 @@ void Player::add_stat(double health, double food, double mood, double energy)
 	_myStat.food += food;
 	_myStat.mood += mood;
 	_myStat.energy += energy;
+}
+void Player::add_stat_forFight(int effectsStat, bool isLostExp)
+{
+	int str_percent, agl_percent, stm_percent;
+	int percent = 100;
+	// Make percentage
+	str_percent = RAND->get_fromIntTo(1, 100);
+	agl_percent = RAND->get_fromIntTo(1, 100);
+	stm_percent = RAND->get_fromIntTo(1, 100);
+	if(isLostExp)
+	{
+		// Empty yet..
+	}//if: subtraction
+	else
+	{
+		if (str_percent <= percent && 
+			effectsStat & PLAYER_SET::STR)
+		{
+			_myStat.str += STAT_EXP;
+		}
+		if (agl_percent <= percent &&
+			effectsStat & PLAYER_SET::AGL)
+		{
+			_myStat.agl += STAT_EXP;
+		}
+		if (stm_percent <= percent &&
+			effectsStat & PLAYER_SET::STM)
+		{
+			_myStat.stm += STAT_EXP;
+		}
+	}//else: add
+}
+
+void Player::Tired()
+{
+	if (_myStat.food < 120 || _myStat.energy < 120)
+	{
+		_fAction = false;
+		_fTired = true;
+		_hunger->Visible();
+	}
 }
 
 void Player::buy_item(SLOT::ITEM itemType)
@@ -296,8 +363,11 @@ void Player::update()
 }
 void Player::render()
 {
-	Draw(_hunger);
-	draw_player();
+	if (_fVisible)
+	{
+		Draw(_hunger);
+		draw_player();
+	}
 }
 Player::Player()
 {

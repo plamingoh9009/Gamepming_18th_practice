@@ -209,7 +209,8 @@ void InGameUI::update()
 	}
 	
 	_cursor->update();
-	if (PLAYER->is_stop_action())
+	if (PLAYER->is_stop_action() && 
+		PLAYER->get_actionType() == PLAYER_SET::ACTION_EMPTY)
 	{
 		_cursor->set_fWait(false);
 	}

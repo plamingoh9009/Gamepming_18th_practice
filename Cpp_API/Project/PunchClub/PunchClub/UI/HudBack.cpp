@@ -103,8 +103,11 @@ void HudBack::update_gauges()
 	_energy->sync_gauge_fromValue(PLAYER->get_stat().energy);
 	// Stat for fight
 	_agl->sync_gauge_fromValue(Exp(PLAYER->get_stat().agl));
+	_icon_agl->set_text_toIcon(Stat(PLAYER->get_stat().agl));
 	_str->sync_gauge_fromValue(Exp(PLAYER->get_stat().str));
+	_icon_str->set_text_toIcon(Stat(PLAYER->get_stat().str));
 	_stm->sync_gauge_fromValue(Exp(PLAYER->get_stat().stm));
+	_icon_stm->set_text_toIcon(Stat(PLAYER->get_stat().stm));
 }
 HRESULT HudBack::init_icons()
 {
