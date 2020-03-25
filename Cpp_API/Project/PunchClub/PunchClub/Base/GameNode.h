@@ -27,6 +27,8 @@ protected:
 	static bool _fClick;		// 클릭 처리를 위한 변수
 	static bool _fDebug;		// 디버그 모드를 위한 변수
 protected:
+	bool is_frameImg(Image * img);
+protected:
 	void update_checkDebugMode();
 	void update_checkClicked();
 	// type: SCENE_TYPE to change you want

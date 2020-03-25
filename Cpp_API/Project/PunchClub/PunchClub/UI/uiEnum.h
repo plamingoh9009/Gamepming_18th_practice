@@ -1,11 +1,28 @@
 #pragma once
+namespace HINT
+{
+	enum TYPE
+	{
+		HINT_EMPTY,
+		HINT_NORMAL,
+		HINT_THINK
+	};
+}
 namespace GAUGE
 {
 	enum TYPE
 	{
 		GG_EMPTY,
 		GG_WORK,
-		GG_STAT_SMALL
+		GG_STAT_SMALL,
+		GG_STAT_FIGHT
+	};
+	enum STAT
+	{
+		ST_EMPTY,
+		ST_STR,
+		ST_AGL,
+		ST_STM
 	};
 }
 namespace SLOT
@@ -14,7 +31,8 @@ namespace SLOT
 	{
 		SLT_EMPTY,
 		SLT_ACTIVE_SKILL,
-		SLT_ITEM
+		SLT_ITEM_SHOP,
+		SLT_ITEM_FRIGER
 	};
 	enum SKILL
 	{
@@ -30,6 +48,9 @@ namespace SLOT
 		ITM_PIZZA_BOX,
 		ITM_SODA
 	};
+#define PRICE_MEAT	20
+#define PRICE_PIZZA_BOX	9
+#define	PRICE_SODA	6
 }
 namespace ICON
 {
@@ -39,15 +60,19 @@ namespace ICON
 		ICN_HUD_MAP,
 		ICN_LEAGUE,
 		ICN_SKILLTREE,
-		// 아이템 아이콘
+		// 스탯 아이콘
 		ICN_ENERGY,
-		ICN_FEEL,
+		ICN_MOOD,
 		ICN_FOOD,
 		ICN_HEALTH,
-		// 스탯 아이콘
+		// 스탯(전투) 아이콘
 		ICN_STR,
 		ICN_AGL,
-		ICN_STM
+		ICN_STM,
+		// 냉장고 아이콘
+		ICN_FRIGER,
+		// 배고픈 아이콘
+		ICN_HUNGER
 	};
 }
 namespace MAPICON

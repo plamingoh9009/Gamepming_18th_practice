@@ -1,27 +1,21 @@
 #include "stdafx.h"
 #include "Facility.h"
-
-bool Facility::is_frameImg(Image * img)
-{
-	if (img->get_maxFrameX() != 0 || img->get_maxFrameY() != 0)
-	{
-		return true;
-	}
-	return false;
-}
+#include "Player.h"
 void Facility::change_player_run()
 {
 	switch (_run_type)
 	{
 	case FACILITY::TRM_PLAYER:
+		PLAYER->set_playerAction(ACTION_TREADMILL);
+		break;
 	case FACILITY::BBL_PLAYER:
 	case FACILITY::YCN_PLAYER:
 	case FACILITY::TIR_PLAYER:
 	case FACILITY::BP_PLAYER:
 	case FACILITY::PB_PLAYER:
-		_fImgRun = !_fImgRun;
 		break;
 	}
+	_fImgRun = !_fImgRun;
 }
 
 HRESULT Facility::init_objs()

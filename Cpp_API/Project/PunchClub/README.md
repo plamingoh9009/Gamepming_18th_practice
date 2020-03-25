@@ -1,8 +1,8 @@
 # PunchClub Copy Project
-# Ver. 1.9.1
+# Ver. 1.9.5
 - 수정내용: 
-    - hud back 게이지 1군데 OK
-    - Stat 게이지 손보는 중..
+    - 체육관 만드는 중..
+    - 
     - 원작 해상도: 1366 x 768(16:9)
 - 개발환경
  - OS:              Windows10

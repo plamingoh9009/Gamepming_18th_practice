@@ -4,11 +4,11 @@ void HomeScene::update_objectSelected()
 {
 	done_action();
 	// 냉장고
-	if (PtInRect(&_friger_rc, m_ptMouse)) 
-	{ 
+	if (PtInRect(&_friger_rc, m_ptMouse))
+	{
 		_fFriger = true;
-		if (_fClick == true) 
-		{ 
+		if (_fClick == true)
+		{
 			INGAME_UI->set_fIngame_wnd(true);
 		}
 		PLAYER->set_fObjMove(false);
@@ -21,7 +21,7 @@ void HomeScene::update_objectSelected()
 		if (_fClick == true && _fSleep == false) { _fSleep = true; }
 	}
 	else { _fSofa = false; }
-	
+
 	// TV
 	if (PtInRect(&_tv_rc, m_ptMouse))
 	{
@@ -31,26 +31,27 @@ void HomeScene::update_objectSelected()
 	else { _fTv = false; }
 
 	// 플레이어 행동
+	PLAYER->action_pause();		// 어떤 행동을 하기 전에 이전의 행동을 멈춘다.
 	if (_fSleep == true)
 	{
 		_sofa_sleep->frameUpdate(false);
-		PLAYER->sleep_toSofa();
+		PLAYER->action_start();
 	}
 	else if (_fWatch == true)
 	{
 		_tv_watch->frameUpdate(false);
-		PLAYER->watch_tv();
+		PLAYER->action_start();
 	}
 }
 void HomeScene::done_action()
 {
 	// 행동 끝내기
-	if (_fClick == true && _fSleep == true)
+	if (PLAYER->is_stop_action() && _fSleep == true)
 	{
 		_fSleep = false;
 		_sofa_sleep->set_frameX(0);
 	}
-	else if (_fClick == true && _fWatch == true)
+	else if (PLAYER->is_stop_action() && _fWatch == true)
 	{
 		_fWatch = false;
 		_tv_watch->set_frameX(0);
@@ -236,16 +237,16 @@ void HomeScene::draw_furniture()
 	_aquarium->frameRender(get_memDC(), _aquarium_rc.left, _aquarium_rc.top);
 	_aquarium_fg->render(get_memDC(), _aquarium_fg_rc.left, _aquarium_fg_rc.top);
 	// 소파 렌더
-	if (_fSofa == true) 
-	{ 
-		_sofa_select->render(get_memDC(), _sofa_rc.left, _sofa_rc.top); 
-		if(_fSleep == true)
-		{ 
-			_sofa_sleep->frameRender(get_memDC(), _sofa_sleep_rc.left, _sofa_sleep_rc.top); 
+	if (_fSofa == true)
+	{
+		_sofa_select->render(get_memDC(), _sofa_rc.left, _sofa_rc.top);
+		if (_fSleep == true)
+		{
+			_sofa_sleep->frameRender(get_memDC(), _sofa_sleep_rc.left, _sofa_sleep_rc.top);
 		}
 	}
-	else 
-	{ 
+	else
+	{
 		_sofa->render(get_memDC(), _sofa_rc.left, _sofa_rc.top);
 		if (_fSleep == true)
 		{
@@ -253,16 +254,16 @@ void HomeScene::draw_furniture()
 		}
 	}
 	// TV 렌더
-	if (_fTv == true) 
-	{ 
+	if (_fTv == true)
+	{
 		_tv_select->render(get_memDC(), _tv_rc.left, _tv_rc.top);
 		if (_fWatch == true)
 		{
 			_tv_watch->frameRender(get_memDC(), _tv_watch_rc.left, _tv_watch_rc.top);
 		}
 	}
-	else 
-	{ 
+	else
+	{
 		_tv->render(get_memDC(), _tv_rc.left, _tv_rc.top);
 		if (_fWatch == true)
 		{
@@ -359,13 +360,19 @@ void HomeScene::update()
 	_clock->frameUpdate();
 	INGAME_UI->update();	// UI를 플레이어보다 먼저 받는다.
 	// 플레이어
-	if(_fSleep == true) {}
-	else if(_fWatch == true) {}
-	else 
-	{ 
-		PLAYER->update(); 
+	if (_fSleep == true)
+	{
+		PLAYER->set_playerAction(ACTION_SLEEP_SOFA);
+	}
+	else if (_fWatch == true)
+	{
+		PLAYER->set_playerAction(ACTION_WATCH_TV);
+	}
+	else
+	{
 		PLAYER->set_fObjMove(true);
 	}
+	PLAYER->update();
 	change_scene();	// 항상 마지막에 씬을 바꾼다.
 }
 void HomeScene::render()
@@ -376,10 +383,10 @@ void HomeScene::render()
 	_fan->frameRender(get_memDC());
 	Draw(_ceil, get_memDC());
 	draw_furniture();
-	if(_fSleep == true) {}
-	else if(_fWatch == true) {}
+	if (_fSleep == true) {}
+	else if (_fWatch == true) {}
 	else { PLAYER->render(); }
-	
+
 	INGAME_UI->render();
 }
 HomeScene::HomeScene()

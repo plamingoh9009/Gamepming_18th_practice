@@ -195,12 +195,6 @@ void Button::render()
 	if (_button != nullptr) { Draw(_button, get_memDC()); }
 	if (_icon != nullptr) { Draw(_icon, get_memDC()); }
 	if (_fText) { draw_text_toButton(); }
-
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _button->get_rect(), RGB(255, 77, 77));
-		ColorRect(get_memDC(), _icon->get_rect());
-	}
 }
 Button::Button(BUTTON::TYPE type)
 {

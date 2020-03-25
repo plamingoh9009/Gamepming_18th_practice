@@ -10,17 +10,26 @@ private:
 	// 힌트
 	Hint * _hint;
 	bool _fHint = false;
+	bool _fHint_bg = false;		// Is hint Bg??
+	// Draw time
+	double _drawTime = 0;
+	double _maxVisibleTime = 3;
+	bool _fUseDrawTime = false;
+	bool _fVisible = false;
 	// 리그 아이콘을 눌렀는지
 	bool _fLeague;
 	// Fg Only
 	bool _fFgOnly = false;
 	bool _fIconText = false;
+	
 protected:
 	void init_icons();
 	void draw_icons();
 	void delete_icons();
+	void draw_icon(bool isAlwaysVisible = true);
 public:
 	void draw_hint();
+	inline void Visible() { _fVisible = true; }
 public:
 	virtual HRESULT init();
 	virtual void release();

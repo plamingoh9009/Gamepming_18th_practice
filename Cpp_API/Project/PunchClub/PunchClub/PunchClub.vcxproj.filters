@@ -141,9 +141,6 @@
     <ClInclude Include="Scene\HudMapScene.h">
       <Filter>I_Scene\type</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Player.h">
-      <Filter>I_Object\Unit\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Object.h">
       <Filter>I_Object</Filter>
     </ClInclude>
@@ -203,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="UI\HudBack.h">
       <Filter>I_UI\type\Gauges</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Player.h">
+      <Filter>I_Object\Unit\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

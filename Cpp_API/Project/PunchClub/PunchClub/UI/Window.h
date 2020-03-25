@@ -82,6 +82,7 @@ protected:
 	void init_inventory();
 	void draw_inventory();
 	void delete_inventory();
+	void update_friger();
 	// 리그창을 초기화한다.
 	void init_league();
 	void draw_league();
@@ -108,6 +109,7 @@ protected:
 	HRESULT init_slots();
 	void delete_slots();
 	void draw_slots();
+	void update_shop();
 public:
 	void close_window();
 public:

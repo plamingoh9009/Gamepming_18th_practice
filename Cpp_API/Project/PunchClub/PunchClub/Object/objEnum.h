@@ -47,5 +47,21 @@ struct PlayerStat
 	double stm = 1250;
 	// SP & Money
 	int skillPoint = 3;
-	int money = 35;
+	int money = 73;
+	// Work Gauge
+	double workGauge = 250;
+};
+enum PLAYER_ACTION
+{
+	ACTION_EMPTY,
+	ACTION_WORK,
+	ACTION_SLEEP_SOFA,
+	ACTION_WATCH_TV,
+	// EXERSIZE
+	ACTION_TREADMILL,
+	ACTION_BARBELL,
+	ACTION_HIT_TIRE,
+	ACTION_BENCH_PRESS,
+	ACTION_PUNCHBUG,
+	ACTION_YUNGCHUN
 };

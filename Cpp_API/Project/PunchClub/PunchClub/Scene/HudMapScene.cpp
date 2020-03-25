@@ -206,6 +206,7 @@ void HudMapScene::update()
 	else if (_build_wnd->is_openWindow() == true)
 	{
 		_build_wnd->update();
+		PLAYER->update();
 	}
 	else
 	{

@@ -6,6 +6,14 @@ Image* GameNode::_backBuffer = NULL;
 SCENE_TYPE GameNode::_scene_forChange = SCENE_EMPTY;
 bool GameNode::_fClick = false;
 bool GameNode::_fDebug = false;
+bool GameNode::is_frameImg(Image * img)
+{
+	if (img->get_maxFrameX() != 0 || img->get_maxFrameY() != 0)
+	{
+		return true;
+	}
+	return false;
+}
 void GameNode::update_checkDebugMode()
 {
 	if (KEYMANAGER->is_toggleKey(VK_TAB) == true) { _fDebug = true; }
@@ -13,7 +21,10 @@ void GameNode::update_checkDebugMode()
 }
 void GameNode::update_checkClicked()
 {
-	if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON)) { _fClick = true; }
+	if (KEYMANAGER->is_onceKeyUp(VK_LBUTTON))
+	{
+		_fClick = true;
+	}
 	else { _fClick = false; }
 }
 void GameNode::change_currentScene(SCENE_TYPE type)

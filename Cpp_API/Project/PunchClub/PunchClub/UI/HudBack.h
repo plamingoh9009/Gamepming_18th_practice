@@ -13,6 +13,10 @@ private:
 	Gauge * _food;
 	Gauge * _mood;
 	Gauge * _energy;
+	
+	Gauge * _str;
+	Gauge * _agl;
+	Gauge * _stm;
 	// Icons
 	Icon * _icon_str;
 	Icon * _icon_agl;

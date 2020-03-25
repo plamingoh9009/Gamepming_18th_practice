@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Slot.h"
-
+#include "Object/Player.h"
 void Slot::init_bg(SLOT::TYPE type)
 {
 	string path;
@@ -11,7 +11,8 @@ void Slot::init_bg(SLOT::TYPE type)
 		_bg = new Image;
 		_bg->init(path.c_str(), (int)(36 * GAME_MULTIPLE), (int)(36 * GAME_MULTIPLE));
 		break;
-	case SLOT::SLT_ITEM:
+	case SLOT::SLT_ITEM_SHOP:
+	case SLOT::SLT_ITEM_FRIGER:
 		set_imgPath("UI/Slot/");
 		_bg = new Image;
 		path = _imgPath + "Inven_slot.bmp";
@@ -71,8 +72,11 @@ void Slot::init_item()
 		_title.set_size(30);
 		_descr = MyText(MYTEXT::TXT_DESCR, "평범한 피자와 같지만 냉동이 되어있다.", RGB(54, 50, 39));
 		_descr.set_size(20);
+		
 		break;
 	}
+	_icon = new Icon(ICON::ICN_FRIGER);
+	_icon->init();
 }
 void Slot::draw_item()
 {
@@ -80,6 +84,7 @@ void Slot::draw_item()
 	Draw(_fg, get_memDC());
 	_title.render(get_memDC());
 	_descr.render(get_memDC());
+	Draw(_icon);
 }
 void Slot::setup_fg_center()
 {
@@ -112,23 +117,135 @@ void Slot::setup_text_pos()
 void Slot::setup_button()
 {
 	POINT center;
+	
 	if (_btn != nullptr)
 	{
-		center.x = (LONG)(_bg->get_rect().right - _btn->get_width() * 0.6);
-		center.y = (LONG)(_bg->get_rect().bottom - _btn->get_height() * 0.7);
-		_btn->set_center(center);
-		switch (_itemType)
+		switch (_type)
 		{
-		case SLOT::ITM_MEAT:
-			_btn->set_text_toButton("$20", 20, MYTEXT::TXT_DESCR);
+		case SLOT::SLT_ITEM_SHOP:
+			center.x = (LONG)(_bg->get_rect().right - _btn->get_width() * 0.6);
+			center.y = (LONG)(_bg->get_rect().bottom - _btn->get_height() * 0.7);
+			_btn->set_center(center);
+			switch (_itemType)
+			{
+			case SLOT::ITM_MEAT:
+				_btn->set_text_toButton("$20", 25, MYTEXT::TXT_DESCR);
+				break;
+			case SLOT::ITM_SODA:
+				_btn->set_text_toButton("$6", 25, MYTEXT::TXT_DESCR);
+				break;
+			case SLOT::ITM_PIZZA_BOX:
+				_btn->set_text_toButton("$9", 25, MYTEXT::TXT_DESCR);
+				break;
+			}
 			break;
-		case SLOT::ITM_SODA:
-			_btn->set_text_toButton("$6", 20, MYTEXT::TXT_DESCR);
-			break;
-		case SLOT::ITM_PIZZA_BOX:
-			_btn->set_text_toButton("$9", 20, MYTEXT::TXT_DESCR);
+		case SLOT::SLT_ITEM_FRIGER:
+			center.x = (LONG)(_bg->get_rect().right - _btn->get_width() * 0.6);
+			center.y = (LONG)(_bg->get_rect().bottom - _btn->get_height() * 0.7);
+			_btn->set_center(center);
+			switch (_itemType)
+			{
+			case SLOT::ITM_MEAT:
+			case SLOT::ITM_SODA:
+			case SLOT::ITM_PIZZA_BOX:
+				_btn->set_text_toButton("먹다", 25, MYTEXT::TXT_DESCR);
+				break;
+			}
 			break;
 		}
+	}
+}
+void Slot::setup_icon()
+{
+	POINT center;
+	if (_itemType != SLOT::ITM_EMPTY)
+	{
+		center.x = (LONG)(_bg->get_rect().right - _icon->get_width() * 0.8);
+		center.y = (LONG)(_bg->get_rect().top + _icon->get_height() * 0.5);
+		_icon->set_center(center);
+		_icon->set_text_toIcon(to_string(PLAYER->how_many_items(_itemType)));
+	}
+	switch (_itemType)
+	{
+	case SLOT::ITM_MEAT:
+		init_icons(10, 0, 1, 40);
+		break;
+	case SLOT::ITM_SODA:
+		init_icons(0, 0, 1, 9);
+		break;
+	case SLOT::ITM_PIZZA_BOX:
+		init_icons(10, 0, 1, 17);
+		break;
+	}//switch: icons
+}
+
+HRESULT Slot::init_icons(int health, int energy, int mood, int food)
+{
+	Icon * icon;
+	POINT center;
+	int blank = 50;
+	center.x = (LONG)(_fg_back->get_rect().right - 30);
+	center.y = (LONG)(_fg_back->get_rect().bottom);
+	if (health != 0)
+	{
+		icon = new Icon(ICON::ICN_HEALTH);
+		icon->init();
+		center.x += blank;
+		icon->set_center(center);
+		icon->set_text_toIcon(to_string(health));
+		_icons.push_back(icon);
+		icon = nullptr;
+	}
+	if (energy != 0)
+	{
+		icon = new Icon(ICON::ICN_ENERGY);
+		icon->init();
+		center.x += blank;
+		icon->set_center(center);
+		icon->set_text_toIcon(to_string(energy));
+		_icons.push_back(icon);
+		icon = nullptr;
+	}
+	if (mood != 0)
+	{
+		icon = new Icon(ICON::ICN_MOOD);
+		icon->init();
+		center.x += blank;
+		icon->set_center(center);
+		icon->set_text_toIcon(to_string(mood));
+		_icons.push_back(icon);
+		icon = nullptr;
+	}
+	if (food != 0)
+	{
+		icon = new Icon(ICON::ICN_FOOD);
+		icon->init();
+		center.x += blank;
+		icon->set_center(center);
+		icon->set_text_toIcon(to_string(food));
+		_icons.push_back(icon);
+		icon = nullptr;
+	}
+
+	return S_OK;
+}
+
+void Slot::delete_icons()
+{
+	auto iter = _icons.begin();
+	for (; iter != _icons.end();)
+	{
+		Release(*iter);
+		iter = _icons.erase(iter);
+	}
+	swap(_icons, Icons());
+}
+void Slot::draw_icons()
+{
+	auto iter = _icons.begin();
+	for (; iter != _icons.end(); iter++)
+	{
+		Draw(*iter);
 	}
 }
 
@@ -143,15 +260,24 @@ void Slot::release()
 	delete_bg();
 	Release(_fg);
 	Release(_fg_back);
+	Release(_btn);
+	Release(_icon);
+	delete_icons();
 }
 void Slot::update()
 {
+	_btn->update();
+	if (_icon != nullptr)
+	{
+		_icon->set_text_toIcon(to_string(PLAYER->how_many_items(_itemType)));
+	}
 }
 void Slot::render()
 {
 	draw_bg();
 	draw_item();
 	Draw(_btn);
+	draw_icons();
 }
 Slot::Slot(SLOT::TYPE type)
 {
@@ -166,9 +292,6 @@ Slot::~Slot()
 {
 }
 
-void Slot::set_slotInfo(SLOT::SKILL skill)
-{
-}
 void Slot::set_slotCenter(POINT center)
 {
 	if (_bg != nullptr)
@@ -177,6 +300,7 @@ void Slot::set_slotCenter(POINT center)
 		setup_fg_center();
 		setup_text_pos();
 		setup_button();
+		setup_icon();
 	}
 }
 void Slot::set_slotPos(POINT pos)
@@ -187,5 +311,6 @@ void Slot::set_slotPos(POINT pos)
 		setup_fg_center();
 		setup_text_pos();
 		setup_button();
+		setup_icon();
 	}
 }

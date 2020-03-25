@@ -34,10 +34,13 @@ void ShopScene::update()
 {
 	update_scene();
 	_shop->update();
-	PLAYER->update();
 	if (_shop->is_openShop() == true)
 	{
 		INGAME_UI->set_fIngame_wnd(true);
+	}
+	else
+	{
+		PLAYER->update();
 	}
 	INGAME_UI->update();
 	change_scene();

@@ -239,7 +239,7 @@ HRESULT MapIcon::init(MAPICON::TYPE type)
 	_type = type;
 	result = init_icon();
 	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
-	_hint = new Hint;
+	_hint = new Hint(HINT::HINT_NORMAL);
 	result = _hint->init();
 	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
 	result = (result_cnt == 0 ? S_OK : E_FAIL);

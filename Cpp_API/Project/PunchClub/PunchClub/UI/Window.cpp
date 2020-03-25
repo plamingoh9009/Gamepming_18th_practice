@@ -147,6 +147,21 @@ void Window::delete_inventory()
 {
 	Release(_fg);
 }
+void Window::update_friger()
+{
+	SLOT::ITEM itemType;
+	auto iter = _slots.begin();
+	for (; iter != _slots.end(); iter++)
+	{
+		(*iter)->update();
+		if ((*iter)->is_clickButton())
+		{
+			itemType = (*iter)->get_itemType();
+			PLAYER->use_item(itemType);
+			break;
+		}
+	}
+}
 
 void Window::init_league()
 {
@@ -398,31 +413,25 @@ HRESULT Window::init_bus_fg()
 	string path;
 	POINT center, pos;
 	string str;
-	// Result for Return
-	HRESULT result;
-	int result_cnt = 0;
 
 	// Bus Window
 	_inside = new Image;
 	path = _imgPath + "bus_inside.bmp";
-	result = _inside->init(path.c_str(), (int)(250 * GAME_MULTIPLE), (int)(98 * GAME_MULTIPLE));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_inside->init(path.c_str(), (int)(250 * GAME_MULTIPLE), (int)(98 * GAME_MULTIPLE));
 	center.x = (LONG)(_bg->get_center().x);
 	center.y = (LONG)(_bg->get_center().y - _inside->get_height() * 0.25);
 	_inside->set_center(center);
 	// FG
 	_fg = new Image;
 	path = _imgPath + "bus_back_st.bmp";
-	result = _fg->init(path.c_str(), (int)(496), (int)(192));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_fg->init(path.c_str(), (int)(496), (int)(192));
 	center.x = (LONG)(_inside->get_center().x);
 	center.y = (LONG)(_inside->get_center().y);
 	_fg->set_center(center);
 	// Bus
 	_bus = new Image;
 	path = _imgPath + "ingame_bus.bmp";
-	result = _bus->init(path.c_str(), (int)(210), (int)(147));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
+	_bus->init(path.c_str(), (int)(210), (int)(147));
 	pos.x = (LONG)(_fg->getX());
 	pos.y = (LONG)(_fg->get_rect().bottom - _bus->get_height());
 	_bus->set_pos(pos);
@@ -471,8 +480,7 @@ HRESULT Window::init_bus_fg()
 	_btn_walk->set_icon_toButton(BUTTON::ICN_TIME_DAYS, center);
 
 	//Return result
-	result = (result_cnt == 0 ? S_OK : E_FAIL);
-	return result;
+	return S_OK;
 }
 void Window::draw_bus()
 {
@@ -501,8 +509,13 @@ void Window::update_bus()
 	_btn_bus->update();
 	_btn_walk->update();
 	// Close Window
-	if (_btn_bus->is_closeWindow() == true ||
-		_btn_walk->is_closeWindow() == true)
+	if (_btn_bus->is_closeWindow() == true)
+	{
+		close_window();
+		_fClickButton = true;
+		PLAYER->add_money(-_bus_distance);
+	}
+	else if(_btn_walk->is_closeWindow() == true)
 	{
 		close_window();
 		_fClickButton = true;
@@ -648,17 +661,35 @@ HRESULT Window::init_slots()
 	switch (_type)
 	{
 	case WINDOW::WND_SHOP:
-		slot = new Slot(SLOT::SLT_ITEM, SLOT::ITM_MEAT);
+		slot = new Slot(SLOT::SLT_ITEM_SHOP, SLOT::ITM_MEAT);
 		slot->init();
 		pos.x = (LONG)(_locked_back->get_rect().left);
 		pos.y = (LONG)(_locked_back->get_rect().top);
 		slot->set_slotPos(pos);
 		_slots.push_back(slot);
-		slot = new Slot(SLOT::SLT_ITEM, SLOT::ITM_SODA);
+		slot = new Slot(SLOT::SLT_ITEM_SHOP, SLOT::ITM_SODA);
 		slot->init();
 		slot->set_slotPos(PointMake(pos.x + slot->get_width(), pos.y));
 		_slots.push_back(slot);
-		slot = new Slot(SLOT::SLT_ITEM, SLOT::ITM_PIZZA_BOX);
+		slot = new Slot(SLOT::SLT_ITEM_SHOP, SLOT::ITM_PIZZA_BOX);
+		slot->init();
+		pos.x = (LONG)(_locked_back->get_rect().left);
+		pos.y = (LONG)(_locked_back->get_rect().top);
+		slot->set_slotPos(PointMake(pos.x, pos.y + slot->get_height()));
+		_slots.push_back(slot);
+		break;
+	case WINDOW::WND_FRIGER:
+		slot = new Slot(SLOT::SLT_ITEM_FRIGER, SLOT::ITM_MEAT);
+		slot->init();
+		pos.x = (LONG)(_locked_back->get_rect().left);
+		pos.y = (LONG)(_locked_back->get_rect().top);
+		slot->set_slotPos(pos);
+		_slots.push_back(slot);
+		slot = new Slot(SLOT::SLT_ITEM_FRIGER, SLOT::ITM_SODA);
+		slot->init();
+		slot->set_slotPos(PointMake(pos.x + slot->get_width(), pos.y));
+		_slots.push_back(slot);
+		slot = new Slot(SLOT::SLT_ITEM_FRIGER, SLOT::ITM_PIZZA_BOX);
 		slot->init();
 		pos.x = (LONG)(_locked_back->get_rect().left);
 		pos.y = (LONG)(_locked_back->get_rect().top);
@@ -687,6 +718,21 @@ void Window::draw_slots()
 		Draw(*iter);
 	}
 }
+void Window::update_shop()
+{
+	SLOT::ITEM itemType;
+	auto iter = _slots.begin();
+	for (; iter != _slots.end(); iter++)
+	{
+		(*iter)->update();
+		if ((*iter)->is_clickButton())
+		{
+			itemType = (*iter)->get_itemType();
+			PLAYER->buy_item(itemType);
+			break;
+		}
+	}
+}
 
 void Window::close_window()
 {
@@ -706,6 +752,7 @@ HRESULT Window::init(WINDOW::TYPE type)
 	{
 	case WINDOW::WND_FRIGER:
 		init_inventory();
+		init_slots();
 		break;
 	case WINDOW::WND_SHOP:
 		init_inventory();
@@ -753,6 +800,12 @@ void Window::update()
 	{
 	case WINDOW::WND_BUILD:
 		update_build();
+		break;
+	case WINDOW::WND_SHOP:
+		update_shop();
+		break;
+	case WINDOW::WND_FRIGER:
+		update_friger();
 		break;
 	default:
 		break;

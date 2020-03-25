@@ -47,6 +47,25 @@ HRESULT HudBack::init_gauges()
 	center.y += blank;
 	_energy->set_center(center);
 	_hud_gauges.push_back(_energy);
+	// Stat for fight
+	_agl = new Gauge(GAUGE::ST_AGL);
+	_agl->init();
+	center.x = (LONG)(_hud_back->get_center().x - _agl->get_width() * 0.45);
+	center.y = (LONG)(_hud_back->get_center().y + _agl->get_height() * 0.725);
+	_agl->set_center(center);
+	_hud_gauges.push_back(_agl);
+	_str = new Gauge(GAUGE::ST_STR);
+	_str->init();
+	center.x = (LONG)(_agl->get_center().x - _str->get_width() * 1.125);
+	center.y = (LONG)(_agl->get_center().y);
+	_str->set_center(center);
+	_hud_gauges.push_back(_str);
+	_stm = new Gauge(GAUGE::ST_STM);
+	_stm->init();
+	center.x = (LONG)(_agl->get_center().x + _stm->get_width() * 1.15);
+	center.y = (LONG)(_agl->get_center().y);
+	_stm->set_center(center);
+	_hud_gauges.push_back(_stm);
 	return S_OK;
 }
 void HudBack::delete_gauges()
@@ -63,6 +82,10 @@ void HudBack::delete_gauges()
 	Release(_food);
 	Release(_mood);
 	Release(_energy);
+	// Stat for Fight
+	Release(_str);
+	Release(_agl);
+	Release(_stm);
 }
 void HudBack::draw_gauges()
 {
@@ -78,6 +101,10 @@ void HudBack::update_gauges()
 	_food->sync_gauge_fromValue(PLAYER->get_stat().food);
 	_mood->sync_gauge_fromValue(PLAYER->get_stat().mood);
 	_energy->sync_gauge_fromValue(PLAYER->get_stat().energy);
+	// Stat for fight
+	_agl->sync_gauge_fromValue(Exp(PLAYER->get_stat().agl));
+	_str->sync_gauge_fromValue(Exp(PLAYER->get_stat().str));
+	_stm->sync_gauge_fromValue(Exp(PLAYER->get_stat().stm));
 }
 HRESULT HudBack::init_icons()
 {
@@ -144,7 +171,7 @@ HRESULT HudBack::init()
 	pos.y = (LONG)(_hud_back->get_center().y + 8);
 	_money.set_pos(pos);
 	_money.set_size(28);
-	
+
 	return S_OK;
 }
 void HudBack::release()

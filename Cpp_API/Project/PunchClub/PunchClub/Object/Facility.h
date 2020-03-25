@@ -18,7 +18,6 @@ private:
 	bool _fImgRunBack = false;
 	bool _fImgRunOnly = false;
 protected:
-	bool is_frameImg(Image * img);
 	void change_player_run();
 protected:
 	HRESULT init_objs();

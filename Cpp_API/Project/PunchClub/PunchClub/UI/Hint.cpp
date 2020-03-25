@@ -1,42 +1,64 @@
 #include "stdafx.h"
 #include "Hint.h"
-
 HRESULT Hint::init_imgs()
 {
 	string path;
-	HRESULT result;
-	int result_cnt = 0;
-	_bg = new Image;
-	path = _imgPath + "hint_back.bmp";
-	_bg_fileName = path;
-	result = _bg->init(path.c_str(), (int)(180 * GAME_MULTIPLE), (int)(60 * GAME_MULTIPLE));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
-	_corner_under = new Image;
-	path = _imgPath + "hint_corner_under.bmp";
-	result = _corner_under->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(10 * GAME_MULTIPLE));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
-	_corner_upper = new Image;
-	path = _imgPath + "hint_corner_upper.bmp";
-	result = _corner_upper->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(10 * GAME_MULTIPLE));
-	result_cnt = (result == S_OK ? result_cnt : result_cnt++);
-	result = (result_cnt == 0 ? S_OK : E_FAIL);
-	return result;
+	switch (_type)
+	{
+	case HINT::HINT_NORMAL:
+		_bg = new Image;
+		path = _imgPath + "hint_back.bmp";
+		_bg_fileName = path;
+		_bg->init(path.c_str(), (int)(180 * GAME_MULTIPLE), (int)(60 * GAME_MULTIPLE));
+		_corner_under = new Image;
+		path = _imgPath + "hint_corner_under.bmp";
+		_corner_under->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(10 * GAME_MULTIPLE));
+		_corner_upper = new Image;
+		path = _imgPath + "hint_corner_upper.bmp";
+		_corner_upper->init(path.c_str(), (int)(13 * GAME_MULTIPLE), (int)(10 * GAME_MULTIPLE));
+		break;
+	case HINT::HINT_THINK:
+		_bg = new Image;
+		path = _imgPath + "hnt_back_wh.bmp";
+		_bg->init(path.c_str(), (int)(50 * 1.6), (int)(42 * 1.6));
+		_corner_under = new Image;
+		path = _imgPath + "hint_corner_think.bmp";
+		_corner_under->init(path.c_str(), (int)(30 * 1.6), (int)(30 * 1.6));
+		_corner_under_shdw = new Image;
+		path = _imgPath + "hint_corner_think_shdw.bmp";
+		_corner_under_shdw->init(path.c_str(), (int)(30 * 1.6), (int)(30 * 1.6));
+	}
+	return S_OK;
 }
 void Hint::delete_imgs()
 {
+	Release(_bg);
+	Release(_corner_under);
+	Release(_corner_under_shdw);
+	Release(_corner_upper);
 }
 void Hint::draw_imgs()
 {
 	if (_fPositionOK == true)
 	{
-		Draw(_bg, get_memDC());
-		if (_fCorner_upper == true)
+		switch (_type)
 		{
-			Draw(_corner_upper, get_memDC());
-		}
-		else
-		{
-			Draw(_corner_under, get_memDC());
+		case HINT::HINT_NORMAL:
+			Draw(_bg, get_memDC());
+			if (_fCorner_upper == true)
+			{
+				Draw(_corner_upper, get_memDC());
+			}
+			else
+			{
+				Draw(_corner_under, get_memDC());
+			}
+			break;
+		case HINT::HINT_THINK:
+				Draw(_bg, get_memDC());
+				Draw(_corner_under, get_memDC());
+				_corner_under_shdw->alphaRender(get_memDC(), 128);
+			break;
 		}
 	}
 }
@@ -51,20 +73,25 @@ void Hint::update_imgPos()
 {
 	POINT center;
 	RECT rc;
-	center.x = (LONG)(m_ptMouse.x + _bg->get_width() * 0.4375);
-	center.y = (LONG)(m_ptMouse.y - _bg->get_height() * 0.6);
-	rc = RectMakeCenter(center.x, center.y, _bg->get_width(), _bg->get_height());
-	if (rc.top <= WIN_HALF_H * 0.5)
+	switch (_type)
 	{
-		_fCorner_upper = true;
+	case HINT::HINT_NORMAL:
 		center.x = (LONG)(m_ptMouse.x + _bg->get_width() * 0.4375);
-		center.y = (LONG)(m_ptMouse.y + _bg->get_height() * 0.8);
+		center.y = (LONG)(m_ptMouse.y - _bg->get_height() * 0.6);
+		rc = RectMakeCenter(center.x, center.y, _bg->get_width(), _bg->get_height());
+		if (rc.top <= WIN_HALF_H * 0.5)
+		{
+			_fCorner_upper = true;
+			center.x = (LONG)(m_ptMouse.x + _bg->get_width() * 0.4375);
+			center.y = (LONG)(m_ptMouse.y + _bg->get_height() * 0.8);
+		}
+		else
+		{
+			_fCorner_upper = false;
+		}
+		set_center(center);
+		break;
 	}
-	else
-	{
-		_fCorner_upper = false;
-	}
-	set_center(center);
 }
 void Hint::update_textPos()
 {
@@ -83,7 +110,7 @@ void Hint::resize_bg()
 {
 	auto texts = _descr.get_texts();
 	auto iter = texts.begin();
-	
+
 	int height = texts.size();
 	int big_width = 0;
 	for (; iter != texts.end(); iter++)
@@ -112,17 +139,32 @@ void Hint::release()
 
 void Hint::update()
 {
-	update_imgPos();
-	update_textPos();
+	switch (_type)
+	{
+	case HINT::HINT_NORMAL:
+		update_imgPos();
+		update_textPos();
+		break;
+	}
+
 }
 
 void Hint::render()
 {
-	draw_imgs();
-	draw_texts();
+	switch (_type)
+	{
+	case HINT::HINT_NORMAL:
+		draw_imgs();
+		draw_texts();
+		break;
+	case HINT::HINT_THINK:
+		draw_imgs();
+		break;
+	}
 }
-Hint::Hint()
+Hint::Hint(HINT::TYPE type)
 {
+	_type = type;
 }
 Hint::~Hint()
 {
@@ -131,18 +173,45 @@ Hint::~Hint()
 void Hint::set_center(POINT center)
 {
 	POINT myCenter;
-	if(_bg != nullptr)
+	if (_bg != nullptr)
 	{
 		_bg->set_center(center);
-		// Corner Under
-		myCenter.x = (LONG)(_bg->get_rect().left + _corner_under->get_width() * 1.5);
-		myCenter.y = (LONG)(_bg->get_rect().bottom - _corner_under->get_height() * 0.75);
-		_corner_under->set_center(myCenter);
+		_fPositionOK = true;
+	}
+	switch (_type)
+	{
+	case HINT::HINT_NORMAL:
+		if (_corner_under != nullptr)
+		{
+			// Corner Under
+			myCenter.x = (LONG)(_bg->get_rect().left + _corner_under->get_width() * 1.5);
+			myCenter.y = (LONG)(_bg->get_rect().bottom - _corner_under->get_height() * 0.75);
+			_corner_under->set_center(myCenter);
+		}
+		break;
+	case HINT::HINT_THINK:
+		if (_corner_under != nullptr)
+		{
+			// Corner Under
+			myCenter.x = (LONG)(_bg->get_rect().left - 10);
+			myCenter.y = (LONG)(_bg->get_rect().bottom + 10);
+			_corner_under->set_center(myCenter);
+		}
+		if (_corner_under_shdw != nullptr)
+		{
+			// Corner Under shadow
+			myCenter.x = (LONG)(_bg->get_rect().left - 10);
+			myCenter.y = (LONG)(_bg->get_rect().bottom + 10);
+			_corner_under_shdw->set_center(myCenter);
+		}
+		break;
+	}
+	if (_corner_upper != nullptr)
+	{
 		// Corner Upper
 		myCenter.x = (LONG)(_bg->get_rect().left + _corner_upper->get_width() * 1.5);
 		myCenter.y = (LONG)(_bg->get_rect().top + _corner_upper->get_height() * 0.3);
 		_corner_upper->set_center(myCenter);
-		_fPositionOK = true;
 	}
 }
 

@@ -209,6 +209,14 @@ void InGameUI::update()
 	}
 	
 	_cursor->update();
+	if (PLAYER->is_stop_action())
+	{
+		_cursor->set_fWait(false);
+	}
+	else
+	{
+		_cursor->set_fWait(true);
+	}
 }
 void InGameUI::render()
 {
