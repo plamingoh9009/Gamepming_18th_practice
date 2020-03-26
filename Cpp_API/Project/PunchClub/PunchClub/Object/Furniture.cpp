@@ -117,16 +117,23 @@ void Furniture::update_objImgFrame(Image * img)
 		break;
 	}
 }
-void Furniture::change_player_run()
+void Furniture::change_player_run(bool isStart)
 {
-	switch (_run_type)
+	if (isStart == true)
 	{
-	case MYOBJECT::SOFA_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_SLEEP_SOFA);
-		break;
-	case MYOBJECT::TV_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_WATCH_TV);
-		break;
+		switch (_run_type)
+		{
+		case MYOBJECT::SOFA_PLAYER:
+			start_player_action(MYOBJECT::SOFA_PLAYER);
+			break;
+		case MYOBJECT::TV_PLAYER:
+			start_player_action(MYOBJECT::TV_PLAYER);
+			break;
+		}
+	}
+	else
+	{
+		stop_player_action();
 	}
 }
 void Furniture::runType_case_toUpdate()

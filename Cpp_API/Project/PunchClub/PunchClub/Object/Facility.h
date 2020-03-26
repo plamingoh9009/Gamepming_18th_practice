@@ -4,7 +4,7 @@ class Facility: public Object
 {
 protected:
 	MYOBJECT::TYPE _type = MYOBJECT::OBJ_EMPTY;
-	MYOBJECT::RUN_TYPE _run_type = MYOBJECT::TRM_EMPTY;
+	MYOBJECT::RUN_TYPE _run_type = MYOBJECT::RUN_EMPTY;
 	Image * _img_off = nullptr;
 	Image * _img_off_fg = nullptr;
 	Image * _img_on = nullptr;
@@ -20,7 +20,8 @@ protected:
 	bool _fImgRunOnly = false;
 	bool _fImgOffOnly = false;
 protected:
-	void change_player_actions(PLAYER_SET::ACTION runType);
+	void start_player_action(MYOBJECT::RUN_TYPE runType);
+	void stop_player_action(bool isStopUnforced = true);
 	void run_imgFrame();
 protected:
 	virtual HRESULT init_objs();
@@ -33,7 +34,7 @@ protected:
 	void draw_img_runback();
 	virtual void update_objImgFrame(Image * img);
 	virtual void runType_case_toUpdate();
-	virtual void change_player_run();
+	virtual void change_player_run(bool isStart = true);
 public:
 	virtual HRESULT init();
 	virtual void release();

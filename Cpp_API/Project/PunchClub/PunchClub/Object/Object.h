@@ -5,6 +5,7 @@ class Object: public GameNode
 {
 protected:
 	static bool _fObjMove;
+	static bool _fObjClickLock;
 public:
 	virtual HRESULT init();
 	virtual void release();

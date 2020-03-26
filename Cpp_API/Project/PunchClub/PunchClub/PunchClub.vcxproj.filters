@@ -207,6 +207,9 @@
     <ClInclude Include="Object\Furniture.h">
       <Filter>I_Object\type</Filter>
     </ClInclude>
+    <ClInclude Include="UI\Bead.h">
+      <Filter>I_UI\type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PunchClub.cpp">
@@ -334,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="Object\Furniture.cpp">
       <Filter>I_Object\type</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Bead.cpp">
+      <Filter>I_UI\type</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

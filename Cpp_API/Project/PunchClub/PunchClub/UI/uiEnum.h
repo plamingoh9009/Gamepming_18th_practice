@@ -1,4 +1,20 @@
 #pragma once
+namespace BEAD
+{
+	enum TYPE
+	{
+		BD_EMPTY,
+		// Stat
+		BD_HEALTH,
+		BD_FOOD,
+		BD_MOOD,
+		BD_ENERGY,
+		// Fight
+		BD_STR,
+		BD_AGL,
+		BD_STM,
+	};
+}
 namespace HINT
 {
 	enum TYPE

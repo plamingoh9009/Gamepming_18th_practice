@@ -1,45 +1,72 @@
 #include "stdafx.h"
 #include "Facility.h"
 #include "Player.h"
-void Facility::change_player_run()
+void Facility::change_player_run(bool isStart)
 {
-	switch (_run_type)
+	if (isStart == true)
 	{
-	case MYOBJECT::TRM_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_TREADMILL);
-		break;
-	case MYOBJECT::BBL_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_BARBELL);
-		break;
-	case MYOBJECT::YCN_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_YUNGCHUN);
-		break;
-	case MYOBJECT::TIR_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_HIT_TIRE);
-		break;
-	case MYOBJECT::BP_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_BENCH_PRESS);
-		break;
-	case MYOBJECT::PB_PLAYER:
-		change_player_actions(PLAYER_SET::ACTION_PUNCHBUG);
-		break;
-	}
-}
-void Facility::change_player_actions(PLAYER_SET::ACTION runType)
-{
-	// Set actionType to player
-	PLAYER->set_playerAction(runType);
-	// Change player action state
-	if (PLAYER->is_stop_action())
-	{
-		PLAYER->action_start();
+		switch (_run_type)
+		{
+		case MYOBJECT::TRM_PLAYER:
+			start_player_action(MYOBJECT::TRM_PLAYER);
+			break;
+		case MYOBJECT::BBL_PLAYER:
+			start_player_action(MYOBJECT::BBL_PLAYER);
+			break;
+		case MYOBJECT::YCN_PLAYER:
+			start_player_action(MYOBJECT::YCN_PLAYER);
+			break;
+		case MYOBJECT::TIR_PLAYER:
+			start_player_action(MYOBJECT::TIR_PLAYER);
+			break;
+		case MYOBJECT::BP_PLAYER:
+			start_player_action(MYOBJECT::BP_PLAYER);
+			break;
+		case MYOBJECT::PB_PLAYER:
+			start_player_action(MYOBJECT::PB_PLAYER);
+			break;
+		}
 	}
 	else
 	{
-		PLAYER->action_pause();
+		stop_player_action();
 	}
-	// Change ImgRun On / Off
-	_fImgRun = !_fImgRun;
+
+}
+void Facility::start_player_action(MYOBJECT::RUN_TYPE runType)
+{
+	// Start action
+	PLAYER->set_playerAction(runType | MYOBJECT::RUN_PLAYER);
+	PLAYER->set_playerCenter(_img_off->get_center());
+	PLAYER->action_start();
+	_fImgRun = true;
+	_fObjMove = false;
+	_fObjClickLock = true;
+}
+void Facility::stop_player_action(bool isStopUnforced)
+{
+	int runType = PLAYER->get_actionType();
+	bool isRun = (PLAYER->is_running_action());
+	bool isSameType = (_run_type == (runType ^ MYOBJECT::RUN_PLAYER));
+	if (isStopUnforced)
+	{
+		// Change player action state
+		if (isRun && isSameType)
+		{
+			PLAYER->action_pause();
+			_fImgRun = false;
+			_fObjMove = true;
+		}//if: 플레이어가 action을 하고 있고, 그게 내 타입과 같을 경우 pause
+	}
+	else
+	{
+		if (MYOBJECT::RUN_PLAYER == (runType & MYOBJECT::RUN_PLAYER))
+		{
+			PLAYER->action_pause();
+			_fImgRun = false;
+			_fObjMove = true;
+		}
+	}//else: 강제로 플레이어블 기구를 전부 멈춘다.
 }
 void Facility::run_imgFrame()
 {
@@ -330,19 +357,31 @@ void Facility::update_objs()
 	{
 		_fImgOn = false;
 	}
-	// 런 이미지 
-	if (_fImgOn == true && _fClick == true)
 	{
-		change_player_run();
-		_fObjMove = false;
-	}//if: 기구를 클릭하면 운동을 시작한다.
-	else if (_fImgRun == true && _fClick == true)
-	{
-		change_player_run();
-		_fObjMove = true;
-	}
-	runType_case_toUpdate();
+		// 시작한 운동을 멈추는 코드
+		if (_fImgRun && _fClick && PLAYER->is_click_ready())
+		{
+			change_player_run(false);
+		}
 
+		// 배고플 때 운동을 강제로 멈추는 코드
+		if (PLAYER->is_tired() && _fImgRun)
+		{
+			PLAYER->Tired();
+		}//if: 배고픈 이미지를 먼저 보여준 후 _fImgRun을 해제한다.
+		if (PLAYER->is_tired())
+		{
+			stop_player_action(false);
+		}
+	}
+
+	// 운동을 시작하는 코드
+	if (_fImgOn == true && _fClick == true && _fObjClickLock == false)
+	{
+		change_player_run();
+	}
+
+	runType_case_toUpdate();
 	run_imgFrame();
 }
 

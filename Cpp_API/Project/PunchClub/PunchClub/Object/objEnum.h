@@ -26,22 +26,23 @@ namespace MYOBJECT
 	};
 	enum RUN_TYPE
 	{
-		TRM_EMPTY,
+		RUN_EMPTY,
+		// Work
+		WORK_PLAYER,
 		// Facility
 		TRM_NORMAL,
 		TRM_ORANGE_GIRL,
 		TRM_YELLOW_GIRL,
 		TRM_PLAYER,
-		BBL_EMPTY,
 		BBL_PLAYER,
-		YCN_EMPTY,
 		YCN_PLAYER,
 		TIR_PLAYER,
 		BP_PLAYER,
 		PB_PLAYER,
 		// Furniture
 		SOFA_PLAYER,
-		TV_PLAYER
+		TV_PLAYER,
+		RUN_PLAYER = 0b10000000
 	};
 }
 namespace NPC
@@ -70,24 +71,14 @@ struct PlayerStat
 };
 namespace PLAYER_SET
 {
-	enum ACTION
-	{
-		ACTION_EMPTY,
-		ACTION_WORK,
-		ACTION_SLEEP_SOFA,
-		ACTION_WATCH_TV,
-		// EXERSIZE
-		ACTION_TREADMILL,
-		ACTION_BARBELL,
-		ACTION_HIT_TIRE,
-		ACTION_BENCH_PRESS,
-		ACTION_PUNCHBUG,
-		ACTION_YUNGCHUN
-	};
 	enum STAT
 	{
 		STR = 0b0001,
 		AGL = 0b0010,
 		STM = 0b0100
+	};
+	enum ADD_STAT
+	{
+		AS_FIGHT = 0b0001
 	};
 }

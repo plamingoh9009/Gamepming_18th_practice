@@ -6,6 +6,7 @@
 #include "Icons/Icon.h"
 #include "HudBack.h"
 #include "Button.h"
+#include "Bead.h"
 // 클릭했을 때
 #include "Window.h"
 // 싸울 때
@@ -21,6 +22,7 @@ class InGameUI: public GameNode, public SingletonBase<InGameUI>
 private:
 	// 오브젝트에 값을 넣기 위해서 필요하다
 	Object * _obj;
+	typedef vector<Bead *> Beads;
 private:
 	// Cursor
 	Cursor * _cursor = nullptr;
@@ -39,6 +41,8 @@ private:
 	bool _fIngame_wnd = false;
 	// 리그에서 쓰는 게이지 클래스
 	FightGauge * _gauge;
+	// Stat Beads
+	Beads _beads;
 	// 현재 UI에 무엇을 띄울 것인지 기준
 	UI_TYPE _type = UI_NONE;
 	WINDOW::TYPE _wndType = WINDOW::WND_NONE;
@@ -49,7 +53,11 @@ protected:
 	void delete_icons();
 	void draw_icons();
 	void update_icons();
-
+	// Beads
+	void delete_beads();
+	void draw_beads();
+	void update_beads();
+	// League
 	void update_league();
 	// 게이지
 	void init_gauges();

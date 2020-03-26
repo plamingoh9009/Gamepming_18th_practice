@@ -175,8 +175,8 @@ void HudMapScene::release()
 void HudMapScene::update()
 {
 	update_scene();
-	
-	if (_bus_wnd->is_openBus() == true) 
+
+	if (_bus_wnd->is_openBus() == true)
 	{
 		_bus_wnd->update();
 
@@ -206,7 +206,6 @@ void HudMapScene::update()
 	else if (_build_wnd->is_openWindow() == true)
 	{
 		_build_wnd->update();
-		PLAYER->update();
 	}
 	else
 	{
@@ -214,6 +213,7 @@ void HudMapScene::update()
 		update_map_icons();
 		update_player_pos();
 	}
+	PLAYER->update();
 	INGAME_UI->update();
 	change_scene();
 }

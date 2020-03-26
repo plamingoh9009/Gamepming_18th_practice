@@ -121,27 +121,36 @@ double Player::limit_stat(double stat, bool fZeroSet)
 }
 void Player::hide_player()
 {
-	switch (_actionType)
+	switch (_actionType ^ MYOBJECT::RUN_PLAYER)
 	{
-	case PLAYER_SET::ACTION_SLEEP_SOFA:
-	case PLAYER_SET::ACTION_WATCH_TV:
-	// Training
-	case PLAYER_SET::ACTION_TREADMILL:
-	case	PLAYER_SET::ACTION_BARBELL:
-	case	PLAYER_SET::ACTION_HIT_TIRE:
-	case	PLAYER_SET::ACTION_BENCH_PRESS:
-	case	PLAYER_SET::ACTION_PUNCHBUG:
-	case	PLAYER_SET::ACTION_YUNGCHUN:
+	case MYOBJECT::SOFA_PLAYER:
+	case MYOBJECT::TV_PLAYER:
+		// Training
+	case MYOBJECT::TRM_PLAYER:
+	case MYOBJECT::BBL_PLAYER:
+	case MYOBJECT::TIR_PLAYER:
+	case MYOBJECT::BP_PLAYER:
+	case MYOBJECT::PB_PLAYER:
+	case MYOBJECT::YCN_PLAYER:
 		_fVisible = false;
 		break;
 	}
+}
+// ========================================
+// ***		스탯 구슬 함수					***
+// ========================================
+void Player::make_bead(BEAD::TYPE type, bool isReverse)
+{
+	Bead * bead = new Bead(type, isReverse);
+	bead->init();
+	_beads.push_back(bead);
 }
 // ========================================
 // ***			플레이어 행동				***
 // ========================================
 void Player::action()
 {
-	if (_actionType != PLAYER_SET::ACTION_EMPTY)
+	if (_actionType != MYOBJECT::RUN_EMPTY)
 	{
 		if (_fAction)
 		{
@@ -150,52 +159,52 @@ void Player::action()
 			_time += TIMEMANAGER->get_elapsedTime();
 			if (1.0f <= _time)
 			{
-				switch (_actionType)
+				switch (_actionType ^ MYOBJECT::RUN_PLAYER)
 				{
-				case PLAYER_SET::ACTION_WORK:
+				case MYOBJECT::WORK_PLAYER:
 					Tired();
 					_myStat.workGauge += 80;
 					// 일하면 모든 상태가 전부 떨어지지만 스탯이 오른다.
 					add_stat(10, -20, -10, -25);
 					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::AGL | PLAYER_SET::STM);
 					break;
-				case PLAYER_SET::ACTION_SLEEP_SOFA:
+				case MYOBJECT::SOFA_PLAYER:
 					Tired();
 					add_stat(10, -30, 2, 40);
 					break;
-				case PLAYER_SET::ACTION_WATCH_TV:
+				case MYOBJECT::TV_PLAYER:
 					Tired();
 					add_stat(10, -10, 30, 10);
 					break;
 					// Trainig
-				case PLAYER_SET::ACTION_TREADMILL:
+				case MYOBJECT::TRM_PLAYER:
 					Tired();
-					add_stat(10, -10, -5, -15);
+					add_stat(PLAYER_SET::AS_FIGHT);
 					add_stat_forFight(PLAYER_SET::STM);
 					break;
-				case PLAYER_SET::ACTION_BARBELL:
+				case MYOBJECT::BBL_PLAYER:
 					Tired();
-					add_stat(10, -10, -5, -15);
+					add_stat(PLAYER_SET::AS_FIGHT);
 					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::STM);
 					break;
-				case PLAYER_SET::ACTION_HIT_TIRE:
+				case MYOBJECT::TIR_PLAYER:
 					Tired();
-					add_stat(10, -10, -5, -15);
+					add_stat(PLAYER_SET::AS_FIGHT);
 					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::AGL | PLAYER_SET::STM);
 					break;
-				case PLAYER_SET::ACTION_BENCH_PRESS:
+				case MYOBJECT::BP_PLAYER:
 					Tired();
-					add_stat(10, -10, -5, -15);
+					add_stat(PLAYER_SET::AS_FIGHT);
 					add_stat_forFight(PLAYER_SET::STR);
 					break;
-				case PLAYER_SET::ACTION_PUNCHBUG:
+				case MYOBJECT::PB_PLAYER:
 					Tired();
-					add_stat(10, -10, -5, -15);
+					add_stat(PLAYER_SET::AS_FIGHT);
 					add_stat_forFight(PLAYER_SET::STR | PLAYER_SET::AGL | PLAYER_SET::STM);
 					break;
-				case PLAYER_SET::ACTION_YUNGCHUN:
+				case MYOBJECT::YCN_PLAYER:
 					Tired();
-					add_stat(10, -10, -5, -15);
+					add_stat(PLAYER_SET::AS_FIGHT);
 					add_stat_forFight(PLAYER_SET::AGL | PLAYER_SET::STM);
 					break;
 				}
@@ -207,7 +216,7 @@ void Player::action()
 			{
 				switch (_actionType)
 				{
-				case PLAYER_SET::ACTION_WORK:
+				case MYOBJECT::WORK_PLAYER:
 					_myStat.workGauge = limit_stat(_myStat.workGauge, true);
 					break;
 				default:
@@ -221,10 +230,11 @@ void Player::action()
 			}
 		}//if: fAction이 True 라면 플레이어가 행동한다.
 	}//if: actionType이 정의되어 있을 때
-	if(_fAction == false)
+	if (_fAction == false)
 	{
-		_actionType = PLAYER_SET::ACTION_EMPTY;
+		_actionType = _actionType & MYOBJECT::RUN_PLAYER;
 		_fVisible = true;
+		_fObjClickLock = false;
 	}//else: 액션을 멈추면 플레이어를 볼 수 있다.
 }
 //==========================================
@@ -252,35 +262,55 @@ void Player::add_stat(double health, double food, double mood, double energy)
 	_myStat.food += food;
 	_myStat.mood += mood;
 	_myStat.energy += energy;
+	// Make status beads
+	if (health < 0) { make_bead(BEAD::BD_HEALTH, true); }
+	else { make_bead(BEAD::BD_HEALTH); }
+	if (health < 0) { make_bead(BEAD::BD_FOOD, true); }
+	else { make_bead(BEAD::BD_HEALTH); }
+	if (health < 0) { make_bead(BEAD::BD_MOOD, true); }
+	else { make_bead(BEAD::BD_HEALTH); }
+	if (health < 0) { make_bead(BEAD::BD_ENERGY, true); }
+	else { make_bead(BEAD::BD_HEALTH); }
+}
+void Player::add_stat(int effectsStat)
+{
+	if (effectsStat & PLAYER_SET::AS_FIGHT)
+	{
+		add_stat(10, -22.5, -5, -33.75);
+	}
 }
 void Player::add_stat_forFight(int effectsStat, bool isLostExp)
 {
 	int str_percent, agl_percent, stm_percent;
-	int percent = 100;
+	int str = (int)(_myStat.str / 1000 - 1);
+	int agl = (int)(_myStat.agl / 1000 - 1);
+	int stm = (int)(_myStat.stm / 1000 - 1);
+	int correction = 30;
 	// Make percentage
+	int percent = 75;
 	str_percent = RAND->get_fromIntTo(1, 100);
 	agl_percent = RAND->get_fromIntTo(1, 100);
 	stm_percent = RAND->get_fromIntTo(1, 100);
-	if(isLostExp)
+	if (isLostExp)
 	{
 		// Empty yet..
 	}//if: subtraction
 	else
 	{
-		if (str_percent <= percent && 
+		if (str_percent <= percent &&
 			effectsStat & PLAYER_SET::STR)
 		{
-			_myStat.str += STAT_EXP;
+			_myStat.str += (STAT_EXP - str * correction);
 		}
 		if (agl_percent <= percent &&
 			effectsStat & PLAYER_SET::AGL)
 		{
-			_myStat.agl += STAT_EXP;
+			_myStat.agl += (STAT_EXP - str * correction);
 		}
 		if (stm_percent <= percent &&
 			effectsStat & PLAYER_SET::STM)
 		{
-			_myStat.stm += STAT_EXP;
+			_myStat.stm += (STAT_EXP - str * correction);
 		}
 	}//else: add
 }
@@ -289,8 +319,9 @@ void Player::Tired()
 {
 	if (_myStat.food < 120 || _myStat.energy < 120)
 	{
-		_fAction = false;
+		action_pause();
 		_fTired = true;
+		_fClick = false;
 		_hunger->Visible();
 	}
 }

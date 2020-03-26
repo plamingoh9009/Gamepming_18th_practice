@@ -83,6 +83,35 @@ void InGameUI::update_icons()
 	_icn_league->update();
 	_icn_skilltree->update();
 }
+// ========================================
+// ***		스탯 구슬 함수					***
+// ========================================
+void InGameUI::delete_beads()
+{
+	auto iter = _beads.begin();
+	for (; iter != _beads.end();)
+	{
+		Release(*iter);
+		iter = _beads.erase(iter);
+	}
+	swap(_beads, Beads());
+}
+void InGameUI::draw_beads()
+{
+	auto iter = _beads.begin();
+	for (; iter != _beads.end(); iter++)
+	{
+		Draw(*iter);
+	}
+}
+void InGameUI::update_beads()
+{
+	auto iter = _beads.begin();
+	for (; iter != _beads.end(); iter++)
+	{
+		(*iter)->update();
+	}
+}
 // ====================================
 // ***		리그창 열었을 때			***
 // ====================================
@@ -188,6 +217,7 @@ void InGameUI::release()
 	Release(_window_league);
 	Release(_ingame_wnd);
 	delete_gauges();
+	delete_beads();
 }
 void InGameUI::update()
 {
@@ -209,15 +239,18 @@ void InGameUI::update()
 	}
 	
 	_cursor->update();
-	if (PLAYER->is_stop_action() && 
-		PLAYER->get_actionType() == PLAYER_SET::ACTION_EMPTY)
-	{
-		_cursor->set_fWait(false);
-	}
-	else
+	if (PLAYER->is_running_action() && 
+		PLAYER->get_actionType() != MYOBJECT::RUN_EMPTY)
 	{
 		_cursor->set_fWait(true);
 	}
+	else
+	{
+		_cursor->set_fWait(false);
+	}
+	// Beads
+	_beads = PLAYER->get_beads();
+	update_beads();
 }
 void InGameUI::render()
 {
@@ -229,6 +262,7 @@ void InGameUI::render()
 	default:
 		draw_icons();
 		_hud_back->render();
+		draw_beads();
 		if (_fRedButton) { _red_button->render(); }
 		if (_icn_league->get_fLeague()) { _window_league->render(); }
 		break;

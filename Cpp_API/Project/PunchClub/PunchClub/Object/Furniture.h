@@ -5,7 +5,7 @@ class Furniture: public Facility
 protected:
 	virtual HRESULT init_objs();
 	virtual void update_objImgFrame(Image * img);
-	virtual void change_player_run();
+	virtual void change_player_run(bool isStart = true);
 	virtual void runType_case_toUpdate();
 public:
 	virtual HRESULT init();
