@@ -37,7 +37,12 @@ void Facility::start_player_action(MYOBJECT::RUN_TYPE runType)
 {
 	// Start action
 	PLAYER->set_playerAction(runType | MYOBJECT::RUN_PLAYER);
-	PLAYER->set_playerCenter(_img_off->get_center());
+	PLAYER->set_playerCenter(
+		PointMake(
+			_img_off->get_center().x, 
+			(int)(_img_off->get_rect().bottom - PLAYER->get_playerHeight())
+		)
+	);
 	PLAYER->action_start();
 	_fImgRun = true;
 	_fObjMove = false;
@@ -352,16 +357,24 @@ void Facility::update_objs()
 	if (PtInRect(&_img_off->get_rect(), m_ptMouse))
 	{
 		_fImgOn = true;
+		if (_fClick)
+		{
+			_fSelect = true;
+		}
 	}
 	else
 	{
 		_fImgOn = false;
+		_fSelect = false;
 	}
 	{
 		// 시작한 운동을 멈추는 코드
-		if (_fImgRun && _fClick && PLAYER->is_click_ready())
+		if (_fImgRun && _fClick)
 		{
-			change_player_run(false);
+			if (PLAYER->is_click_ready())
+			{
+				change_player_run(false);
+			}
 		}
 
 		// 배고플 때 운동을 강제로 멈추는 코드

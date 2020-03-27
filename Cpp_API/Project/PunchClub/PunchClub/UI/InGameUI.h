@@ -54,7 +54,7 @@ protected:
 	void draw_icons();
 	void update_icons();
 	// Beads
-	void delete_beads();
+	void erase_beads();
 	void draw_beads();
 	void update_beads();
 	// League

@@ -19,6 +19,7 @@ protected:
 	bool _fImgRunBack = false;
 	bool _fImgRunOnly = false;
 	bool _fImgOffOnly = false;
+	bool _fSelect = false;
 protected:
 	void start_player_action(MYOBJECT::RUN_TYPE runType);
 	void stop_player_action(bool isStopUnforced = true);
@@ -54,5 +55,6 @@ public:
 	int get_height();
 	POINT get_center() { return _img_off->get_center(); }
 	RECT get_rect();
+	bool is_select() { return _fSelect; }
 };
 

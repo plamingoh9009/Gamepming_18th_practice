@@ -139,10 +139,11 @@ void Player::hide_player()
 // ========================================
 // ***		스탯 구슬 함수					***
 // ========================================
-void Player::make_bead(BEAD::TYPE type, bool isReverse)
+void Player::make_bead(BEAD::TYPE type, int plusCnt, bool isReverse)
 {
 	Bead * bead = new Bead(type, isReverse);
 	bead->init();
+	bead->set_position(plusCnt);
 	_beads.push_back(bead);
 }
 // ========================================
@@ -157,7 +158,7 @@ void Player::action()
 			hide_player();
 			// 일정 시간을 주고, 행동을 한다.
 			_time += TIMEMANAGER->get_elapsedTime();
-			if (1.0f <= _time)
+			if (2.6f <= _time)
 			{
 				switch (_actionType ^ MYOBJECT::RUN_PLAYER)
 				{
@@ -262,15 +263,33 @@ void Player::add_stat(double health, double food, double mood, double energy)
 	_myStat.food += food;
 	_myStat.mood += mood;
 	_myStat.energy += energy;
+
+	int plusCnt = 0;
 	// Make status beads
-	if (health < 0) { make_bead(BEAD::BD_HEALTH, true); }
-	else { make_bead(BEAD::BD_HEALTH); }
-	if (health < 0) { make_bead(BEAD::BD_FOOD, true); }
-	else { make_bead(BEAD::BD_HEALTH); }
-	if (health < 0) { make_bead(BEAD::BD_MOOD, true); }
-	else { make_bead(BEAD::BD_HEALTH); }
-	if (health < 0) { make_bead(BEAD::BD_ENERGY, true); }
-	else { make_bead(BEAD::BD_HEALTH); }
+	if (health < 0) { make_bead(BEAD::BD_HEALTH, 0, true); }
+	else 
+	{
+		plusCnt++;
+		make_bead(BEAD::BD_HEALTH, plusCnt);
+	}
+	if (food < 0) { make_bead(BEAD::BD_FOOD, 0, true); }
+	else 
+	{ 
+		plusCnt++;
+		make_bead(BEAD::BD_FOOD, plusCnt); 
+	}
+	if (mood < 0) { make_bead(BEAD::BD_MOOD, 0, true); }
+	else 
+	{
+		plusCnt++;
+		make_bead(BEAD::BD_MOOD, plusCnt);
+	}
+	if (energy < 0) { make_bead(BEAD::BD_ENERGY, 0, true); }
+	else 
+	{
+		plusCnt++;
+		make_bead(BEAD::BD_ENERGY, plusCnt);
+	}
 }
 void Player::add_stat(int effectsStat)
 {
@@ -291,6 +310,8 @@ void Player::add_stat_forFight(int effectsStat, bool isLostExp)
 	str_percent = RAND->get_fromIntTo(1, 100);
 	agl_percent = RAND->get_fromIntTo(1, 100);
 	stm_percent = RAND->get_fromIntTo(1, 100);
+	// Make bead counter
+	int plusCnt = 0;
 	if (isLostExp)
 	{
 		// Empty yet..
@@ -301,16 +322,22 @@ void Player::add_stat_forFight(int effectsStat, bool isLostExp)
 			effectsStat & PLAYER_SET::STR)
 		{
 			_myStat.str += (STAT_EXP - str * correction);
+			plusCnt++;
+			make_bead(BEAD::BD_STR, plusCnt);
 		}
 		if (agl_percent <= percent &&
 			effectsStat & PLAYER_SET::AGL)
 		{
 			_myStat.agl += (STAT_EXP - str * correction);
+			plusCnt++;
+			make_bead(BEAD::BD_AGL, plusCnt);
 		}
 		if (stm_percent <= percent &&
 			effectsStat & PLAYER_SET::STM)
 		{
 			_myStat.stm += (STAT_EXP - str * correction);
+			plusCnt++;
+			make_bead(BEAD::BD_STM, plusCnt);
 		}
 	}//else: add
 }

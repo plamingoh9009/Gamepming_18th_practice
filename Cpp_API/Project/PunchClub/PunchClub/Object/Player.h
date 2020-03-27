@@ -13,6 +13,8 @@ private:
 	const double STAT_EXP = 100;	// Gain exp when player training
 private:
 	Image * _player_idle[4];
+	Image * _player_img;
+	Image * _player_img_shdw;
 	RECT _player_rc;
 	POINT _player_center;
 	// 이미지 바꿀 때 쓰는 변수
@@ -45,7 +47,7 @@ protected:
 	void move_player();
 	void hide_player();
 	// Bead
-	void make_bead(BEAD::TYPE type, bool isReverse = false);
+	void make_bead(BEAD::TYPE type, int plusCnt, bool isReverse = false);
 	
 	double limit_stat(double stat, bool fZeroSet = false);
 protected:
@@ -72,9 +74,10 @@ public:
 	Player();
 	~Player();
 public:
-	PlayerStat get_stat() { return _myStat; }
-	MAPICON::TYPE get_playerLocation() { return _location; }
-	POINT get_playerCenter() { return _player_center; }
+	inline PlayerStat get_stat() { return _myStat; }
+	inline MAPICON::TYPE get_playerLocation() { return _location; }
+	inline POINT get_playerCenter() { return _player_center; }
+	inline int get_playerHeight() { return (int)(_player_rc.right - _player_rc.left); }
 	int get_actionType() { return _actionType; }
 	Beads get_beads() { return _beads; }
 	void set_playerCenter(POINT center);

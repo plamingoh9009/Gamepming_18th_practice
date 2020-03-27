@@ -86,15 +86,21 @@ void InGameUI::update_icons()
 // ========================================
 // ***		스탯 구슬 함수					***
 // ========================================
-void InGameUI::delete_beads()
+void InGameUI::erase_beads()
 {
 	auto iter = _beads.begin();
 	for (; iter != _beads.end();)
 	{
-		Release(*iter);
-		iter = _beads.erase(iter);
+		if ((*iter)->is_deleteOK())
+		{
+			Release(*iter);
+			iter = _beads.erase(iter);
+		}
+		else
+		{
+			iter++;
+		}
 	}
-	swap(_beads, Beads());
 }
 void InGameUI::draw_beads()
 {
@@ -217,7 +223,6 @@ void InGameUI::release()
 	Release(_window_league);
 	Release(_ingame_wnd);
 	delete_gauges();
-	delete_beads();
 }
 void InGameUI::update()
 {
@@ -237,9 +242,9 @@ void InGameUI::update()
 	{
 		update_ingame_wnd();
 	}
-	
+
 	_cursor->update();
-	if (PLAYER->is_running_action() && 
+	if (PLAYER->is_running_action() &&
 		PLAYER->get_actionType() != MYOBJECT::RUN_EMPTY)
 	{
 		_cursor->set_fWait(true);
@@ -251,7 +256,8 @@ void InGameUI::update()
 	// Beads
 	_beads = PLAYER->get_beads();
 	update_beads();
-}
+	erase_beads();
+}// Update
 void InGameUI::render()
 {
 	switch (_type)
@@ -271,7 +277,7 @@ void InGameUI::render()
 	{
 		draw_ingame_wnd();
 	}
-	
+
 	Draw(_cursor);
 }
 InGameUI::InGameUI()

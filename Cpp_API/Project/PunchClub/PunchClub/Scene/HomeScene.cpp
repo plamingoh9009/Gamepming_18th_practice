@@ -10,7 +10,6 @@ void HomeScene::init_friger()
 	center.x = (LONG)(_kitchentable->get_center().x - _friger->get_width() * 0.86);
 	center.y = (LONG)(_kitchentable->get_center().y + _friger->get_width() * 0.1);
 	_friger->set_furniture_center(center);
-	_objs.push_back(_friger);
 }
 void HomeScene::init_sofa()
 {
@@ -21,7 +20,6 @@ void HomeScene::init_sofa()
 	pos.x = (LONG)(_stand->get_rect().right - _stand->get_width() * 0.08);
 	pos.y = (LONG)(_stand->get_center().y - _stand->get_width() * 0.1);
 	_sofa->set_furniture_pos(pos);
-	_objs.push_back(_sofa);
 }
 void HomeScene::init_tv()
 {
@@ -32,7 +30,6 @@ void HomeScene::init_tv()
 	pos.x = (LONG)(_sofa->get_rect().left + _stand->get_width() * 0.25);
 	pos.y = (LONG)(_aquarium->get_rect().bottom - _stand->get_width() * 0.37);
 	_tv->set_furniture_pos(pos);
-	_objs.push_back(_tv);
 }
 void HomeScene::init_aquarium()
 {
@@ -42,7 +39,6 @@ void HomeScene::init_aquarium()
 	pos.x = (LONG)(_sofa->get_rect().right - _aquarium->get_width() * 0.25);
 	pos.y = (LONG)(_kitchentable->get_center().y - _aquarium->get_width() * 0.35);
 	_aquarium->set_furniture_pos(pos);
-	_objs.push_back(_aquarium);
 }
 void HomeScene::init_fan()
 {
@@ -52,7 +48,6 @@ void HomeScene::init_fan()
 	center.x = (LONG)((_sofa->get_rect().left + _sofa->get_rect().right) * 0.5);
 	center.y = (LONG)(_kitchentable->get_center().y - _fan->get_height() * 0.92);
 	_fan->set_furniture_center(center);
-	_objs.push_back(_fan);
 }
 void HomeScene::init_clock()
 {
@@ -62,7 +57,6 @@ void HomeScene::init_clock()
 	pos.x = (LONG)(_tv->get_rect().right - _clock->get_width() * 0.65);
 	pos.y = (LONG)(_stand->get_rect().top - _clock->get_width() * 0.5);
 	_clock->set_furniture_pos(pos);
-	_objs.push_back(_clock);
 }
 void HomeScene::init_kitchentable()
 {
@@ -72,7 +66,6 @@ void HomeScene::init_kitchentable()
 	center.x = (LONG)(WIN_HALF_W - _kitchentable->get_width() * 0.57);
 	center.y = (LONG)(WIN_HALF_H - _kitchentable->get_width() * 0.1);
 	_kitchentable->set_furniture_center(center);
-	_objs.push_back(_kitchentable);
 }
 void HomeScene::init_stand()
 {
@@ -82,7 +75,6 @@ void HomeScene::init_stand()
 	center.x = (LONG)(WIN_HALF_W - _stand->get_width() * 0.015);
 	center.y = (LONG)(_kitchentable->get_center().y - _stand->get_width() * 0.1);
 	_stand->set_furniture_center(center);
-	_objs.push_back(_stand);
 }
 void HomeScene::init_table()
 {
@@ -92,7 +84,6 @@ void HomeScene::init_table()
 	center.x = (LONG)(_stand->get_center().x + _stand->get_width() * 0.25);
 	center.y = (LONG)(WINSIZEY - _table->get_height() * 0.5);
 	_table->set_furniture_center(center);
-	_objs.push_back(_table);
 }
 void HomeScene::init_bookshelf()
 {
@@ -102,7 +93,6 @@ void HomeScene::init_bookshelf()
 	pos.x = (LONG)(_tv->get_rect().right + _bookshelf->get_width() * 0.25);
 	pos.y = (LONG)(WINSIZEY - _bookshelf->get_height() - _bookshelf->get_width() * 0.1);
 	_bookshelf->set_furniture_pos(pos);
-	_objs.push_back(_bookshelf);
 }
 void HomeScene::init_phone()
 {
@@ -112,7 +102,6 @@ void HomeScene::init_phone()
 	center.x = (LONG)(_stand->get_center().x + _phone->get_height() * 0.1);
 	center.y = (LONG)(_friger->get_rect().bottom - _phone->get_height() * 0.1);
 	_phone->set_furniture_center(center);
-	_objs.push_back(_phone);
 }
 
 void HomeScene::init_furnitures()
@@ -130,6 +119,17 @@ void HomeScene::init_furnitures()
 	init_bookshelf();
 	init_clock();
 	init_phone();
+	_objs.push_back(_kitchentable);
+	_objs.push_back(_friger);
+	_objs.push_back(_stand);
+	_objs.push_back(_aquarium);
+	_objs.push_back(_sofa);
+	_objs.push_back(_tv);
+	_objs.push_back(_fan);
+	_objs.push_back(_table);
+	_objs.push_back(_bookshelf);
+	_objs.push_back(_clock);
+	_objs.push_back(_phone);
 }
 void HomeScene::draw_furnitures()
 {
@@ -201,7 +201,14 @@ void HomeScene::update()
 	update_scene();		// 모든 씬에서 공통으로 업데이트 해야 하는 것을 함수화
 	update_furnitures();
 	INGAME_UI->update();	// UI를 플레이어보다 먼저 받는다.
-	PLAYER->update();
+	if (_friger->is_select())
+	{
+		INGAME_UI->set_fIngame_wnd(true);
+	}
+	else
+	{
+		PLAYER->update();
+	}
 	change_scene();	// 항상 마지막에 씬을 바꾼다.
 }
 void HomeScene::render()

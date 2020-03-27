@@ -150,16 +150,7 @@ void HudBack::draw_icons()
 
 HRESULT HudBack::init()
 {
-	POINT center, pos;
-	set_imgPath("UI/");
-	string path = _imgPath + "Hud_back.bmp";
-	_hud_back = new Image;
-	_hud_back->init(path.c_str(), (int)(400 * GAME_MULTIPLE), (int)(70 * GAME_MULTIPLE));
-	center.x = (LONG)(WIN_HALF_W);
-	center.y = (LONG)(0 + _hud_back->get_height() * 0.33);
-	_hud_back->set_center(center);
-	// Gauges
-	init_gauges();
+	POINT pos;
 	// Icons
 	init_icons();
 	// SkillPoint
@@ -174,7 +165,6 @@ HRESULT HudBack::init()
 	pos.y = (LONG)(_hud_back->get_center().y + 8);
 	_money.set_pos(pos);
 	_money.set_size(28);
-
 	return S_OK;
 }
 void HudBack::release()
@@ -204,6 +194,16 @@ void HudBack::render()
 }
 HudBack::HudBack()
 {
+	POINT center;
+	set_imgPath("UI/");
+	string path = _imgPath + "Hud_back.bmp";
+	_hud_back = new Image;
+	_hud_back->init(path.c_str(), (int)(400 * GAME_MULTIPLE), (int)(70 * GAME_MULTIPLE));
+	center.x = (LONG)(WIN_HALF_W);
+	center.y = (LONG)(0 + _hud_back->get_height() * 0.33);
+	_hud_back->set_center(center);
+	// Gauges
+	init_gauges();
 }
 HudBack::~HudBack()
 {

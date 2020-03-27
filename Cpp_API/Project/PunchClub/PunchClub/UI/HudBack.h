@@ -45,5 +45,13 @@ public:
 public:
 	HudBack();
 	~HudBack();
+public:
+	inline POINT get_health_center() { return _health->get_center(); }
+	inline POINT get_food_center() { return _food->get_center(); }
+	inline POINT get_mood_center() { return _mood->get_center(); }
+	inline POINT get_energy_center() { return _energy->get_center(); }
+	inline POINT get_str_center() { return _str->get_center(); }
+	inline POINT get_agl_center() { return _agl->get_center(); }
+	inline POINT get_stm_center() { return _stm->get_center(); }
 };
 
