@@ -120,19 +120,6 @@ void MapIcon::draw_icon()
 			Draw(_icon_off, get_memDC());
 		}
 	}//else: 플레이어 아닌 아이콘 조건
-
-	if (_fDebug)
-	{
-		if (_type == MAPICON::ICN_PLAYER)
-		{
-			ColorRect(get_memDC(), _icon_off->get_rect(), RGB(144, 233, 0));
-		}
-		else
-		{
-			ColorRect(get_memDC(), _icon_off->get_rect(), RGB(244, 180, 41));
-		}
-
-	}//if: Debug
 }
 void MapIcon::delete_icon()
 {

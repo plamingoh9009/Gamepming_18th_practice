@@ -2,6 +2,8 @@
 #include "Object.h"
 class Facility: public Object
 {
+private:
+	typedef vector<Collision *> Collisions;
 protected:
 	MYOBJECT::TYPE _type = MYOBJECT::OBJ_EMPTY;
 	MYOBJECT::RUN_TYPE _run_type = MYOBJECT::RUN_EMPTY;
@@ -11,6 +13,8 @@ protected:
 	Image * _img_shadow = nullptr;
 	Image * _img_runback = nullptr;
 	Image * _img_runback_shdw = nullptr;
+	// Collisions
+	Collisions _collisions;
 
 	Image * _img_run = nullptr;
 	Image * _img_run_shadow = nullptr;

@@ -17,7 +17,7 @@ protected:
 	void init_fight_stat();
 protected:
 	void action();
-	void run_gauge();
+	void run_gauge(bool isSyncValue = false);
 	double limit_value(double value, bool fZeroSet = false);
 	void sync_gauge_fromValue();
 public:

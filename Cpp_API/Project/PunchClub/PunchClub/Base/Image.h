@@ -164,6 +164,7 @@ public:
 	void frameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY);
 	void frameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, int width, int height);
 	void frameAlphaRender(HDC hdc, BYTE alpha);
+	void frameAlphaRender(HDC hdc, int destX, int destY, BYTE alpha);
 	//루프렌더(hdc, 루프시킬영역, x오프셋, y오프셋)
 	void loopRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY);
 	void loopAlphaRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY, BYTE alpha);

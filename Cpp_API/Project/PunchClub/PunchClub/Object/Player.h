@@ -12,15 +12,24 @@ private:
 	typedef vector<Bead *> Beads;
 	const double STAT_EXP = 100;	// Gain exp when player training
 private:
+	// Idle Images
 	Image * _player_idle[4];
-	Image * _player_img;
-	Image * _player_img_shdw;
-	RECT _player_rc;
+	Image * _player_idle_shdw[4];
+	// Walk Images
+	Image * _player_move[6];
+	Image * _player_move_shdw[6];
 	POINT _player_center;
 	// 이미지 바꿀 때 쓰는 변수
 	bool _fIdle = true;
 	int _idleIndex = 0;
-	
+	// 플레이어가 걸을 때 쓰는 변수
+	POINT _move_dest = {0, 0};
+	bool _fMoving = false;
+	int _moveIndex = 0;
+	int _speed = 2;
+	// 플레이어 충돌처리에 쓰는 변수
+	Collision _collision;
+	// 플레이어 능력치
 	PlayerStat _myStat;		// 플레이어 능력치
 	ItemList _inven;		// 플레이어의 인벤토리
 	Beads _beads;			// 플레이어의 스탯 구슬
@@ -36,20 +45,25 @@ private:
 	bool _fTired = false;
 	bool _fVisible = true;
 protected:
-	void update_idle_img();
+	void update_idle_img(bool isResetPos = false);
 	void change_idle_img();
+	void update_move_img();
 	void follow_icon_player();
 	// Player functions
 	void init_player();
+	HRESULT init_player_moves();
 	void draw_player();
 	void update_player();
 	void delete_player();
-	void move_player();
 	void hide_player();
+	void move_player();
 	// Bead
 	void make_bead(BEAD::TYPE type, int plusCnt, bool isReverse = false);
-	
+	// Limit
 	double limit_stat(double stat, bool fZeroSet = false);
+	bool is_positionOK(LONG currentPos, LONG targetPos);
+	bool is_positionOK(POINT currentPos, POINT targetPos);
+	bool is_move_dest_left(LONG currentPos, LONG targetPos);
 protected:
 	void action();
 	void use(SLOT::ITEM itemType);
@@ -77,12 +91,16 @@ public:
 	inline PlayerStat get_stat() { return _myStat; }
 	inline MAPICON::TYPE get_playerLocation() { return _location; }
 	inline POINT get_playerCenter() { return _player_center; }
-	inline int get_playerHeight() { return (int)(_player_rc.right - _player_rc.left); }
+	inline int get_playerHeight() 
+	{
+		return (int)(_player_idle[_idleIndex]->get_height());
+	}
 	int get_actionType() { return _actionType; }
 	Beads get_beads() { return _beads; }
 	void set_playerCenter(POINT center);
 	void set_playerLocation(MAPICON::TYPE type) { _location = type; }
 	void set_playerAction(int type) { _actionType = type; }
+	inline void init_workGauge() { _myStat.workGauge = 0; }
 	int how_many_items(SLOT::ITEM itemType);
 	inline bool is_running_action() { return _fAction; }
 	inline bool is_tired() { return _fTired; }

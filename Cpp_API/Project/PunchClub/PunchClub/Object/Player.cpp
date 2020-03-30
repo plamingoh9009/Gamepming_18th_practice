@@ -3,101 +3,340 @@
 // ========================================
 // ***		Idle 이미지 업데이트			***
 // ========================================
-void Player::update_idle_img()
+void Player::update_idle_img(bool isResetPos)
 {
-	_player_idle[_idleIndex]->frameUpdate(false);
-	if (_player_idle[_idleIndex]->is_end_thirdSection())
+	if (isResetPos)
 	{
-		change_idle_img();	// 이미지 변경하고
-
+		// 이미지 변경하고
+		change_idle_img();		
+		_player_idle[_idleIndex]->set_frameX(0);
+		_player_idle[_idleIndex]->set_frameY(0);
+		_player_idle_shdw[_idleIndex]->set_frameX(0);
+		_player_idle_shdw[_idleIndex]->set_frameY(0);
 		// 위치 다시 잡아주고
-		_player_rc = RectMakeCenter(_player_center.x, _player_center.y,
-			_player_idle[_idleIndex]->get_frameWidth(),
-			_player_idle[_idleIndex]->get_frameHeight());
+		_player_idle[_idleIndex]->set_center(_player_center);
+		_player_idle_shdw[_idleIndex]->set_center(_player_center);
+	}
+	else
+	{
+		_player_idle[_idleIndex]->frameUpdate(false);
+		_player_idle_shdw[_idleIndex]->frameUpdate(false);
+		if (_player_idle[_idleIndex]->is_end_thirdSection())
+		{
+			change_idle_img();	// 이미지 변경하고
+
+			// 위치 다시 잡아주고
+			_player_idle[_idleIndex]->set_center(_player_center);
+			_player_idle_shdw[_idleIndex]->set_center(_player_center);
+		}
 	}
 }
 void Player::change_idle_img()
 {
-	// 확률은 가만히 1, 고개돌리기 왼쪽 2 오른쪽 2, 근육자랑 2
+	// 확률은		고개돌리기 오른쪽 2, 왼쪽 2 
+	//			근육자랑 오른쪽 2, 왼쪽 2
 	int result;
 	result = RAND->get_fromIntTo(1, 100);
 	int max;
-	max = 7;
-	if (0 < result && result <= (100 * 1 / max)) { _idleIndex = 0; }
-	else if ((100 * 1 / max) < result && result <= (100 * 3 / max)) { _idleIndex = 1; }
-	else if ((100 * 3 / max) < result && result <= (100 * 5 / max)) { _idleIndex = 2; }
+	max = 8;
+	if (0 < result && result <= (100 * 2 / max)) { _idleIndex = 0; }
+	else if ((100 * 2 / max) < result && result <= (100 * 4 / max)) { _idleIndex = 1; }
+	else if ((100 * 4 / max) < result && result <= (100 * 6 / max)) { _idleIndex = 2; }
 	else { _idleIndex = 3; }
+}
+void Player::update_move_img()
+{
+	_player_move[_moveIndex]->frameUpdate(false);
+	_player_move_shdw[_moveIndex]->frameUpdate(false);
+
+	// 위치 다시 잡아주고
+	_player_move[_moveIndex]->set_center(_player_center);
+	_player_move_shdw[_moveIndex]->set_center(_player_center);
 }
 void Player::follow_icon_player()
 {
 	POINT center;
-	center.x = (LONG)(_player_rc.right + _hunger->get_width());
-	center.y = (LONG)(_player_rc.top - _hunger->get_height());
+	center.x = (LONG)(_player_idle[_idleIndex]->get_rect().right + _hunger->get_width());
+	center.y = (LONG)(_player_idle[+_idleIndex]->get_rect().top - _hunger->get_height());
 	_hunger->set_center(center);
 	_hunger->update();
 }
 void Player::move_player()
 {
-	_player_center.x = m_ptMouse.x;
-	_player_center.y = m_ptMouse.y;
-	_player_center.y -= (LONG)(_player_idle[_idleIndex]->get_frameHeight() * 0.5);
-	_player_rc = RectMakeCenter(
-		(int)(_player_center.x),
-		(int)(_player_center.y),
-		_player_idle[_idleIndex]->get_frameWidth(),
-		_player_idle[_idleIndex]->get_frameHeight());
+	if (_move_dest.x && _move_dest.y)
+	{
+		// 4방향을 먼저 정한다.
+		if (is_positionOK(_player_center.y, _move_dest.y))
+		{
+			if (is_positionOK(_player_center.x, _move_dest.x)) {}
+			else
+			{
+				if (is_move_dest_left(_player_center.x, _move_dest.x))
+				{
+					_player_center.x -= (LONG)(_speed);
+					_moveIndex = 4;
+
+				}// if: Move left
+				else
+				{
+					_player_center.x += (LONG)(_speed);
+					_moveIndex = 5;
+				}// else: Move right
+			}
+
+		}// if: y 축이  맞다면 좌, 우로 움직인다.
+		else
+		{
+			if (is_positionOK(_player_center.x, _move_dest.x)) 
+			{
+				if (_move_dest.y < _player_center.y)
+				{
+					_player_center.y -= (LONG)(_speed * 0.5);
+					_moveIndex = 0;
+				}
+				else
+				{
+					_player_center.y += (LONG)(_speed * 0.5);
+					_moveIndex = 3;
+				}
+			}// if: x 축이 맞다면 그냥 위, 아래로만 움직인다.
+			else
+			{
+				if (_move_dest.y < _player_center.y)
+				{
+					if (is_move_dest_left(_player_center.x, _move_dest.x))
+					{
+						_player_center.y -= (LONG)(_speed * 0.5);
+						_player_center.x -= (LONG)(_speed);
+						_moveIndex = 0;
+					}
+					else
+					{
+						_player_center.y -= (LONG)(_speed * 0.5);
+						_player_center.x += (LONG)(_speed);
+						_moveIndex = 1;
+					}
+				}// if: Move up
+				else
+				{
+					if (is_move_dest_left(_player_center.x, _move_dest.x))
+					{
+						_player_center.y += (LONG)(_speed * 0.5);
+						_player_center.x -= (LONG)(_speed);
+						_moveIndex = 2;
+					}
+					else
+					{
+						_player_center.y += (LONG)(_speed * 0.5);
+						_player_center.x += (LONG)(_speed);
+						_moveIndex = 3;
+					}
+				}// else: Move down
+			}
+			
+		}// else: y축이 맞지 않다면 위인지 아래로 움직인다.
+		
+		// 여기서 플레이어 렉트를 다시 잡아준다.
+		_collision.rc = RectMakeCenter(
+			_player_center.x + _collision.correctionX, 
+			_player_center.y + _collision.correctionY,
+			_collision.width, _collision.height);
+		if (is_positionOK(_player_center, _move_dest))
+		{
+			update_idle_img(true);
+			_fMoving = false;
+			_fIdle = true;
+			_move_dest = { 0, 0 };
+		}
+	}// if: 목적지가 잡혀 있으면 움직인다.
+
+	// 플레이어 위치를 다시 잡아준다.
+	update_move_img();
 }
 void Player::init_player()
 {
 	string path;
-	path = _imgPath + "default_idle_01.bmp";
+	// Idle 01
+	path = _imgPath + "player_idle_01.bmp";
 	_player_idle[0] = new Image;
 	_player_idle[0]->init(path.c_str(),
-		(int)(76 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 2, 1);
-	_player_idle[0]->set_frameSection(3, 0, 1, 0.1f, 0, 1, 0.1f, 0, 1, 0.5f);
-	path = _imgPath + "default_idle_02.bmp";
+		(int)(114 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 3, 1);
+	_player_idle[0]->set_frameSection(3, 0, 0, 1.0f, 1, 2, 0.7f, 2, 2, 1.0f);
+	path = _imgPath + "player_idle_shdw_01.bmp";
+	_player_idle_shdw[0] = new Image;
+	_player_idle_shdw[0]->init(path.c_str(),
+		(int)(114 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 3, 1);
+	_player_idle_shdw[0]->set_frameSection(3, 0, 0, 1.0f, 1, 2, 0.7f, 2, 2, 1.0f);
+	// Idle 02
+	path = _imgPath + "player_idle_02.bmp";
 	_player_idle[1] = new Image;
 	_player_idle[1]->init(path.c_str(),
 		(int)(114 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 3, 1);
 	_player_idle[1]->set_frameSection(3, 0, 0, 1.0f, 1, 2, 0.7f, 2, 2, 1.0f);
-	path = _imgPath + "default_idle_03.bmp";
+	path = _imgPath + "player_idle_shdw_02.bmp";
+	_player_idle_shdw[1] = new Image;
+	_player_idle_shdw[1]->init(path.c_str(),
+		(int)(114 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 3, 1);
+	_player_idle_shdw[1]->set_frameSection(3, 0, 0, 1.0f, 1, 2, 0.7f, 2, 2, 1.0f);
+	// Idle 03
+	path = _imgPath + "player_idle_03.bmp";
 	_player_idle[2] = new Image;
 	_player_idle[2]->init(path.c_str(),
-		(int)(114 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 3, 1);
-	_player_idle[2]->set_frameSection(3, 0, 0, 1.0f, 1, 2, 0.7f, 2, 2, 1.0f);
-	path = _imgPath + "default_idle_04.bmp";
+		(int)(250 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 5, 1);
+	_player_idle[2]->set_frameSection(3, 0, 0, 1.0f, 1, 4, 0.5f, 4, 4, 1.0f);
+	path = _imgPath + "player_idle_shdw_03.bmp";
+	_player_idle_shdw[2] = new Image;
+	_player_idle_shdw[2]->init(path.c_str(),
+		(int)(250 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 5, 1);
+	_player_idle_shdw[2]->set_frameSection(3, 0, 0, 1.0f, 1, 4, 0.5f, 4, 4, 1.0f);
+	// Idle 04
+	path = _imgPath + "player_idle_04.bmp";
 	_player_idle[3] = new Image;
 	_player_idle[3]->init(path.c_str(),
 		(int)(250 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 5, 1);
 	_player_idle[3]->set_frameSection(3, 0, 0, 1.0f, 1, 4, 0.5f, 4, 4, 1.0f);
+	path = _imgPath + "player_idle_shdw_04.bmp";
+	_player_idle_shdw[3] = new Image;
+	_player_idle_shdw[3]->init(path.c_str(),
+		(int)(250 * GAME_MULTIPLE), (int)(76 * GAME_MULTIPLE), 5, 1);
+	_player_idle_shdw[3]->set_frameSection(3, 0, 0, 1.0f, 1, 4, 0.5f, 4, 4, 1.0f);
+	// Walking
+	init_player_moves();
 	// 초기 위치 잡기
 	_player_center.x = (LONG)(WIN_HALF_W - WIN_HALF_W * 0.4);
 	_player_center.y = (LONG)(WIN_HALF_H +
 		_player_idle[_idleIndex]->get_height() * 0.5);
-	_player_rc = RectMakeCenter(_player_center.x, _player_center.y,
-		_player_idle[_idleIndex]->get_frameWidth(),
-		_player_idle[_idleIndex]->get_frameHeight());
+	_player_idle[_idleIndex]->set_center(_player_center);
+	_player_idle_shdw[_idleIndex]->set_center(_player_center);
+	// 위치 잡은 후 콜리전 렉트 만들기
+	POINT center;
+	_collision.width = (int)(20 * GAME_MULTIPLE);
+	_collision.height = (int)(10 * GAME_MULTIPLE);
+	_collision.correctionY = 50;
+	center.x = (LONG)(_player_center.x);
+	center.y = (LONG)(_player_center.y + _collision.correctionY);
+	_collision.rc = RectMakeCenter(center.x, center.y,
+		_collision.width, _collision.height);
+}
+HRESULT Player::init_player_moves()
+{
+	string path;
+	// Up	0
+	_player_move[0] = new Image;
+	path = _imgPath + "player_walk_upL.bmp";
+	_player_move[0]->init(path.c_str(),
+		(int)(280 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 8, 1);
+	_player_move[0]->set_frameSection(1, 0, 7, 0.3f);
+	_player_move_shdw[0] = new Image;
+	path = _imgPath + "player_walk_upL_shdw.bmp";
+	_player_move_shdw[0]->init(path.c_str(),
+		(int)(280 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 8, 1);
+	_player_move_shdw[0]->set_frameSection(1, 0, 7, 0.3f);
+	// Up	1
+	_player_move[1] = new Image;
+	path = _imgPath + "player_walk_upR.bmp";
+	_player_move[1]->init(path.c_str(),
+		(int)(280 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 8, 1);
+	_player_move[1]->set_frameSection(1, 0, 7, 0.3f);
+	_player_move_shdw[1] = new Image;
+	path = _imgPath + "player_walk_upR_shdw.bmp";
+	_player_move_shdw[1]->init(path.c_str(),
+		(int)(280 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 8, 1);
+	_player_move_shdw[1]->set_frameSection(1, 0, 7, 0.3f);
+	// Down		2
+	_player_move[2] = new Image;
+	path = _imgPath + "player_downL.bmp";
+	_player_move[2]->init(path.c_str(),
+		(int)(272 * GAME_MULTIPLE), (int)(77 * GAME_MULTIPLE), 8, 1);
+	_player_move[2]->set_frameSection(1, 0, 7, 0.3f);
+	_player_move_shdw[2] = new Image;
+	path = _imgPath + "player_downL_shdw.bmp";
+	_player_move_shdw[2]->init(path.c_str(),
+		(int)(272 * GAME_MULTIPLE), (int)(77 * GAME_MULTIPLE), 8, 1);
+	_player_move_shdw[2]->set_frameSection(1, 0, 7, 0.3f);
+	// Down		3
+	_player_move[3] = new Image;
+	path = _imgPath + "player_downR.bmp";
+	_player_move[3]->init(path.c_str(),
+		(int)(272 * GAME_MULTIPLE), (int)(77 * GAME_MULTIPLE), 8, 1);
+	_player_move[3]->set_frameSection(1, 0, 7, 0.3f);
+	_player_move_shdw[3] = new Image;
+	path = _imgPath + "player_downR_shdw.bmp";
+	_player_move_shdw[3]->init(path.c_str(),
+		(int)(272 * GAME_MULTIPLE), (int)(77 * GAME_MULTIPLE), 8, 1);
+	_player_move_shdw[3]->set_frameSection(1, 0, 7, 0.3f);
+	// Left		4
+	_player_move[4] = new Image;
+	path = _imgPath + "player_walkL.bmp";
+	_player_move[4]->init(path.c_str(),
+		(int)(540 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 12, 1);
+	_player_move[4]->set_frameSection(3, 0, 3, 0.1f, 4, 6, 0.1f, 7, 11, 0.1f);
+	_player_move_shdw[4] = new Image;
+	path = _imgPath + "player_walkL_shdw.bmp";
+	_player_move_shdw[4]->init(path.c_str(),
+		(int)(540 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 12, 1);
+	_player_move_shdw[4]->set_frameSection(3, 0, 3, 0.1f, 4, 6, 0.1f, 7, 11, 0.1f);
+	// Right	5
+	_player_move[5] = new Image;
+	path = _imgPath + "player_walkR.bmp";
+	_player_move[5]->init(path.c_str(),
+		(int)(540 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 12, 1);
+	_player_move[5]->set_frameSection(3, 0, 3, 0.1f, 4, 6, 0.1f, 7, 11, 0.1f);
+	_player_move_shdw[5] = new Image;
+	path = _imgPath + "player_walkR_shdw.bmp";
+	_player_move_shdw[5]->init(path.c_str(),
+		(int)(540 * GAME_MULTIPLE), (int)(80 * GAME_MULTIPLE), 12, 1);
+	_player_move_shdw[5]->set_frameSection(3, 0, 3, 0.1f, 4, 6, 0.1f, 7, 11, 0.1f);
+	return S_OK;
 }
 void Player::draw_player()
 {
-	_player_idle[_idleIndex]->frameRender(get_memDC(),
-		_player_rc.left, _player_rc.top);
+	if (_fIdle)
+	{
+		_player_idle[_idleIndex]->frameRender(get_memDC());
+		_player_idle_shdw[_idleIndex]->frameAlphaRender(get_memDC(), 128);
+	}
+	if (_fMoving)
+	{
+		_player_move[_moveIndex]->frameRender(get_memDC());
+		_player_move_shdw[_moveIndex]->frameAlphaRender(get_memDC(), 128);
+	}
 }
 void Player::update_player()
 {
 	if (_fIdle) { update_idle_img(); }
+
 	if (_fClick && _fObjMove)
 	{
 		if (m_ptMouse.y < WIN_HALF_H) {}
-		else { move_player(); }
+		else
+		{
+			//if (!_move_dest.x && !_move_dest.y)
+			//{
+				_move_dest = m_ptMouse;
+				_move_dest.y -= (LONG)(_player_idle[_idleIndex]->get_frameHeight() * 0.5);
+				_fMoving = true;
+				_fIdle = false;
+			//}// if: Setup destination
+		}
 	}
+	move_player();
 }
 void Player::delete_player()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
-		_player_idle[i]->release();
-		_player_idle[i] = nullptr;
+		Release(_player_move[i]);
+		Release(_player_move_shdw[i]);
+		if (4 <= i)
+		{
+			break;
+		}
+		else
+		{
+			Release(_player_idle[i]);
+			Release(_player_idle_shdw[i]);
+		}
 	}
 }
 double Player::limit_stat(double stat, bool fZeroSet)
@@ -118,6 +357,38 @@ double Player::limit_stat(double stat, bool fZeroSet)
 		}
 	}
 	return stat;
+}
+bool Player::is_positionOK(LONG currentPos, LONG targetPos)
+{
+	LONG ok_band = 10;
+	int temp;
+	temp = (currentPos < targetPos ?
+		(int)(targetPos - currentPos) : (int)(currentPos - targetPos));
+	if (temp <= ok_band)
+	{
+		return true;
+	}
+	return false;
+}
+bool Player::is_positionOK(POINT currentPos, POINT targetPos)
+{
+	bool xOK, yOK;
+	xOK = is_positionOK(currentPos.x, targetPos.x);
+	yOK = is_positionOK(currentPos.y, targetPos.y);
+
+	if (xOK && yOK)
+	{
+		return true;
+	}
+	return false;
+}
+bool Player::is_move_dest_left(LONG currentPos, LONG targetPos)
+{
+	if (targetPos < currentPos)
+	{
+		return true;
+	}
+	return false;
 }
 void Player::hide_player()
 {
@@ -267,25 +538,25 @@ void Player::add_stat(double health, double food, double mood, double energy)
 	int plusCnt = 0;
 	// Make status beads
 	if (health < 0) { make_bead(BEAD::BD_HEALTH, 0, true); }
-	else 
+	else
 	{
 		plusCnt++;
 		make_bead(BEAD::BD_HEALTH, plusCnt);
 	}
 	if (food < 0) { make_bead(BEAD::BD_FOOD, 0, true); }
-	else 
-	{ 
+	else
+	{
 		plusCnt++;
-		make_bead(BEAD::BD_FOOD, plusCnt); 
+		make_bead(BEAD::BD_FOOD, plusCnt);
 	}
 	if (mood < 0) { make_bead(BEAD::BD_MOOD, 0, true); }
-	else 
+	else
 	{
 		plusCnt++;
 		make_bead(BEAD::BD_MOOD, plusCnt);
 	}
 	if (energy < 0) { make_bead(BEAD::BD_ENERGY, 0, true); }
-	else 
+	else
 	{
 		plusCnt++;
 		make_bead(BEAD::BD_ENERGY, plusCnt);
@@ -426,6 +697,10 @@ void Player::render()
 		Draw(_hunger);
 		draw_player();
 	}
+	if (_fDebug)
+	{
+			ColorRect(get_memDC(), _collision.rc);
+	}
 }
 Player::Player()
 {
@@ -439,10 +714,9 @@ Player::~Player()
 
 void Player::set_playerCenter(POINT center)
 {
-	_player_rc = RectMakeCenter(center.x, center.y,
-		_player_idle[_idleIndex]->get_frameWidth(),
-		_player_idle[_idleIndex]->get_frameHeight());
 	_player_center = center;
+	_player_idle[_idleIndex]->set_center(_player_center);
+	_player_idle_shdw[_idleIndex]->set_center(_player_center);
 }
 int Player::how_many_items(SLOT::ITEM itemType)
 {

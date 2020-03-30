@@ -1,7 +1,8 @@
 #pragma once
 #include "Gauge.h"
 #include "Icons/Icon.h"
-class HudBack: public UI
+#include "Base/SingletonBase.h"
+class HudBack: public UI, public SingletonBase<HudBack>
 {
 private:
 	typedef vector<Gauge *> Gauges;
@@ -54,4 +55,4 @@ public:
 	inline POINT get_agl_center() { return _agl->get_center(); }
 	inline POINT get_stm_center() { return _stm->get_center(); }
 };
-
+#define HUDBACK	HudBack::get_singleton()

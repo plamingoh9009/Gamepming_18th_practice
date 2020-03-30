@@ -7,7 +7,7 @@ HRESULT Furniture::init_objs()
 	switch (_type)
 	{
 	case MYOBJECT::OBJ_FRIGER:
-		_img_off = new Image;
+		_img_off = new Image;				
 		path = _imgPath + "Refrigerator.bmp";
 		_img_off->init(path.c_str(), (int)(48 * GAME_MULTIPLE), (int)(87 * GAME_MULTIPLE));
 		_img_on = new Image;
@@ -140,6 +140,59 @@ void Furniture::runType_case_toUpdate()
 {
 	// Empty.. coding when you need
 }
+void Furniture::make_collisions()
+{
+	Collision * c = nullptr;
+	POINT pos;
+	switch (_type)
+	{
+	case MYOBJECT::OBJ_FRIGER:
+		// Make collision
+		c = new Collision;
+		c->width = (int)(48 * 1.3);
+		c->height = (int)(87 * 1.4);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x - 5),
+			(int)(_img_off->get_rect().top + c->height * 0.8), 
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::OBJ_KITCHEN_TABLE:
+		c = new Collision;
+		c->width = (int)(48 * 3.7);
+		c->height = (int)(48 * 1.5);
+		pos.x = (LONG)(_img_off->get_center().x + 40);
+		pos.y = (LONG)(_img_off->get_center().y + 40);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		for (int i = 0; i < 6; i++)
+		{
+			c = new Collision;
+			c->width = (int)(48 * 1.2);
+			c->height = (int)(48 * 1.3);
+			pos.x = (LONG)(_img_off->get_center().x + 75 - 8 * i);
+			pos.y = (LONG)(_img_off->get_center().y + 70 + 20 * i);
+			c->rc = RectMakeCenter(
+				(int)(pos.x),
+				(int)(pos.y),
+				c->width, c->height
+			);
+			_collisions.push_back(c);
+		}
+		c = nullptr;
+		break;
+	}
+	if (c != nullptr)
+	{
+		SAFE_DELETE(c);
+	}
+}
 HRESULT Furniture::init()
 {
 	set_imgPath("Object/Home/");
@@ -178,6 +231,7 @@ Furniture::~Furniture()
 void Furniture::set_furniture_center(POINT center)
 {
 	set_center(center);
+	make_collisions();
 }
 void Furniture::set_furniture_pos(POINT pos)
 {

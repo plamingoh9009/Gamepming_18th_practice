@@ -189,8 +189,6 @@ void HudBack::render()
 	_skillPoint.render(get_memDC());
 	// Money
 	_money.render(get_memDC());
-
-	if (_fDebug) { ColorRect(get_memDC(), _hud_back->get_rect()); }
 }
 HudBack::HudBack()
 {

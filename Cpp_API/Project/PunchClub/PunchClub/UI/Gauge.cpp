@@ -38,7 +38,7 @@ void Gauge::action()
 		break;
 	}
 }
-void Gauge::run_gauge()
+void Gauge::run_gauge(bool isSyncValue)
 {
 	// 일정 시간을 주고, 게이지를 올린다.
 	_time += TIMEMANAGER->get_elapsedTime();
@@ -69,13 +69,20 @@ double Gauge::limit_value(double value, bool fZeroSet)
 	}
 	else if (value > 1000)
 	{
-		if (fZeroSet)
+		switch (_type)
 		{
+		case GAUGE::GG_WORK:
+			PLAYER->init_workGauge();
 			return 0.0;
-		}
-		else
-		{
-			return 1000.0;
+		default:
+			if (fZeroSet)
+			{
+				return 0.0;
+			}
+			else
+			{
+				return 1000.0;
+			}
 		}
 	}
 	return value;

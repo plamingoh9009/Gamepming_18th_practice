@@ -42,12 +42,6 @@ void PrefightStat::draw_icons()
 	_stm_icon->render(get_memDC(), _stm_rc.left, _stm_rc.top);
 	FontTextShadow(get_memDC(), _stm_rc.left + 45, _stm_rc.top + 8, _stm.c_str(),
 		"ÈÞ¸Õ¸ÅÁ÷Ã¼", 30, RGB(254, 254, 254));
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _agl_rc, RGB(116, 216, 255));
-		ColorRect(get_memDC(), _str_rc, RGB(239, 155, 178));
-		ColorRect(get_memDC(), _stm_rc, RGB(173, 212, 127));
-	}
 }
 void PrefightStat::delete_icons()
 {

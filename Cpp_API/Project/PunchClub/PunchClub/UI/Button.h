@@ -59,6 +59,7 @@ public:
 	void set_center(POINT center);
 	void set_pos_toRT_edge(RECT rc);
 	void set_fClickButton(bool fResult) { _fClickButton = fResult; }
+	void set_fToggleButton(bool fResult) { _fToggleButton = fResult; }
 	bool is_closeWindow() { return _fCloseWindow; }
 	bool is_clickButton() { return _fClickButton; }
 	bool is_toggleButton() { return _fToggleButton; }

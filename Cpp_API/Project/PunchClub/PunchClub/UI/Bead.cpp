@@ -112,16 +112,16 @@ void Bead::setup_bead_position()
 		switch (_type)
 		{
 		case BEAD::BD_HEALTH:
-			center = HudBack().get_health_center();
+			center = HUDBACK->get_health_center();
 			break;
 		case BEAD::BD_FOOD:
-			center = HudBack().get_food_center();
+			center = HUDBACK->get_food_center();
 			break;
 		case BEAD::BD_MOOD:
-			center = HudBack().get_mood_center();
+			center = HUDBACK->get_mood_center();
 			break;
 		case BEAD::BD_ENERGY:
-			center = HudBack().get_energy_center();
+			center = HUDBACK->get_energy_center();
 			break;
 		}
 		_img->set_center(center);
@@ -186,25 +186,25 @@ void Bead::setup_bead_destination()
 		switch (_type)
 		{
 		case BEAD::BD_HEALTH:
-			_dest = HudBack().get_health_center();
+			_dest = HUDBACK->get_health_center();
 			break;
 		case BEAD::BD_FOOD:
-			_dest = HudBack().get_food_center();
+			_dest = HUDBACK->get_food_center();
 			break;
 		case BEAD::BD_MOOD:
-			_dest = HudBack().get_mood_center();
+			_dest = HUDBACK->get_mood_center();
 			break;
 		case BEAD::BD_ENERGY:
-			_dest = HudBack().get_energy_center();
+			_dest = HUDBACK->get_energy_center();
 			break;
 		case BEAD::BD_STR:
-			_dest = HudBack().get_str_center();
+			_dest = HUDBACK->get_str_center();
 			break;
 		case BEAD::BD_AGL:
-			_dest = HudBack().get_agl_center();
+			_dest = HUDBACK->get_agl_center();
 			break;
 		case BEAD::BD_STM:
-			_dest = HudBack().get_stm_center();
+			_dest = HUDBACK->get_stm_center();
 			break;
 		}
 	}

@@ -74,11 +74,6 @@ void TitleScene::draw_logos()
 {
 	_logo[0]->render(get_memDC(), _logo_rc[0].left, _logo_rc[0].top);
 	_logo[1]->render(get_memDC(), _logo_rc[1].left, _logo_rc[1].top);
-	if (_fDebug == true)
-	{
-		ColorRect(get_memDC(), _logo_rc[0]);
-		ColorRect(get_memDC(), _logo_rc[1], RGB(254, 0, 0));
-	}
 }
 void TitleScene::delete_logos()
 {
@@ -117,11 +112,6 @@ void TitleScene::draw_texts()
 		_play->get_frameX(), _play->get_frameY());
 	_exit->frameRender(get_memDC(), _exit_rc.left, _exit_rc.top, 
 		_exit->get_frameX(), _exit->get_frameY());
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _play_rc);
-		ColorRect(get_memDC(), _exit_rc);
-	}
 }
 void TitleScene::delete_texts()
 {

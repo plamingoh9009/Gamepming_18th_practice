@@ -7,6 +7,7 @@ protected:
 	virtual void update_objImgFrame(Image * img);
 	virtual void change_player_run(bool isStart = true);
 	virtual void runType_case_toUpdate();
+	void make_collisions();
 public:
 	virtual HRESULT init();
 	virtual void release();

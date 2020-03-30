@@ -53,6 +53,19 @@ namespace NPC
 		NPC_SHOP
 	};
 }
+namespace PLAYER_SET
+{
+	enum STAT
+	{
+		STR = 0b0001,
+		AGL = 0b0010,
+		STM = 0b0100
+	};
+	enum ADD_STAT
+	{
+		AS_FIGHT = 0b0001
+	};
+}
 struct PlayerStat
 {
 	double health = 800;
@@ -69,16 +82,11 @@ struct PlayerStat
 	// Work Gauge
 	double workGauge = 250;
 };
-namespace PLAYER_SET
+struct Collision
 {
-	enum STAT
-	{
-		STR = 0b0001,
-		AGL = 0b0010,
-		STM = 0b0100
-	};
-	enum ADD_STAT
-	{
-		AS_FIGHT = 0b0001
-	};
-}
+	RECT rc;
+	int width, height;
+	int correctionX = 0;
+	int correctionY = 0;
+};
+

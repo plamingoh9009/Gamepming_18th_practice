@@ -38,12 +38,6 @@ void FightGauge::draw_player_bars()
 	_player_back->render(get_memDC(), _player_back_rc.left, _player_back_rc.top);
 	_playerHp_fore->render(get_memDC(), _playerHp_rc.left, _playerHp_rc.top);
 	_playerNrg_fore->render(get_memDC(), _playerNrg_rc.left, _playerNrg_rc.top);
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _player_back_rc);
-		ColorRect(get_memDC(), _playerHp_rc, RGB(143, 190, 2));
-		ColorRect(get_memDC(), _playerNrg_rc, RGB(226, 172, 0));
-	}
 }
 void FightGauge::update_player_bars()
 {
@@ -88,12 +82,6 @@ void FightGauge::draw_enemy_bars()
 	_enemy_back->render(get_memDC(), _enemy_back_rc.left, _enemy_back_rc.top);
 	_enemyHp_fore->render(get_memDC(), _enemyHp_rc.left, _enemyHp_rc.top);
 	_enemyNrg_fore->render(get_memDC(), _enemyNrg_rc.left, _enemyNrg_rc.top);
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _enemy_back_rc);
-		ColorRect(get_memDC(), _enemyHp_rc, RGB(143, 190, 2));
-		ColorRect(get_memDC(), _enemyNrg_rc, RGB(226, 172, 0));
-	}
 }
 void FightGauge::update_enemy_bars()
 {
@@ -135,10 +123,6 @@ void FightGauge::draw_round()
 		"휴먼편지체", 25, RGB(253, 199, 56));
 	FontTextOut(get_memDC(), _round_center.x - 55, _round_center.y + 25, _round_desc.c_str(),
 		"휴먼편지체", 25, RGB(253, 199, 56));
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _round_back_rc);
-	}
 }
 void FightGauge::update_round()
 {

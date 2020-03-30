@@ -139,7 +139,6 @@ void Window::draw_inventory()
 	Draw(_fg, get_memDC());
 	_fg_title.render(get_memDC());
 	_fg_descr.render(get_memDC());
-	if (_fDebug) { ColorRect(get_memDC(), _fg->get_rect()); }
 	// Delete button을 그린다.
 	Draw(_red_button);
 }
@@ -215,11 +214,6 @@ void Window::draw_league()
 	draw_league_slots();
 	// Delete button Draw
 	Draw(_red_button);
-	// 디버그 모드
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _fg->get_rect());
-	}
 }
 void Window::update_league()
 {
@@ -382,16 +376,6 @@ void Window::draw_league_slots()
 				_league_slot[i].lock_rc.left, _league_slot[i].lock_rc.top, 255);
 		}
 	}
-	if (_fDebug)
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			ColorRect(get_memDC(), _league_slot[i].back_rc);
-			ColorRect(get_memDC(), _league_slot[i].btn_show_rc, RGB(162, 204, 232));
-			ColorRect(get_memDC(), _league_slot[i].icon_rc);
-		}
-		ColorRect(get_memDC(), _league_slot[0].icon_back_rc);
-	}
 }
 void Window::delete_league_slots()
 {
@@ -515,7 +499,7 @@ void Window::update_bus()
 		_fClickButton = true;
 		PLAYER->add_money(-_bus_distance);
 	}
-	else if(_btn_walk->is_closeWindow() == true)
+	else if (_btn_walk->is_closeWindow() == true)
 	{
 		close_window();
 		_fClickButton = true;
@@ -638,12 +622,16 @@ void Window::update_build()
 	// 여기서 시작 버튼을 눌렀는지 여부를 게이지에 넘겨준다.
 	if (_btn_build->is_toggleButton() == true)
 	{
-		_gauge->start();
+		// 플레이어 위치를 윈도우 가운데로 다시 잡아준다.
+		PLAYER->set_playerCenter(_inside->get_center());
+		PLAYER->set_playerAction(MYOBJECT::WORK_PLAYER | MYOBJECT::RUN_PLAYER);
+		PLAYER->action_start();
 		_btn_build->set_text_toButton("중지");
 	}
 	else
 	{
-		_gauge->pause();
+		PLAYER->set_playerAction(MYOBJECT::RUN_EMPTY);
+		PLAYER->action_pause();
 		_btn_build->set_text_toButton("시작");
 	}
 
@@ -739,6 +727,19 @@ void Window::close_window()
 	_fClose = true;
 	_fOpen = false;
 	_fOpenBus = false;
+
+	switch (_type)
+	{
+	case WINDOW::WND_BUILD:
+		// 그냥 닫기를 눌러도 종료한다.
+		if (_fOpen == false)
+		{
+			PLAYER->set_playerAction(MYOBJECT::RUN_EMPTY);
+			PLAYER->action_pause();
+			_btn_build->set_fToggleButton(false);
+		}
+		break;
+	}
 }
 
 HRESULT Window::init(WINDOW::TYPE type)

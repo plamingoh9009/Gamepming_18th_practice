@@ -47,12 +47,6 @@ void LeagueWaitingScene::draw_prefight_window()
 	_pfWindow->render(get_memDC(), _enemy_window_rc.left, _enemy_window_rc.top);
 	_playerStat->render();
 	_enemyStat->render();
-	if (_fDebug)
-	{
-		ColorRect(get_memDC(), _pfVs_rc);
-		ColorRect(get_memDC(), _player_window_rc);
-		ColorRect(get_memDC(), _enemy_window_rc);
-	}
 }
 void LeagueWaitingScene::delete_prefight_window()
 {

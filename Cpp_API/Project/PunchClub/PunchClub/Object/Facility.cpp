@@ -346,26 +346,64 @@ void Facility::draw_objs()
 		draw_img_run();
 	}//run: 런 이미지가 있으면 드로우
 
+		auto iter = _collisions.begin();
 	if (_fDebug)
 	{
-		ColorRect(get_memDC(), _img_off->get_rect());
+		for (; iter != _collisions.end();)
+		{
+			if ((*iter) != nullptr)
+			{
+				ColorRect(get_memDC(), (*iter)->rc);
+				iter++;
+			}
+			else
+			{
+				iter++;
+			}
+		}
+		
 	}
 }
 void Facility::update_objs()
 {
 	// 이미지 온, 오프
-	if (PtInRect(&_img_off->get_rect(), m_ptMouse))
+	auto iter = _collisions.begin();
+	if (iter != _collisions.end())
 	{
-		_fImgOn = true;
-		if (_fClick)
+		for (; iter != _collisions.end();)
 		{
-			_fSelect = true;
+			if (PtInRect(&(*iter)->rc, m_ptMouse))
+			{
+				_fImgOn = true;
+				if (_fClick)
+				{
+					_fSelect = true;
+				}
+				iter++;
+			}
+			else
+			{
+				_fImgOn = false;
+				_fSelect = false;
+				iter++;
+			}
 		}
 	}
 	else
 	{
-		_fImgOn = false;
-		_fSelect = false;
+		if (PtInRect(&_img_off->get_rect(), m_ptMouse))
+		{
+			_fImgOn = true;
+			if (_fClick)
+			{
+				_fSelect = true;
+			}
+		}
+		else
+		{
+			_fImgOn = false;
+			_fSelect = false;
+		}
 	}
 	{
 		// 시작한 운동을 멈추는 코드

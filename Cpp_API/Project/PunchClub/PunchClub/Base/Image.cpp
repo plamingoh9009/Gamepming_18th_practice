@@ -994,7 +994,47 @@ void Image::frameAlphaRender(HDC hdc, BYTE alpha)
 
 	}
 }
+void Image::frameAlphaRender(HDC hdc, int destX, int destY, BYTE alpha)
+{
+	//알파값 초기화
+	_blendFunc.SourceConstantAlpha = alpha;
 
+	if (_isTrans)
+	{
+		//출력해야 될 DC에 그려져 있는 내용을 그린다
+		BitBlt(_blendImage->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth, _imageInfo->frameHeight,
+			hdc, (int)(destX), (int)(destY), SRCCOPY);
+		//출력해야 될 이미지를 그린다.
+		GdiTransparentBlt(_blendImage->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _imageInfo->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _transColor);
+		//블렌드 DC를 출력해야할 DC에 그린다.
+		AlphaBlend(hdc, (int)(destX), (int)(destY),
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _blendImage->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _blendFunc);
+
+	}
+	//원본이미지 그대로 알파 블렌딩 할꺼냐
+	else
+	{
+		//블렌드 DC를 출력해야할 DC에 그린다.
+		AlphaBlend(hdc, (int)(destX), (int)(destY),
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _blendImage->hMemDC,
+			_imageInfo->currentFrameX * _imageInfo->frameWidth,
+			_imageInfo->currentFrameY * _imageInfo->frameHeight,
+			_imageInfo->frameWidth, _imageInfo->frameHeight, _blendFunc);
+
+	}
+}
 void Image::loopRender(HDC hdc, const LPRECT drawArea, int offSetX, int offSetY)
 {
 	//정밀 보정
