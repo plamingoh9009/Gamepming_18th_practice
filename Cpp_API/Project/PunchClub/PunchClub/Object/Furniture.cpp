@@ -7,7 +7,7 @@ HRESULT Furniture::init_objs()
 	switch (_type)
 	{
 	case MYOBJECT::OBJ_FRIGER:
-		_img_off = new Image;				
+		_img_off = new Image;			
 		path = _imgPath + "Refrigerator.bmp";
 		_img_off->init(path.c_str(), (int)(48 * GAME_MULTIPLE), (int)(87 * GAME_MULTIPLE));
 		_img_on = new Image;
@@ -187,6 +187,107 @@ void Furniture::make_collisions()
 		}
 		c = nullptr;
 		break;
+	case MYOBJECT::OBJ_SOFA:
+		c = new Collision;
+		c->width = (int)(48 * 3.5);
+		c->height = (int)(48 * 1.5);
+		pos.x = (LONG)(_img_off->get_center().x);
+		pos.y = (LONG)(_img_off->get_center().y);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::OBJ_AQUARIUM:
+		c = new Collision;
+		c->width = (int)(48);
+		c->height = (int)(48 * 1.6);
+		pos.x = (LONG)(_img_off->get_center().x);
+		pos.y = (LONG)(_img_off->get_center().y - 35);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = new Collision;
+		c->width = (int)(48);
+		c->height = (int)(48 * 1.6);
+		pos.x = (LONG)(_img_off->get_center().x + 10);
+		pos.y = (LONG)(_img_off->get_center().y + 25);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::OBJ_TV:
+		c = new Collision;
+		c->width = (int)(48 * 1.2);
+		c->height = (int)(48 * 1.2);
+		pos.x = (LONG)(_img_off->get_center().x - 110);
+		pos.y = (LONG)(_img_off->get_center().y - 10);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = new Collision;
+		c->width = (int)(48);
+		c->height = (int)(32);
+		pos.x = (LONG)(_img_off->get_center().x - 10);
+		pos.y = (LONG)(_img_off->get_center().y - 30);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = new Collision;
+		c->width = (int)(48);
+		c->height = (int)(32);
+		pos.x = (LONG)(_img_off->get_center().x + 5);
+		pos.y = (LONG)(_img_off->get_center().y);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		_collisions.push_back(c);
+		c = new Collision;
+		c->width = (int)(48 * 1.5);
+		c->height = (int)(48 * 1.5);
+		pos.x = (LONG)(_img_off->get_center().x + 90);
+		pos.y = (LONG)(_img_off->get_center().y);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::OBJ_TABLE:
+		c = new Collision;
+		c->width = (int)(48 * 6);
+		c->height = (int)(48 * 3);
+		pos.x = (LONG)(_img_off->get_center().x + 5);
+		pos.y = (LONG)(_img_off->get_center().y + 10);
+		c->rc = RectMakeCenter(
+			(int)(pos.x),
+			(int)(pos.y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
 	}
 	if (c != nullptr)
 	{
@@ -249,4 +350,5 @@ void Furniture::set_furniture_pos(POINT pos)
 		set_img_run_pos(pos);
 		break;
 	}
+	make_collisions();
 }

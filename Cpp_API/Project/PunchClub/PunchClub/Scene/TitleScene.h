@@ -9,7 +9,12 @@ enum BUTTON_TYPE
 class TitleScene : public Scene
 {
 private:
-	Image * _bg;
+	Image * _sky_black;
+	Image * _sky_color;
+	Image * _cloud_up;
+	Image * _cloud_under;
+	int _cloud_up_x = 0;
+	int _cloud_under_x = 0;
 	// ·Î°í
 	Image * _logo[2];
 	RECT _logo_rc[2];
@@ -26,6 +31,7 @@ private:
 protected:
 	void control_light_onButtons();
 	void run_buttons();
+	void update_loopsRenders();
 protected:
 	void init_background();
 	void draw_background();

@@ -614,7 +614,7 @@ void Window::delete_build()
 }
 void Window::update_build()
 {
-	// 버튼 업데이트
+	// 시작버튼 업데이트
 	_btn_build->update();
 
 	// 게이지 업데이트
@@ -627,6 +627,14 @@ void Window::update_build()
 		PLAYER->set_playerAction(MYOBJECT::WORK_PLAYER | MYOBJECT::RUN_PLAYER);
 		PLAYER->action_start();
 		_btn_build->set_text_toButton("중지");
+		// 플레이어가 지치면 윈도우를 멈춘다.
+		if (PLAYER->is_tired())
+		{
+			PLAYER->Tired();
+			PLAYER->set_playerAction(MYOBJECT::RUN_EMPTY);
+			PLAYER->action_pause();
+			_btn_build->set_text_toButton("시작");
+		}
 	}
 	else
 	{
@@ -634,7 +642,7 @@ void Window::update_build()
 		PLAYER->action_pause();
 		_btn_build->set_text_toButton("시작");
 	}
-
+	
 	// 프레임 업데이트
 	_work_jhammer->frameUpdate(false);
 	_work_dust->frameUpdate(false);

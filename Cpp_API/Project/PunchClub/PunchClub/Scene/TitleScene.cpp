@@ -29,21 +29,65 @@ void TitleScene::run_buttons()
 	if (_buttonType == BUTTON_PLAY) { _fPlayGame = true; }
 	else if (_buttonType == BUTTON_EXIT) { PostQuitMessage(0); }
 }
+void TitleScene::update_loopsRenders()
+{
+	if (_cloud_up_x > 1366)
+	{
+		_cloud_up_x -= 1366;
+	}
+	else
+	{
+		_cloud_up_x++;
+	}
+	if (_cloud_under_x > 1366)
+	{
+		_cloud_under_x -= 1366;
+	}
+	else
+	{
+		_cloud_under_x++;
+	}
+}
 //==========================================
 //##			이미지 초기화				  ##
 //==========================================
 void TitleScene::init_background()
 {
-	double bg_multiple = 1.7042;
-	_bg = new Image;
-	string path = _imgPath + "Sky_map.bmp";
-	_bg->init(path.c_str(), (int)(256 * GAME_MULTIPLE * bg_multiple),
-		(int)(255 * GAME_MULTIPLE * bg_multiple));
+	POINT center;
+	string path;
+	_sky_black = new Image;
+	path = _imgPath + "sky_black.bmp";
+	_sky_black->init(path.c_str(), (int)(682 * GAME_MULTIPLE), (int)(210 * GAME_MULTIPLE));
+	_sky_color = new Image;
+	path = _imgPath + "sky_color.bmp";
+	_sky_color->init(path.c_str(), (int)(682 * GAME_MULTIPLE), (int)(108 * GAME_MULTIPLE));
+	center.x = (int)(WIN_HALF_W);
+	center.y = (int)(WIN_HALF_H - 65);
+	_sky_color->set_center(center);
+	// Cloud
+	_cloud_up = new Image;
+	path = _imgPath + "sky_up.bmp";
+	_cloud_up->init(path.c_str(), (int)(682 * GAME_MULTIPLE), (int)(58 * GAME_MULTIPLE));
+	center.x = (int)(WIN_HALF_W);
+	center.y = (int)(WIN_HALF_H - 200);
+	_cloud_up->set_center(center);
+	_cloud_under = new Image;
+	path = _imgPath + "sky_under.bmp";
+	_cloud_under->init(path.c_str(), (int)(682 * GAME_MULTIPLE), (int)(69 * GAME_MULTIPLE));
+	center.x = (int)(WIN_HALF_W);
+	center.y = (int)(WIN_HALF_H - 170);
+	_cloud_under->set_center(center);
+
+	_cloud_up_x = RAND->get_int(1366);
+	_cloud_under_x = RAND->get_int(1366);
 }
 void TitleScene::draw_background()
 {
-	_bg->render(get_memDC());
-	_bg->render(get_memDC(), (int)(WINSIZEX * 0.5), 0);
+	_sky_black->render(get_memDC());
+	_sky_color->loopRender(get_memDC(), &_sky_color->get_rect(), _cloud_up_x, 0);
+	// cloud
+	_cloud_up->loopRender(get_memDC(), &_cloud_up->get_rect(), _cloud_up_x, 0);
+	_cloud_under->loopRender(get_memDC(), &_cloud_under->get_rect(), _cloud_under_x, 0);
 }
 
 void TitleScene::init_logos()
@@ -103,14 +147,14 @@ void TitleScene::init_texts()
 		_play->get_frameWidth(), _play->get_frameHeight());
 	// 종료 버튼
 	center.y = (LONG)(center.y + _play->get_frameHeight() * 1.5);
-	_exit_rc = RectMakeCenter(center.x, center.y, 
+	_exit_rc = RectMakeCenter(center.x, center.y,
 		_exit->get_frameWidth(), _exit->get_frameHeight());
 }
 void TitleScene::draw_texts()
 {
-	_play->frameRender(get_memDC(), _play_rc.left, _play_rc.top, 
+	_play->frameRender(get_memDC(), _play_rc.left, _play_rc.top,
 		_play->get_frameX(), _play->get_frameY());
-	_exit->frameRender(get_memDC(), _exit_rc.left, _exit_rc.top, 
+	_exit->frameRender(get_memDC(), _exit_rc.left, _exit_rc.top,
 		_exit->get_frameX(), _exit->get_frameY());
 }
 void TitleScene::delete_texts()
@@ -133,23 +177,24 @@ HRESULT TitleScene::init()
 }
 void TitleScene::release()
 {
-	_bg->release();
-	_bg = nullptr;
+	Release(_sky_black);
+	Release(_sky_color);
 	delete_logos();
 	delete_texts();
 }
 void TitleScene::update()
 {
 	control_light_onButtons();
+	update_loopsRenders();
 	if (KEYMANAGER->is_onceKeyDown(VK_LBUTTON)) { run_buttons(); }
 	// 여기서 씬 체인지
 	if (_fPlayGame == true)
 	{
 		SCENEMANAGER->changeScene("Home");
 	}
-//==========================================
-//##			디버그 모드				  ##
-//==========================================
+	//==========================================
+	//##			디버그 모드				  ##
+	//==========================================
 	update_checkDebugMode();
 }
 void TitleScene::render()

@@ -25,6 +25,7 @@ protected:
 	static SCENE_TYPE _scene_forChange;
 	
 	static bool _fClick;		// 클릭 처리를 위한 변수
+	static bool _fRClick;
 	static bool _fDebug;		// 디버그 모드를 위한 변수
 protected:
 	bool is_frameImg(Image * img);

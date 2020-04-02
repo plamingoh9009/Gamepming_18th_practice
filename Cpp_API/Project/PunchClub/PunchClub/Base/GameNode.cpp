@@ -5,6 +5,7 @@ Image* GameNode::_backBuffer = NULL;
 // 인게임 공통 데이터
 SCENE_TYPE GameNode::_scene_forChange = SCENE_EMPTY;
 bool GameNode::_fClick = false;
+bool GameNode::_fRClick = false;
 bool GameNode::_fDebug = false;
 bool GameNode::is_frameImg(Image * img)
 {
@@ -25,7 +26,18 @@ void GameNode::update_checkClicked()
 	{
 		_fClick = true;
 	}
-	else { _fClick = false; }
+	else 
+	{ 
+		_fClick = false; 
+	}
+	if (KEYMANAGER->is_onceKeyUp(VK_RBUTTON))
+	{
+		_fRClick = true;
+	}
+	else
+	{
+		_fRClick = false;
+	}
 }
 void GameNode::change_currentScene(SCENE_TYPE type)
 {

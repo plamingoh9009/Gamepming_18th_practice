@@ -165,15 +165,24 @@ void Bead::setup_bead_position()
 		_nextPos.x = center.x;
 		_nextPos.y = center.y - 100;
 	}
-	// Distance
-	_distance_next = abs(
-		UTIL::getDistance(
-		(float)(_img->get_center().x),
-			(float)(_img->get_center().y),
-			(float)(_nextPos.x),
-			(float)(_nextPos.y)
-		)
-	);
+	if (_nextPos.x && (100 < _nextPos.y))
+	{
+		// Distance
+		_distance_next = abs(
+			UTIL::getDistance(
+			(float)(_img->get_center().x),
+				(float)(_img->get_center().y),
+				(float)(_nextPos.x),
+				(float)(_nextPos.y)
+			)
+		);
+	}
+	else
+	{
+		_fNextPos = false;
+		_fDestination = true;
+		setup_bead_destination();
+	}
 }
 void Bead::setup_bead_destination()
 {

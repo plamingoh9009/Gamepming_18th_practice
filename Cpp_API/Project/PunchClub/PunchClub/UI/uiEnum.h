@@ -31,7 +31,10 @@ namespace GAUGE
 		GG_EMPTY,
 		GG_WORK,
 		GG_STAT_SMALL,
-		GG_STAT_FIGHT
+		GG_STAT_FIGHT,
+		GG_PLAYER_HP,
+		GG_ENEMY_HP,
+		GG_ENERGY
 	};
 	enum STAT
 	{

@@ -45,6 +45,35 @@ namespace MYOBJECT
 		RUN_PLAYER = 0b10000000
 	};
 }
+struct Collision
+{
+	RECT rc;
+	int width, height;
+	int correctionX = 0;
+	int correctionY = 0;
+	bool on = false;
+};
+class Destination
+{
+	POINT _dest;
+	MYOBJECT::RUN_TYPE _runType;
+	bool _fEmpty;
+public:
+	Destination::Destination()
+	{
+		_fEmpty = true;
+	}
+	Destination::~Destination() {}
+	bool isEmpty() { return _fEmpty; }
+	POINT get_dest() { return _dest; }
+	MYOBJECT::RUN_TYPE get_runType() { return _runType; }
+	void setup_destination(POINT dest, MYOBJECT::RUN_TYPE runType)
+	{
+		_fEmpty = false;
+		_dest = dest;
+		_runType = runType;
+	}
+};
 namespace NPC
 {
 	enum TYPE
@@ -76,17 +105,23 @@ struct PlayerStat
 	double str = 1250;
 	double agl = 1250;
 	double stm = 1250;
+	double maxHp;
+	double currentHp;
+	double hp_correction;
+	double currentNrg = 1000;
 	// SP & Money
 	int skillPoint = 3;
 	int money = 73;
 	// Work Gauge
 	double workGauge = 250;
 };
-struct Collision
+struct EnemyStat
 {
-	RECT rc;
-	int width, height;
-	int correctionX = 0;
-	int correctionY = 0;
+	int level = 1;
+	double str;
+	double agl;
+	double stm;
+	double maxHp;
+	double currentHp;
+	double currentNrg = 1000;
 };
-

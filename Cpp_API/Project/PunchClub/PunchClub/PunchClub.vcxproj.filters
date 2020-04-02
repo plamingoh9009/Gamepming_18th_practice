@@ -210,6 +210,9 @@
     <ClInclude Include="UI\Bead.h">
       <Filter>I_UI\type</Filter>
     </ClInclude>
+    <ClInclude Include="Object\Enemy.h">
+      <Filter>I_Object\Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PunchClub.cpp">
@@ -340,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="UI\Bead.cpp">
       <Filter>I_UI\type</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy.cpp">
+      <Filter>I_Object\Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

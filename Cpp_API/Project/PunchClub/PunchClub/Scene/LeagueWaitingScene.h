@@ -19,8 +19,8 @@ private:
 	POINT _player_window_center;
 	POINT _enemy_window_center;
 	// Prefight Picture
-	Image * _player;
-	Image * _enemy;
+	Image * _player_img;
+	Image * _enemy_img;
 	RECT _player_rc;
 	RECT _enemy_rc;
 	// Prefight Skill set
@@ -32,6 +32,10 @@ protected:
 	void init_prefight_window();
 	void draw_prefight_window();
 	void delete_prefight_window();
+	HRESULT init_fightStat();
+	void draw_fightStat();
+	void delete_fightStat();
+	void update_fightStat();
 	void init_picture();
 	void draw_picture();
 	void update_picture();

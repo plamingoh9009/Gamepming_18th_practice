@@ -52,15 +52,15 @@ HRESULT GymScene::init_treadmills()
 	_treadmill_mid->init();
 	center.x = (LONG)(WIN_HALF_W + _treadmill_mid->get_width() * 1.8);
 	center.y = (LONG)(WIN_HALF_H - _treadmill_mid->get_height());
-	_treadmill_mid->set_center(center);
+	_treadmill_mid->set_facility_center(center);
 	_objs.push_back(_treadmill_mid);
 	_treadmill_left = new Facility(MYOBJECT::OBJ_TREADMILL, MYOBJECT::TRM_ORANGE_GIRL);
 	_treadmill_left->init();
-	_treadmill_left->set_center(PointMake(center.x - 100, center.y));
+	_treadmill_left->set_facility_center(PointMake(center.x - 100, center.y));
 	_objs.push_back(_treadmill_left);
 	_treadmill_right = new Facility(MYOBJECT::OBJ_TREADMILL, MYOBJECT::TRM_PLAYER);
 	_treadmill_right->init();
-	_treadmill_right->set_center(PointMake(center.x + 100, center.y));
+	_treadmill_right->set_facility_center(PointMake(center.x + 100, center.y));
 	_objs.push_back(_treadmill_right);
 
 	return S_OK;
@@ -78,7 +78,7 @@ HRESULT GymScene::init_barbells()
 	_barbell->init();
 	center.x = (LONG)(_door->get_rect().left - _barbell->get_width() * 0.85);
 	center.y = (LONG)(_door->get_rect().top - _barbell->get_height() * 0.2438);
-	_barbell->set_center(center);
+	_barbell->set_facility_center(center);
 	_objs.push_back(_barbell);
 	return S_OK;
 }
@@ -93,7 +93,7 @@ HRESULT GymScene::init_yungchun()
 	_yungchun->init();
 	center.x = (LONG)(_treadmill_right->get_center().x);
 	center.y = (LONG)(WINSIZEY - _yungchun->get_height() * 1);
-	_yungchun->set_center(center);
+	_yungchun->set_facility_center(center);
 	_objs.push_back(_yungchun);
 	return S_OK;
 }
@@ -108,7 +108,7 @@ HRESULT GymScene::init_tire()
 	_tire->init();
 	center.x = (LONG)(WIN_HALF_W);
 	center.y = (LONG)(_yungchun->get_center().y);
-	_tire->set_center(center);
+	_tire->set_facility_center(center);
 	_objs.push_back(_tire);
 	return S_OK;
 }
@@ -123,7 +123,7 @@ HRESULT GymScene::init_benchPress()
 	_benchPress->init();
 	center.x = (LONG)(WIN_HALF_W - _benchPress->get_width() * 2);
 	center.y = (LONG)(WIN_HALF_H + _benchPress->get_height() * 0.5);
-	_benchPress->set_center(center);
+	_benchPress->set_facility_center(center);
 	_objs.push_back(_benchPress);
 	return S_OK;
 }
@@ -138,7 +138,7 @@ HRESULT GymScene::init_punchbugs()
 	_punchbug->init();
 	center.x = (LONG)(WIN_HALF_W - _punchbug->get_width() * 2);
 	center.y = (LONG)(WIN_HALF_H - _punchbug->get_height() * 0.6);
-	_punchbug->set_center(center);
+	_punchbug->set_facility_center(center);
 	_objs.push_back(_punchbug);
 	return S_OK;
 }

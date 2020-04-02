@@ -17,9 +17,11 @@
 #include <tchar.h>
 
 // STL
-#include<vector>
-#include<map>
-#include<string>
+#include <vector>
+#include <map>
+#include <queue>
+
+#include <string>
 // Assert
 #include <cassert>
 // 여기서 프로그램에 필요한 추가 헤더를 참조합니다.
@@ -58,7 +60,7 @@ using namespace std;
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 #define SAFE_DELETE(p) {if(p) {delete(p); (p) = nullptr;}}
 // 펀치클럽 배율
-#define GAME_MULTIPLE	2.0029
+#define GAME_MULTIPLE	2.002933
 //========================================
 //##				전역변수				##
 //========================================

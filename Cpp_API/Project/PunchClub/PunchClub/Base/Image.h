@@ -111,9 +111,6 @@ protected:
 	void run_frameUpdate(bool bDefualt, bool bReverse);
 	void set_fSectionEnd_false();
 public:
-	// 이미지 크기 다시 잡아주는 함수
-	void resize_image(int width, int height);
-public:
 	//빈 비트맵 이미지 초기화
 	HRESULT init(int width, int height);
 	HRESULT init(const char* fileName, int width, int height,

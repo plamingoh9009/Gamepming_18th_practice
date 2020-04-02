@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Facility.h"
+#include "UI/InGameUI.h"
 #include "Player.h"
 void Facility::change_player_run(bool isStart)
 {
@@ -39,7 +40,7 @@ void Facility::start_player_action(MYOBJECT::RUN_TYPE runType)
 	PLAYER->set_playerAction(runType | MYOBJECT::RUN_PLAYER);
 	PLAYER->set_playerCenter(
 		PointMake(
-			_img_off->get_center().x, 
+			_img_off->get_center().x,
 			(int)(_img_off->get_rect().bottom - PLAYER->get_playerHeight())
 		)
 	);
@@ -73,6 +74,16 @@ void Facility::stop_player_action(bool isStopUnforced)
 		}
 	}//else: 강제로 플레이어블 기구를 전부 멈춘다.
 }
+void Facility::stop_running()
+{
+	POINT center;
+	center.x = (LONG)(_img_off->get_center().x);
+	center.y = (LONG)(_img_off->get_rect().bottom - 50);
+	PLAYER->set_playerCenter(center);
+	PLAYER->pop_destinaiton();
+	stop_player_action(false);
+	_fRun = false;
+}
 void Facility::run_imgFrame()
 {
 	// 이미지 프레임 런
@@ -98,6 +109,178 @@ void Facility::run_imgFrame()
 				update_objImgFrame(_img_run_shadow);
 			}
 		}
+	}
+}
+
+void Facility::collision_withPlayer(Collision objCollision)
+{
+	POINT obj_center;
+	POINT player_center;
+	Destination nextDest = PLAYER->get_destination();
+	Collision player_collision = PLAYER->get_collision();
+	// Correction destPos
+	POINT destPos = nextDest.get_dest();
+	destPos.y += player_collision.correctionY;
+	int power = 2;
+	if (!nextDest.isEmpty())
+	{
+		if (IntersectRect(&RECT(), &player_collision.rc, &objCollision.rc))
+		{
+			PLAYER->update_idle_img(true);	// Idle 이미지 위치, 프레임 초기화
+			//PLAYER->pop_destinaiton();		// Destination 제거
+			//push_player_fromObj(objCollision);
+		}// if: 플레이어와 오브제가 충돌하면 플레이어를 밀어낸다.
+		else
+		{
+			if (PtInRect(&objCollision.rc, destPos))
+			{
+				player_center = PLAYER->get_playerCenter();
+				obj_center = CenterFromRect(objCollision.rc);
+				// 플레이어 위치에 따라 Destination을 상, 하, 좌, 우로 밀어낸다.
+				if (player_center.x < obj_center.x)
+				{
+					destPos.x = (LONG)(objCollision.rc.left);
+				}
+				else
+				{
+					destPos.x = (LONG)(objCollision.rc.right);
+				}
+				if (player_center.y < obj_center.y)
+				{
+					destPos.y = (LONG)(objCollision.rc.top);
+				}
+				else
+				{
+					destPos.y = (LONG)(objCollision.rc.bottom - PLAYER->get_playerHeight() * 0.2);
+				}
+				nextDest.setup_destination(destPos, nextDest.get_runType());
+				PLAYER->fix_destination(nextDest);
+			}
+		}// else: 플레이어가 오브젝트에 붙기 전까지만 목적지를 바꾼다.
+	}// if: 목적지가 존재할 때만 콜리전을 체크한다.
+}
+
+void Facility::push_player_fromObj(Collision objCollision)
+{
+	// 내 중앙, 플레이어 중앙을 확인해서 밀어낸다.
+	POINT player_center = PLAYER->get_playerCenter();
+	POINT obj_center = CenterFromRect(objCollision.rc);
+	int power = 2;
+	if (player_center.x < obj_center.x)
+	{
+		player_center.x -= power;
+	}
+	else
+	{
+		player_center.x += power;
+	}
+	if (player_center.y < obj_center.y)
+	{
+		player_center.y -= power;
+	}
+	else
+	{
+		player_center.y += power;
+	}
+	PLAYER->set_playerCenter(player_center);
+}
+
+void Facility::make_collisions()
+{
+	Collision * c = nullptr;
+	switch (_run_type)
+	{
+	case MYOBJECT::TRM_PLAYER:
+		// Make collision
+		c = new Collision;
+		c->width = (int)(48 * 1.5);
+		c->height = (int)(48 * 1.8);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x),
+			(int)(_img_off->get_center().y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::BBL_PLAYER:
+		// Make collision
+		c = new Collision;
+		c->width = (int)(48 * 2.2);
+		c->height = (int)(48 * 3.5);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x),
+			(int)(_img_off->get_center().y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::YCN_PLAYER:
+		// Make collision
+		c = new Collision;
+		c->width = (int)(48 * 1.5);
+		c->height = (int)(48 * 3);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x),
+			(int)(_img_off->get_center().y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::TIR_PLAYER:
+		// Make collision
+		c = new Collision;
+		c->width = (int)(48 * 2.5);
+		c->height = (int)(48 * 1.8);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x),
+			(int)(_img_off->get_center().y),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::BP_PLAYER:
+		// Make collision
+		c = new Collision;
+		c->width = (int)(48 * 2.5);
+		c->height = (int)(48 * 0.8);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x),
+			(int)(_img_off->get_center().y + 34),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = new Collision;
+		c->width = (int)(48 * 1);
+		c->height = (int)(48 * 1.5);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x - 20),
+			(int)(_img_off->get_center().y - 20),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	case MYOBJECT::PB_PLAYER:
+		// Make collision
+		c = new Collision;
+		c->width = (int)(48 * 0.8);
+		c->height = (int)(48 * 1.8);
+		c->rc = RectMakeCenter(
+			(int)(_img_off->get_center().x),
+			(int)(_img_off->get_center().y + 100),
+			c->width, c->height
+		);
+		_collisions.push_back(c);
+		c = nullptr;
+		break;
+	}
+	if (c != nullptr)
+	{
+		SAFE_DELETE(c);
 	}
 }
 
@@ -346,7 +529,7 @@ void Facility::draw_objs()
 		draw_img_run();
 	}//run: 런 이미지가 있으면 드로우
 
-		auto iter = _collisions.begin();
+	auto iter = _collisions.begin();
 	if (_fDebug)
 	{
 		for (; iter != _collisions.end();)
@@ -361,34 +544,67 @@ void Facility::draw_objs()
 				iter++;
 			}
 		}
-		
+
 	}
 }
 void Facility::update_objs()
 {
+	int collision_cnt;
 	// 이미지 온, 오프
 	auto iter = _collisions.begin();
 	if (iter != _collisions.end())
 	{
+		collision_cnt = _collisions.size();
 		for (; iter != _collisions.end();)
 		{
+			// Collision 끼리 충돌하면 밀어낸다.
+			collision_withPlayer(**iter);
+			// 건드린 콜리전은 true
 			if (PtInRect(&(*iter)->rc, m_ptMouse))
 			{
-				_fImgOn = true;
+				(*iter)->on = true;
 				if (_fClick)
 				{
+					if (PLAYER->is_tired())
+					{
+						PLAYER->Tired();
+					}
 					_fSelect = true;
-				}
-				iter++;
+					//_fObjMove = false;
+				}// if: 클릭 가능한 오브제를 클릭한 경우
 			}
 			else
 			{
-				_fImgOn = false;
-				_fSelect = false;
-				iter++;
+				(*iter)->on = false;
 			}
+			// 건드리지 않은 콜리전 영역을 센다.
+			if ((*iter)->on == false)
+			{
+				collision_cnt--;
+			}
+			iter++;
+		}// loop: 콜리전을 건드리고 있는지
+		// 플레이어의 콜리전이 오브제의 rc와 충돌하면 select -> false, run -> true
+		RECT player_rc = PLAYER->get_collision().rc;
+		if (_fSelect && IntersectRect(&RECT(), &get_rect(), &player_rc))
+		{
+			_fRun = true;
+			_fSelect = false;
 		}
-	}
+		if (INGAME_UI->is_close_ingame_wnd())
+		{
+			_fRun = false;
+		}
+		// 충돌이 전혀 없다면 이미지 off
+		if (collision_cnt == 0)
+		{
+			_fImgOn = false;
+		}
+		else
+		{
+			_fImgOn = true;
+		}
+	}// if: collision이 하나라도 존재하는 오브제 처리
 	else
 	{
 		if (PtInRect(&_img_off->get_rect(), m_ptMouse))
@@ -404,30 +620,30 @@ void Facility::update_objs()
 			_fImgOn = false;
 			_fSelect = false;
 		}
-	}
-	{
-		// 시작한 운동을 멈추는 코드
-		if (_fImgRun && _fClick)
-		{
-			if (PLAYER->is_click_ready())
-			{
-				change_player_run(false);
-			}
-		}
+	}// else: 콜리전이 없는 오브제
 
-		// 배고플 때 운동을 강제로 멈추는 코드
-		if (PLAYER->is_tired() && _fImgRun)
+	// 시작한 운동을 멈추는 코드
+	if (_fImgRun && _fClick)
+	{
+		if (PLAYER->is_click_ready() && 
+			((PLAYER->get_actionType() ^ MYOBJECT::RUN_PLAYER) == _run_type))
 		{
-			PLAYER->Tired();
-		}//if: 배고픈 이미지를 먼저 보여준 후 _fImgRun을 해제한다.
-		if (PLAYER->is_tired())
-		{
-			stop_player_action(false);
+			stop_running();
 		}
+	}
+
+	// 배고플 때 운동을 강제로 멈추는 코드
+	if (PLAYER->is_tired() && _fImgRun && _fRun)
+	{
+		PLAYER->Tired();
+	}//if: 배고픈 이미지를 먼저 보여준 후 _fImgRun을 해제한다.
+	if (PLAYER->is_tired() && _fRun)
+	{
+		stop_running();
 	}
 
 	// 운동을 시작하는 코드
-	if (_fImgOn == true && _fClick == true && _fObjClickLock == false)
+	if (_fRun == true)
 	{
 		change_player_run();
 	}
@@ -684,6 +900,16 @@ void Facility::set_pos(POINT pos)
 	{
 		_img_run_shadow->set_pos(pos);
 	}
+}
+void Facility::set_facility_center(POINT center)
+{
+	set_center(center);
+	make_collisions();
+}
+void Facility::set_facility_pos(POINT pos)
+{
+	set_pos(pos);
+	make_collisions();
 }
 void Facility::set_img_off_fg_pos(POINT pos)
 {

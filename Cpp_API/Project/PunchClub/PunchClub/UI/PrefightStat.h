@@ -35,5 +35,6 @@ public:
 	// name_left: Unit name position for draw [left|right]
 	void set_window(POINT center, string name, bool name_left = true);
 	void set_stat(int str, int stm, int agl);
+	EnemyStat get_enemyStat() { return _enemy->get_stat(); }
 };
 

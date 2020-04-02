@@ -201,7 +201,7 @@ void HomeScene::update()
 	update_scene();		// 모든 씬에서 공통으로 업데이트 해야 하는 것을 함수화
 	update_furnitures();
 	INGAME_UI->update();	// UI를 플레이어보다 먼저 받는다.
-	if (_friger->is_select())
+	if (_friger->is_run())
 	{
 		INGAME_UI->set_fIngame_wnd(true);
 	}

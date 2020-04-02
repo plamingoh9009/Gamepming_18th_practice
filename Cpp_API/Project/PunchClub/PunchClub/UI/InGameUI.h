@@ -39,6 +39,7 @@ private:
 	Window * _window_league;	// 리그 창
 	Window * _ingame_wnd = nullptr;
 	bool _fIngame_wnd = false;
+	bool _fClose_ingame_wnd = false;
 	// 리그에서 쓰는 게이지 클래스
 	FightGauge * _gauge;
 	// Stat Beads
@@ -76,9 +77,13 @@ public:
 public:
 	InGameUI();
 	~InGameUI();
+public : 
+	void CloseWnd();
 public:
 	void set_fRedButton(bool fResult) { _fRedButton = fResult; }
 	void set_windowType(WINDOW::TYPE type);
 	void set_fIngame_wnd(bool fResult) { _fIngame_wnd = fResult; }
+	bool is_close_ingame_wnd() { return _fClose_ingame_wnd; }
+	void reset_ingame_wnd();
 };
 #define INGAME_UI	InGameUI::get_singleton()

@@ -121,6 +121,7 @@ public:
 	Window();
 	~Window();
 	bool is_closeWindow() { return _fClose; }
+	void reset_closeWindow() { _fClose = false; }
 	bool is_openWindow() { return _fOpen; }
 	void set_openWindow(bool fResult) { _fOpen = fResult; }
 	bool is_openBus() { return _fOpenBus; }

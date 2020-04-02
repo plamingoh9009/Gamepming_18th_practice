@@ -159,6 +159,7 @@
     <ClInclude Include="Manager\KeyManager.h" />
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
+    <ClInclude Include="Object\Enemy.h" />
     <ClInclude Include="Object\Facility.h" />
     <ClInclude Include="Object\Furniture.h" />
     <ClInclude Include="Object\Npc.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="Manager\KeyManager.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
+    <ClCompile Include="Object\Enemy.cpp" />
     <ClCompile Include="Object\Facility.cpp" />
     <ClCompile Include="Object\Furniture.cpp" />
     <ClCompile Include="Object\Npc.cpp" />

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "UI/InGameUI.h"
 // ========================================
 // ***		Idle 이미지 업데이트			***
 // ========================================
@@ -8,7 +9,7 @@ void Player::update_idle_img(bool isResetPos)
 	if (isResetPos)
 	{
 		// 이미지 변경하고
-		change_idle_img();		
+		change_idle_img();
 		_player_idle[_idleIndex]->set_frameX(0);
 		_player_idle[_idleIndex]->set_frameY(0);
 		_player_idle_shdw[_idleIndex]->set_frameX(0);
@@ -63,15 +64,17 @@ void Player::follow_icon_player()
 }
 void Player::move_player()
 {
-	if (_move_dest.x && _move_dest.y)
+	Destination myDest;
+	if (!_dest.empty())
 	{
+		myDest = _dest.front();
 		// 4방향을 먼저 정한다.
-		if (is_positionOK(_player_center.y, _move_dest.y))
+		if (is_positionOK(_player_center.y, myDest.get_dest().y))
 		{
-			if (is_positionOK(_player_center.x, _move_dest.x)) {}
+			if (is_positionOK(_player_center.x, myDest.get_dest().x)) {}
 			else
 			{
-				if (is_move_dest_left(_player_center.x, _move_dest.x))
+				if (is_move_dest_left(_player_center.x, myDest.get_dest().x))
 				{
 					_player_center.x -= (LONG)(_speed);
 					_moveIndex = 4;
@@ -87,9 +90,9 @@ void Player::move_player()
 		}// if: y 축이  맞다면 좌, 우로 움직인다.
 		else
 		{
-			if (is_positionOK(_player_center.x, _move_dest.x)) 
+			if (is_positionOK(_player_center.x, myDest.get_dest().x))
 			{
-				if (_move_dest.y < _player_center.y)
+				if (myDest.get_dest().y < _player_center.y)
 				{
 					_player_center.y -= (LONG)(_speed * 0.5);
 					_moveIndex = 0;
@@ -102,9 +105,9 @@ void Player::move_player()
 			}// if: x 축이 맞다면 그냥 위, 아래로만 움직인다.
 			else
 			{
-				if (_move_dest.y < _player_center.y)
+				if (myDest.get_dest().y < _player_center.y)
 				{
-					if (is_move_dest_left(_player_center.x, _move_dest.x))
+					if (is_move_dest_left(_player_center.x, myDest.get_dest().x))
 					{
 						_player_center.y -= (LONG)(_speed * 0.5);
 						_player_center.x -= (LONG)(_speed);
@@ -119,7 +122,7 @@ void Player::move_player()
 				}// if: Move up
 				else
 				{
-					if (is_move_dest_left(_player_center.x, _move_dest.x))
+					if (is_move_dest_left(_player_center.x, myDest.get_dest().x))
 					{
 						_player_center.y += (LONG)(_speed * 0.5);
 						_player_center.x -= (LONG)(_speed);
@@ -133,25 +136,33 @@ void Player::move_player()
 					}
 				}// else: Move down
 			}
-			
-		}// else: y축이 맞지 않다면 위인지 아래로 움직인다.
+
+		}// else: y축이 맞지 않다면 위, 아래로 움직인다.
+
+		// 여기서 콜리전 렉트를 다시 잡아준다.
+		setup_collision_rect();
 		
-		// 여기서 플레이어 렉트를 다시 잡아준다.
-		_collision.rc = RectMakeCenter(
-			_player_center.x + _collision.correctionX, 
-			_player_center.y + _collision.correctionY,
-			_collision.width, _collision.height);
-		if (is_positionOK(_player_center, _move_dest))
+		if (is_positionOK(_player_center, myDest.get_dest()))
 		{
 			update_idle_img(true);
-			_fMoving = false;
-			_fIdle = true;
-			_move_dest = { 0, 0 };
+			_dest.pop();
 		}
 	}// if: 목적지가 잡혀 있으면 움직인다.
+	else
+	{
+		_fIdle = true;
+		_fMoving = false;
+	}// else: 목적지가 없다면 Idle 상태가 된다 
 
 	// 플레이어 위치를 다시 잡아준다.
 	update_move_img();
+}
+void Player::setup_collision_rect()
+{
+	_collision.rc = RectMakeCenter(
+		_player_center.x + _collision.correctionX,
+		_player_center.y + _collision.correctionY,
+		_collision.width, _collision.height);
 }
 void Player::init_player()
 {
@@ -210,7 +221,7 @@ void Player::init_player()
 	_player_idle_shdw[_idleIndex]->set_center(_player_center);
 	// 위치 잡은 후 콜리전 렉트 만들기
 	POINT center;
-	_collision.width = (int)(20 * GAME_MULTIPLE);
+	_collision.width = (int)(40 * GAME_MULTIPLE);
 	_collision.height = (int)(10 * GAME_MULTIPLE);
 	_collision.correctionY = 50;
 	center.x = (LONG)(_player_center.x);
@@ -304,20 +315,39 @@ void Player::draw_player()
 }
 void Player::update_player()
 {
+	POINT myDest;
 	if (_fIdle) { update_idle_img(); }
 
 	if (_fClick && _fObjMove)
 	{
-		if (m_ptMouse.y < WIN_HALF_H) {}
+		if (m_ptMouse.y < (LONG)(WIN_HALF_H * 0.5)) {}
 		else
 		{
-			//if (!_move_dest.x && !_move_dest.y)
-			//{
-				_move_dest = m_ptMouse;
-				_move_dest.y -= (LONG)(_player_idle[_idleIndex]->get_frameHeight() * 0.5);
+			if (_fObjMove)
+			{
+				myDest = m_ptMouse;
+				myDest.y -= (LONG)(_player_idle[_idleIndex]->get_frameHeight() * 0.5);
+				push_destination(myDest);
 				_fMoving = true;
 				_fIdle = false;
-			//}// if: Setup destination
+				INGAME_UI->reset_ingame_wnd();
+			}
+		}
+	}
+	else if (_fRClick && _fObjMove)
+	{
+		if (m_ptMouse.y < (LONG)(WIN_HALF_H * 0.5)) {}
+		else
+		{
+			if (_fObjMove)
+			{
+				myDest = m_ptMouse;
+				myDest.y -= (LONG)(_player_idle[_idleIndex]->get_frameHeight() * 0.5);
+				push_destination(myDest, true);
+				_fMoving = true;
+				_fIdle = false;
+				INGAME_UI->reset_ingame_wnd();
+			}
 		}
 	}
 	move_player();
@@ -360,7 +390,7 @@ double Player::limit_stat(double stat, bool fZeroSet)
 }
 bool Player::is_positionOK(LONG currentPos, LONG targetPos)
 {
-	LONG ok_band = 10;
+	LONG ok_band = 3;
 	int temp;
 	temp = (currentPos < targetPos ?
 		(int)(targetPos - currentPos) : (int)(currentPos - targetPos));
@@ -429,7 +459,8 @@ void Player::action()
 			hide_player();
 			// 일정 시간을 주고, 행동을 한다.
 			_time += TIMEMANAGER->get_elapsedTime();
-			if (2.6f <= _time)
+			// #Time 2.6f
+			if (0.6f <= _time)
 			{
 				switch (_actionType ^ MYOBJECT::RUN_PLAYER)
 				{
@@ -619,7 +650,7 @@ void Player::Tired()
 	{
 		action_pause();
 		_fTired = true;
-		_fClick = false;
+		//_fClick = false;
 		_hunger->Visible();
 	}
 }
@@ -677,6 +708,7 @@ HRESULT Player::init()
 	// 배고플 때 쓰는 아이콘
 	_hunger = new Icon(ICON::ICN_HUNGER);
 	_hunger->init();
+	_fObjMove = true;
 	return S_OK;
 }
 void Player::release()
@@ -699,7 +731,13 @@ void Player::render()
 	}
 	if (_fDebug)
 	{
-			ColorRect(get_memDC(), _collision.rc);
+		ColorRect(get_memDC(), _collision.rc);
+		if (!_dest.empty())
+		{
+			ColorRect(get_memDC(),
+				RectMakeCenter(_dest.front().get_dest().x, _dest.front().get_dest().y, 10, 10),
+				RGB(10, 10, 130));
+		}
 	}
 }
 Player::Player()
@@ -717,6 +755,66 @@ void Player::set_playerCenter(POINT center)
 	_player_center = center;
 	_player_idle[_idleIndex]->set_center(_player_center);
 	_player_idle_shdw[_idleIndex]->set_center(_player_center);
+	setup_collision_rect();
+	follow_icon_player();
+}
+Destination Player::get_destination()
+{
+	if (!_dest.empty())
+	{
+		return _dest.front();
+	}
+	return Destination();
+}
+void Player::fix_destination(Destination dest)
+{
+	_dest.front().setup_destination(dest.get_dest(), dest.get_runType());
+}
+void Player::push_destination(
+	POINT dest, 
+	bool isUseReservation,
+	MYOBJECT::RUN_TYPE runType)
+{
+	Destination myDest;
+	if (isUseReservation) 
+	{
+		myDest.setup_destination(dest, runType);
+		_dest.push(myDest);
+	}
+	else
+	{
+		myDest.setup_destination(dest, runType);
+		pop_destinaiton();
+		_dest.push(myDest);
+	}
+}
+void Player::pop_destinaiton()
+{
+	if (!_dest.empty())
+	{
+		_dest.pop();
+	}
+}
+void Player::init_playerHp()
+{
+	// Hp의 기본 값은 Stm과 연동한다.
+	double maxHp = 60 + get_stm() * 17;
+	// 실제 사용하는 Hp는 health gauge 와 연동한다.
+	double correction = _myStat.health / 1000.0;
+	_myStat.hp_correction = correction;
+	maxHp *= correction;
+	_myStat.maxHp = maxHp;
+	_myStat.currentHp = maxHp;
+}
+void Player::add_playerHp(double add_hp)
+{
+	_myStat.currentHp += add_hp;
+}
+void Player::init_playerNrg()
+{
+}
+void Player::add_playerNrg()
+{
 }
 int Player::how_many_items(SLOT::ITEM itemType)
 {

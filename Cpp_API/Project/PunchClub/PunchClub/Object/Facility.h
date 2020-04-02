@@ -24,10 +24,16 @@ protected:
 	bool _fImgRunOnly = false;
 	bool _fImgOffOnly = false;
 	bool _fSelect = false;
+	bool _fRun = false;
 protected:
 	void start_player_action(MYOBJECT::RUN_TYPE runType);
 	void stop_player_action(bool isStopUnforced = true);
+	void stop_running();
 	void run_imgFrame();
+	void push_player_fromObj(Collision objCollision);
+	// Collision
+	virtual void make_collisions();
+	void collision_withPlayer(Collision objCollision);
 protected:
 	virtual HRESULT init_objs();
 	void delete_objs();
@@ -37,6 +43,8 @@ protected:
 	void draw_img_off();
 	void draw_img_on();
 	void draw_img_runback();
+	void set_center(POINT center);
+	void set_pos(POINT pos);
 	virtual void update_objImgFrame(Image * img);
 	virtual void runType_case_toUpdate();
 	virtual void change_player_run(bool isStart = true);
@@ -51,14 +59,14 @@ public:
 	Facility(MYOBJECT::TYPE type, MYOBJECT::RUN_TYPE run_type);
 	~Facility();
 public:
-	void set_center(POINT center);
-	void set_pos(POINT pos);
+	void set_facility_center(POINT center);
+	void set_facility_pos(POINT pos);
 	void set_img_off_fg_pos(POINT pos);
 	void set_img_run_pos(POINT pos);
 	int get_width();
 	int get_height();
 	POINT get_center() { return _img_off->get_center(); }
 	RECT get_rect();
-	bool is_select() { return _fSelect; }
+	bool is_run() { return _fRun; }
 };
 

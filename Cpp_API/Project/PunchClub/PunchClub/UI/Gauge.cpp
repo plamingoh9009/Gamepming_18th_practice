@@ -92,6 +92,22 @@ void Gauge::sync_gauge_fromValue()
 {
 	sync_gauge_fromValue(_currentGauge);
 }
+POINT Gauge::correct_fg_position(POINT position)
+{
+	POINT result = position;
+	switch (_type)
+	{
+	case GAUGE::GG_PLAYER_HP:
+		result.x = (LONG)(position.x);
+		result.y = (LONG)(position.y - 14);
+		break;
+	case GAUGE::GG_ENEMY_HP:
+		result.x = (LONG)(position.x);
+		result.y = (LONG)(position.y - 14);
+		break;
+	}
+	return result;
+}
 void Gauge::sync_gauge_fromValue(double value)
 {
 	double temp;
@@ -106,6 +122,37 @@ void Gauge::sync_gauge_fromValue(double value)
 	temp = (value / _maxGauge) * gaugeWidth;
 	// 출력할 게이지 값을 정의
 	_currentWidth = temp;
+}
+
+void Gauge::set_text_toGauge(double currentValue, double maxValue, GAUGE::TYPE type)
+{
+	POINT center;
+	int size;
+	string text = "";
+	text.append(to_string((int)(currentValue)));
+	text.append(" / ");
+	text.append(to_string((int)(maxValue)));
+	switch (type)
+	{
+	case GAUGE::GG_PLAYER_HP:
+	case GAUGE::GG_ENEMY_HP:
+		_text = MyText(MYTEXT::TXT_TITLE, text, RGB(222, 255, 0));
+		size = 28;
+		center.x = _fg->get_center().x - (text.length() * 6);
+		center.y = _fg->get_center().y - (LONG)(size * 0.3);
+		_text.set_pos(center);
+		_text.set_size(size);
+		break;
+	case GAUGE::GG_ENERGY:
+		_text = MyText(MYTEXT::TXT_TITLE, text, RGB(255, 198, 0));
+		size = 20;
+		center.x = _fg->get_center().x - (text.length() * 5);
+		center.y = _fg->get_center().y - (LONG)(size * 0.3);
+		_text.set_pos(center);
+		_text.set_size(size);
+		break;
+	}
+	_fText = true;
 }
 
 HRESULT Gauge::init()
@@ -128,6 +175,27 @@ HRESULT Gauge::init()
 		_fg = new Image;
 		path = _imgPath + "hud_bar_small.bmp";
 		_fg->init(path.c_str(), (int)(51 * GAME_MULTIPLE), (int)(6 * GAME_MULTIPLE));
+		break;
+	case GAUGE::GG_PLAYER_HP:
+		_bg = new Image;
+		path = _imgPath + "Player_bars.bmp";
+		_bg->init(path.c_str(), (int)(253 * GAME_MULTIPLE), (int)(33 * GAME_MULTIPLE));
+		_fg = new Image;
+		path = _imgPath + "hp_bar.bmp";
+		_fg->init(path.c_str(), (int)(251 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
+		break;
+	case GAUGE::GG_ENEMY_HP:
+		_bg = new Image;
+		path = _imgPath + "Enemy_bars.bmp";
+		_bg->init(path.c_str(), (int)(253 * GAME_MULTIPLE), (int)(33 * GAME_MULTIPLE));
+		_fg = new Image;
+		path = _imgPath + "hp_bar.bmp";
+		_fg->init(path.c_str(), (int)(251 * GAME_MULTIPLE), (int)(18 * GAME_MULTIPLE));
+		break;
+	case GAUGE::GG_ENERGY:
+		_fg = new Image;
+		path = _imgPath + "energy_bar.bmp";
+		_fg->init(path.c_str(), (int)(139 * GAME_MULTIPLE), (int)(9 * GAME_MULTIPLE));
 		break;
 	case GAUGE::GG_STAT_FIGHT:
 		init_fight_stat();
@@ -160,6 +228,10 @@ void Gauge::render()
 		_fg->render(get_memDC(), _fg->get_rect().left, _fg->get_rect().top,
 			0, 0, (int)(_currentWidth), _fg->get_height());
 	}
+	if (_fText)
+	{
+		_text.render(get_memDC());
+	}
 }
 Gauge::Gauge(GAUGE::TYPE type)
 {
@@ -179,6 +251,7 @@ void Gauge::set_center(POINT center)
 	if (_bg != nullptr)
 	{
 		_bg->set_center(center);
+		center = correct_fg_position(center);
 	}
 	if (_fg != nullptr)
 	{
@@ -186,6 +259,18 @@ void Gauge::set_center(POINT center)
 	}
 }
 
+void Gauge::set_pos(POINT pos)
+{
+	if (_bg != nullptr)
+	{
+		_bg->set_pos(pos);
+		pos = correct_fg_position(pos);
+	}
+	if (_fg != nullptr)
+	{
+		_fg->set_pos(pos);
+	}
+}
 POINT Gauge::get_center()
 {
 	if (_fg != nullptr)

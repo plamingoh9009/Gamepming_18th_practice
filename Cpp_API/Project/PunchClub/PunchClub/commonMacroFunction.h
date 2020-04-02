@@ -26,6 +26,16 @@ inline void ColorLine(HDC hdc, int x1, int y1, int x2, int y2, int width = 1, CO
 	SelectObject(hdc, oldPen);
 	DeleteObject(newPen);
 }
+// RECT 에서 center 가져오기
+inline POINT CenterFromRect(RECT rc)
+{
+	POINT result;
+	int width = (int)(rc.right - rc.left);
+	int height = (int)(rc.bottom - rc.top);
+	result.x = rc.left + width;
+	result.y = rc.top + height;
+	return result;
+}
 //RECT만들기(좌상단 기준)
 inline RECT RectMake(int x, int y, int width, int height)
 {
@@ -37,6 +47,11 @@ inline RECT RectMakeCenter(int x, int y, int width, int height)
 {
 	RECT rc = { x - width / 2, y - height / 2, x + width / 2, y + height / 2 };
 
+	return rc;
+}
+inline RECT RectMakeCenter(POINT center, int width, int height)
+{
+	RECT rc = RectMakeCenter(center.x, center.y, width, height);
 	return rc;
 }
 inline RECT RectMakeRightBottom(int x, int y, int width, int height)

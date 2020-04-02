@@ -156,8 +156,7 @@ void InGameUI::update_ingame_wnd()
 	_ingame_wnd->update();
 	if (_ingame_wnd->is_closeWindow() == true)
 	{
-		_fIngame_wnd = false;
-		_ingame_wnd->init(_wndType);
+		CloseWnd();
 	}
 }
 void InGameUI::draw_ingame_wnd()
@@ -173,6 +172,12 @@ void InGameUI::set_windowType(WINDOW::TYPE type)
 		_ingame_wnd = new Window;
 	}
 	_ingame_wnd->init(type);
+}
+
+void InGameUI::reset_ingame_wnd()
+{
+	_fClose_ingame_wnd = false;
+	_ingame_wnd->reset_closeWindow();
 }
 
 HRESULT InGameUI::init()
@@ -285,4 +290,10 @@ InGameUI::InGameUI()
 }
 InGameUI::~InGameUI()
 {
+}
+
+void InGameUI::CloseWnd()
+{
+	_fIngame_wnd = false;
+	_fClose_ingame_wnd = true;
 }

@@ -1,5 +1,6 @@
 #pragma once
-#include "UI.h"
+#include "Gauge.h"
+#include "Object/Enemy.h"
 class FightGauge: public UI
 {
 	// 라운드 이미지
@@ -12,35 +13,21 @@ class FightGauge: public UI
 	string _round_desc;
 	string _round_num;
 	// 싸울때 쓰는 게이지
-	Image * _player_back;
-	Image * _playerHp_fore;
-	Image * _playerNrg_fore;
-	Image * _enemy_back;
-	Image * _enemyHp_fore;
-	Image * _enemyNrg_fore;
-	RECT _player_back_rc;
-	RECT _playerHp_rc;
-	RECT _playerNrg_rc;
-	RECT _enemy_back_rc;
-	RECT _enemyHp_rc;
-	RECT _enemyNrg_rc;
-	string _playerHp_str;
-	string _playerNrg_str;
-	string _enemyHp_str;
-	string _enemyNrg_str;
+	Gauge * _playerHp;
+	Gauge * _playerNrg;
+	Gauge * _enemyHp;
+	Gauge * _enemyNrg;
 protected:
 	void init_player_bars();
-	void draw_player_bars();
-	void update_player_bars();
-	void delete_player_bars();
 	void init_enemy_bars();
-	void draw_enemy_bars();
-	void update_enemy_bars();
-	void delete_enemy_bars();
+
 	void init_round();
 	void draw_round();
 	void update_round();
 	void delete_round();
+
+	void sync_player_bars();
+	void sync_enemy_bars();
 public:
 	virtual HRESULT init();
 	virtual void release();
